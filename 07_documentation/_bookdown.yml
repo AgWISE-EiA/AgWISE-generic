@@ -1,0 +1,16 @@
+book_filename: agwise
+rmd_files: 
+  - "index.Rmd"
+  - "00-Datasets.Rmd"
+  - "01-CHIRPS.Rmd"
+  - "02-CHIRTS.Rmd"
+new_session: yes
+delete_merged_file: true
+output_dir: "docs"
+language:
+  label:
+    fig: "FIGURE "
+    tab: "TABLE "
+  ui:
+    edit: "Edit"
+    chapter_name: "Section "

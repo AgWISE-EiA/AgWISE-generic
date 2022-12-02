@@ -1,1 +1,1 @@
-this folder contains all the AgWISE documentation files
+this folder contains all the AgWISE documentation script files

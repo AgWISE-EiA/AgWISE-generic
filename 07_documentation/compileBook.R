@@ -23,3 +23,8 @@ bookdown::render_book()
 #copy files into docs folder
 system("cp -rvf docs ./../.")
 
+#push to repository
+setwd("./..")
+system("git add .")
+system("git commit -m 'update documentation'")
+system("git push")

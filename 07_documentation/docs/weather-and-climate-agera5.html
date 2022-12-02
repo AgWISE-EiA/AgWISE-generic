@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Weather and climate: AgERA5 | The AgWISE site-specific agronomy tool</title>
+  <meta name="description" content="Weather and climate: AgERA5 | The AgWISE site-specific agronomy tool" />
+  <meta name="generator" content="bookdown 0.30 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Weather and climate: AgERA5 | The AgWISE site-specific agronomy tool" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Weather and climate: AgERA5 | The AgWISE site-specific agronomy tool" />
+  
+  
+  
+
+<meta name="author" content="Excellence in Agronomy, TRANSFORM Team" />
+
+
+<meta name="date" content="2022-12-02" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="soils-isda.html"/>
+<link rel="next" href="weather-and-climate-chirps.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a></li>
+<li class="chapter" data-level="1" data-path="inventory-of-datasets.html"><a href="inventory-of-datasets.html"><i class="fa fa-check"></i><b>1</b> <strong>Inventory of datasets</strong></a>
+<ul>
+<li class="chapter" data-level="" data-path="soils-isda.html"><a href="soils-isda.html"><i class="fa fa-check"></i>Soils: iSDA</a></li>
+<li class="chapter" data-level="" data-path="weather-and-climate-agera5.html"><a href="weather-and-climate-agera5.html"><i class="fa fa-check"></i>Weather and climate: AgERA5</a></li>
+<li class="chapter" data-level="" data-path="weather-and-climate-chirps.html"><a href="weather-and-climate-chirps.html"><i class="fa fa-check"></i>Weather and climate: CHIRPS</a></li>
+<li class="chapter" data-level="" data-path="weather-and-climate-chirts.html"><a href="weather-and-climate-chirts.html"><i class="fa fa-check"></i>Weather and climate: CHIRTS</a></li>
+<li class="chapter" data-level="" data-path="weather-and-climate-terraclimate-climatology.html"><a href="weather-and-climate-terraclimate-climatology.html"><i class="fa fa-check"></i>Weather and climate: TerraClimate climatology</a></li>
+<li class="chapter" data-level="" data-path="weather-and-climate-terraclimate.html"><a href="weather-and-climate-terraclimate.html"><i class="fa fa-check"></i>Weather and climate: TerraClimate</a></li>
+<li class="chapter" data-level="" data-path="weather-and-climate-worldclim.html"><a href="weather-and-climate-worldclim.html"><i class="fa fa-check"></i>Weather and climate: WorldClim</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">The AgWISE site-specific agronomy tool</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="weather-and-climate-agera5" class="section level2 unnumbered hasAnchor">
+<h2>Weather and climate: AgERA5<a href="weather-and-climate-agera5.html#weather-and-climate-agera5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This dataset provides daily surface meteorological data for the period from 1979 to present as input for agriculture and agro-ecological studies. This dataset is based on the hourly ECMWF ERA5 data at surface level and is referred to as AgERA5. Acquisition and pre-processing of the original ERA5 data is a complex and specialized job</p>
+<div id="dataset-characteristics-1" class="section level3 unlisted unnumbered hasAnchor">
+<h3>Dataset characteristics<a href="weather-and-climate-agera5.html#dataset-characteristics-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>Spatial resolution: 0.1 x 0.1 degree</li>
+<li>Spatial coverage: 90ºN to 90ºS</li>
+<li>Temporal resolution: daily</li>
+<li>Temporal coverage:1979-present</li>
+<li>Update frequency / latency: 8 days</li>
+<li>Version: 1.0</li>
+<li>License: Copernicus license</li>
+<li>Official website: <a href="https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-agrometeorological-indicators?tab=overview" class="uri">https://cds.climate.copernicus.eu/cdsapp#!/dataset/sis-agrometeorological-indicators?tab=overview</a></li>
+</ul>
+</div>
+<div id="variables-included-1" class="section level3 unlisted unnumbered hasAnchor">
+<h3>Variables included<a href="weather-and-climate-agera5.html#variables-included-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<table>
+<colgroup>
+<col width="20%" />
+<col width="39%" />
+<col width="20%" />
+<col width="20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable name</th>
+<th>Description</th>
+<th>Temporal resolution</th>
+<th>Units</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10m wind speed</td>
+<td>Mean wind speed at a height of 10 metres above the surface over the period 00h-24h local time</td>
+<td>daily</td>
+<td>m/s</td>
+</tr>
+<tr class="even">
+<td>Max. temperature</td>
+<td>Air temperature at a height of 2 metres above the surface. Maximum of 00-24h period local time.</td>
+<td>daily</td>
+<td>K</td>
+</tr>
+<tr class="odd">
+<td>Mean temperature</td>
+<td>Air temperature at a height of 2 metres above the surface. Average of 00-24h period local time.</td>
+<td>daily</td>
+<td>K</td>
+</tr>
+<tr class="even">
+<td>Min. temperature</td>
+<td>Air temperature at a height of 2 metres above the surface. Minimum of 00-24h period local time.</td>
+<td>daily</td>
+<td>K</td>
+</tr>
+<tr class="odd">
+<td>Precipitation</td>
+<td>Total volume of liquid water (cubic mm) precipitated over the period 00h-24h local time per unit of area (mm sq.), per day.</td>
+<td>daily</td>
+<td>mm/day</td>
+</tr>
+<tr class="even">
+<td>Relative humidity</td>
+<td>Relative humidity at 06h, 09h, 12h. 15h, 18h (local time) at a height of 2 metres above the surface. This variable describes the amount of water vapour present in air expressed as a percentage of the amount needed for saturation at the same temperature.</td>
+<td>daily</td>
+<td>%</td>
+</tr>
+<tr class="odd">
+<td>Solar radiation</td>
+<td>Total amount of energy provided by solar radiation at the surface over the period 00-24h local time per unit area and time.</td>
+<td>daily</td>
+<td>J/m2/day</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="soils-isda.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="weather-and-climate-chirps.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

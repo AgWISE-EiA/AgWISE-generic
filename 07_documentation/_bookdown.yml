@@ -7,8 +7,7 @@ rmd_files:
   - "03-CHIRPS.Rmd"
   - "04-CHIRTS.Rmd"
   - "05-TerraClimate.Rmd"
-  - "06-TerraClimate.Rmd"
-  - "07-WorldClim.Rmd"
+  - "06-WorldClim.Rmd"
 new_session: yes
 delete_merged_file: true
 output_dir: "docs"

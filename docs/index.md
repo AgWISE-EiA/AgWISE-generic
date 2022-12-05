@@ -1,7 +1,7 @@
 ---
 title: "The AgWISE site-specific agronomy tool"
 author: "Excellence in Agronomy, TRANSFORM Team"
-date: "2022-12-02"
+date: "2022-12-05"
 site: bookdown::bookdown_site
 documentclass: book
 # bibliography: [book.bib, packages.bib]

@@ -46,6 +46,8 @@ invisible(lapply(vars_isric,
 ))
 
 
+
+
 #################################################################################################################
 ## crop for the AOI: cropped layers will be available as input data in "pathOut"
 #################################################################################################################
@@ -70,6 +72,7 @@ lapply(listRaster,
 
 ## crop for GPS coordinates
 Rwanda_coor <- read.csv("AgWise/EiA_Analytics/useCase_RAB/Rice/inputData/RAB_Rice_Coordinates.csv")
+
 lapply(listRaster,       
        function(i) {
          cropSoil(i, pathIn = "./AgWise/rawData/1_soil/",
@@ -80,3 +83,18 @@ lapply(listRaster,
 
 
 
+
+
+#####################################################################################################
+## pedo-transfer function from harvest choice to get soil hydraulics based on sand, silt, clay and OM in percentage 
+######################################################################################################
+
+
+get_soilHydraulics(pathIn = "./AgWise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/soil",
+                   countryName = "Rwanda", pathOut = "./AgWise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/soil",
+                   returnFormat = "raster")
+
+
+get_soilHydraulics(pathIn = "./AgWise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/soil",
+                   countryName = "Rwanda", pathOut = "./AgWise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/soil",
+                   returnFormat = "point")

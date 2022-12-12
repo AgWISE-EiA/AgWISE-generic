@@ -1,7 +1,7 @@
 #################################################################################################################
 ## sourcing required packages 
 #################################################################################################################
-packages_required <- c("terra", "sf", "rgl", "rgdal", "dplyr", "sp", "plyr", "geodata", "terra")
+packages_required <- c("terra", "sf", "rgl", "rgdal", "sp", "geodata", "terra", "tidyverse")
 
 # check and install packages that are not yet installed
 installed_packages <- packages_required %in% rownames(installed.packages())
@@ -97,4 +97,4 @@ get_soilHydraulics(pathIn = "./AgWise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/
 
 get_soilHydraulics(pathIn = "./AgWise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/soil",
                    countryName = "Rwanda", pathOut = "./AgWise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/soil",
-                   returnFormat = "point")
+                   returnFormat = "point", countryCoord = Rwanda_coor)

@@ -41,3 +41,10 @@ vignettes/*.pdf
 #macOSX files
 .DS_Store
 
+# ignore inputData contents and subfolders intermediate out folders
+inputData/
+intermediateOutput/
+
+#ignore jupyter checkpoints
+.ipynb_checkpoints/
+00_dataProcessing/.ipynb_checkpoints/

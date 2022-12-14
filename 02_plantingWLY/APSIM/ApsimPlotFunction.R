@@ -35,7 +35,8 @@ foreach (i = 1:length(results))%do%{
   }
   #########################################################################
   final<- do.call("smartbind", results)
-  glimpse(final)
+  FinalBound<-final
+  colnames(FinalBound)[4]  <- "Maize.HarvestingDate"  
   
   finall<-final%>%
     group_by(Longitude, Latitude)%>%
@@ -54,7 +55,7 @@ foreach (i = 1:length(results))%do%{
           geom_point(data=finall, aes(x=Longitude, y=Latitude, color= Yield), size = 2))
   
   print(ggplot() +  geom_point(data=finall, aes(x=Longitude, y=Latitude, color= Yield), size = 2))
-return(final)
+return(FinalBound)
 }
 
 

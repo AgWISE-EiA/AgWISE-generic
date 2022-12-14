@@ -17,14 +17,14 @@ solar$Date = seq(as.Date("1981-01-01"), as.Date("2020-12-31"), by="days")
 
 #########################################################
 ## sourcing function to create met file
-setwd("D:/OneDrive - CGIAR/Documents/Script/EiA/APSIM/test")
+setwd("D:/dev_agwise/AgWISE-generic/02_plantingWLY/APSIM/")
 source('createMetFileFunction.R')
 
 my_list_clm<-createMetFile(rain = rain,max = max,min = min,solar = solar,stn = stn)
 
 #########################################################
 ## sourcing function to create spatialize apsim
-setwd("D:/OneDrive - CGIAR/Documents/Script/EiA/APSIM/test")
+setwd("D:/dev_agwise/AgWISE-generic/02_plantingWLY/APSIM/")
 source('apsimSpatialFunction.R')
 results<- apsim.spatial(my_list_clm = my_list_clm,
                         wkdir ="D:/project", 
@@ -40,7 +40,7 @@ results<- apsim.spatial(my_list_clm = my_list_clm,
 #########################################################
 ## sourcing function to create plot
 
-setwd("D:/OneDrive - CGIAR/Documents/Script/EiA/APSIM/test")
+setwd("D:/dev_agwise/AgWISE-generic/02_plantingWLY/APSIM/")
 source('ApsimPlotFunction.R')
 PlantingDates<-apsim.plots(stn = stn,
             results=results, 

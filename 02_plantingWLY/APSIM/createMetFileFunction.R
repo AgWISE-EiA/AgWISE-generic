@@ -1,6 +1,4 @@
 
-
-
 #' Title
 #' depends on foreach package
 #' @param rain 

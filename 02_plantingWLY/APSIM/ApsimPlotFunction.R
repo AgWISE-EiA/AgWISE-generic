@@ -1,12 +1,8 @@
-################################################################################################
-#results = the results list obtained from apsim.spatial command
-#b = the country shapefile e.g "ZM" for Zimbabwe
-#wkdir = the directory where station data is saved
 #' Title
 #'
-#' @param results 
-#' @param b 
-#' @param wkdir 
+#' @param results = the results list obtained from apsim.spatial command
+#' @param b = the country shapefile e.g "ZM" for Zimbabwe
+#' @param wkdir = the directory where station data is saved
 #'
 #' @return
 #' @export

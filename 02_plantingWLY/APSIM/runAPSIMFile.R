@@ -1,5 +1,5 @@
 setwd("D:/j")
-#########################################################
+#######################################################
 ## sourcing the data 
 stn<- read.csv("Rwanda/station.csv")
 names(stn)<- c("Longitude", 'Latitude', "Location")

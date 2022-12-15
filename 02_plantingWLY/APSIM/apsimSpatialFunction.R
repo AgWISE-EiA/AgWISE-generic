@@ -42,7 +42,7 @@ apsim.spatial <- function(my_list_clm, wkdir, crop, clck, sd, ed, variety, fert,
   list.files(extd.dir)
   
    ##Get soil data from iscric
-  my_list_sol <- foreach (i = 1:(nrow(stn)-1)) %dopar% {
+  my_list_sol <- foreach (i = 1:length(my_list_clm)) %dopar% {
     tryCatch(apsimx::get_isric_soil_profile(lonlat = c(stn$Longitude[[i]], stn$Latitude[[i]]))
              , error=function(err) NA)
   }

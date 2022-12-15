@@ -13,6 +13,7 @@ apsim.plots<- function(stn, results, b, wkdir){
    foreach (i = 1:length(results))%do%{
   results[[i]]$Longitude<-stn$Longitude[[i]]
   results[[i]]$Latitude<-stn$Latitude[[i]]
+  results[[i]]$Location<-stn$Location[[i]]
  }
 
 foreach (i = 1:length(results))%do%{ 
@@ -36,7 +37,10 @@ foreach (i = 1:length(results))%do%{
   #########################################################################
   final<- do.call("smartbind", results)
   FinalBound<-final
-  colnames(FinalBound)[4]  <- "Maize.HarvestingDate"  
+  colnames(FinalBound)[colnames(FinalBound) == "Date"]  <- "Maize.HarvestingDate"  
+  FinalBound$Maize.SowingDate = format(as.Date(FinalBound$Maize.SowingDate), "%d/%m/%Y")
+  FinalBound$Maize.HarvestingDate = strptime(FinalBound$Maize.HarvestingDate, "%Y-%m-%d")
+  FinalBound$Maize.HarvestingDate = format(FinalBound$Maize.HarvestingDate, "%d/%m/%Y")
   
   finall<-final%>%
     group_by(Longitude, Latitude)%>%

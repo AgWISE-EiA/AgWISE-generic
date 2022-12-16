@@ -98,7 +98,7 @@ apsim.spatial <- function(my_list_clm, wkdir, crop, clck, sd, ed, variety, fert,
     apsimx::edit_apsimx(crop, 
                         node = "Manager",
                         manager.child = "SowingRule",
-                        parm = "CultivarName", ## This is for end date
+                        parm = "CultivarName", # This is for end date
                         value = variety,
                         overwrite = TRUE)
     apsimx::edit_apsimx(crop,

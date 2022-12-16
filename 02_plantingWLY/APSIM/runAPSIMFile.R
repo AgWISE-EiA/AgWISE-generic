@@ -3,17 +3,20 @@ setwd("D:/j")
 ## sourcing the data 
 stn<- read.csv("Rwanda/station.csv")
 names(stn)<- c("Longitude", 'Latitude', "Location")
+
 rain<-read.csv("Rwanda/Rainfall.data.coordinates_Rwanda.csv")
 rain$Date = seq(as.Date("1981-01-01"), as.Date("2020-12-31"), by="days")
-
+date<- as.data.frame(rain$Date)
+rain<-rain[,-1]
+  
 max<-read.csv("Rwanda/Tmax.data.coordinates_Rwanda.csv")
-max$Date = seq(as.Date("1981-01-01"), as.Date("2020-12-31"), by="days")
+max<-max[,-1]
 
 min<-read.csv("Rwanda/Tmin.data.coordinates_Rwanda.csv")
-min$Date = seq(as.Date("1981-01-01"), as.Date("2020-12-31"), by="days")
+min<-min[,-1]
 
 solar<-read.csv("Rwanda/S.Rad.data.coordinates_Rwanda.csv")
-solar$Date = seq(as.Date("1981-01-01"), as.Date("2020-12-31"), by="days")
+solar<-solar[,-1]
 
 #########################################################
 ## sourcing function to create met file

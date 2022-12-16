@@ -26,11 +26,11 @@ createMetFile<-function(rain,max, min,solar,stn,filename = NULL){
   
   if(!grepl(".met", filename, fixed = TRUE)) stop("filename should end in .met")
   
-  pwr <- foreach (i = 1:(nrow(stn)-1)) %do% {data.frame(date = rain[1],
-                                                        rain = rain[i+1] ,
-                                                        max = max[i+1],
-                                                        min = min[i+1],
-                                                        solar = solar[i+1])}
+  pwr <- foreach (i = 1:(nrow(stn))) %do% {data.frame(date = date[1],
+                                                        rain = rain[i] ,
+                                                        max = max[i],
+                                                        min = min[i],
+                                                        solar = solar[i])}
   
   foreach (i = 1: length(pwr))%do%{
     names(pwr[[i]])<- c('Date', 'rain', 'maxt', 'mint', 'radn')}

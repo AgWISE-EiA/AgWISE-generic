@@ -2,6 +2,9 @@
 #'
 #'This function is the 'core' of this module. It generates apsim outputs
 #'for a list of locations that are provided as input.
+#'It sources soil from ISRIC, takes climate data and management as an input.
+#'
+#'TODO provide explanation of file and path handling.
 #'
 #'
 #' @param wkdir 

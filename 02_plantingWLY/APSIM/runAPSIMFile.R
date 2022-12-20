@@ -1,3 +1,9 @@
+#'This is the main or index file for running APSIM simulations.
+#'This file sources functions for preparing, processing, and visualizing data.
+#'The core is a call to 'apsim.spatial' for running apsim simulations.
+#'The simulations are provided in a list and run in parallel.
+#'
+
 #TODO implement automated data sourcing system from module 1.
 #TODO Rename - suggests it runs single APSIM file. But runs spatial suite. 
 

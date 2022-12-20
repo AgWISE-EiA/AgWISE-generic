@@ -53,12 +53,12 @@ foreach (i = 1:length(results))%do%{
   print(ggplot()+tidyterra::geom_spatvector(data=country, fill = "white")+
           geom_point(data=finall, aes(x=Longitude, y=Latitude, color= Maize.SowingDate), size = 2))
   
-  print(ggplot() +  geom_point(data=final, aes(x=Longitude, y=Latitude, color= Maize.SowingDate), size = 2))
+  print(ggplot() + geom_point(data=final, aes(x=Longitude, y=Latitude, color= Maize.SowingDate), size = 2))
   
   print(ggplot()+tidyterra::geom_spatvector(data=country, fill = "white")+
           geom_point(data=finall, aes(x=Longitude, y=Latitude, color= Yield), size = 2))
   
-  print(ggplot() +  geom_point(data=finall, aes(x=Longitude, y=Latitude, color= Yield), size = 2))
+  print(ggplot() + geom_point(data=finall, aes(x=Longitude, y=Latitude, color= Yield), size = 2))
 return(FinalBound)
 }
 

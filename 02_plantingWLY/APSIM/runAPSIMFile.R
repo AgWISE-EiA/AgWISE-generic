@@ -1,3 +1,6 @@
+#TODO implement automated data sourcing system from module 1.
+#TODO Rename - suggests it runs single APSIM file. But runs spatial suite. 
+
 setwd("D:/j")
 #######################################################
 ## sourcing the data 
@@ -27,9 +30,10 @@ my_list_clm<-createMetFile(rain = rain,max = max,min = min,solar = solar,stn = s
 
 #########################################################
 ## sourcing function to create spatialize apsim
+#TODO clarify output format of this (suppose it's a list).
 setwd("D:/dev_agwise/AgWISE-generic/02_plantingWLY/APSIM/")
 source('apsimSpatialFunction.R')
-results<- apsim.spatial(my_list_clm = my_list_clm,
+results <- apsim.spatial(my_list_clm = my_list_clm,
                         wkdir ="D:/project", 
                         crop = "Maize.apsimx", 
                         clck = c("2019-01-01T00:00:00", "2020-12-01T00:00:00"),
@@ -37,8 +41,8 @@ results<- apsim.spatial(my_list_clm = my_list_clm,
                         ed = "30-dec",
                         variety = "sc501",
                         fert = 200,
-                        rep1 ="[Maize].Grain.Total.Wt*10 as Yield" ,
-                        rep2 ="[Maize].SowingDate")
+                        rep1 = "[Maize].Grain.Total.Wt*10 as Yield" ,
+                        rep2 = "[Maize].SowingDate")
  
 #########################################################
 ## sourcing function to create plot

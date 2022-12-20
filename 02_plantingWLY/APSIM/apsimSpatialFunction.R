@@ -1,13 +1,17 @@
 #' Title 
 #'
+#'This function is the 'core' of this module. It generates apsim outputs
+#'for a list of locations that are provided as input.
+#'
+#'
 #' @param wkdir 
 #' @param cell 
 #' @param b 
 #' @param date 
 #' @param crop 
 #' @param clck 
-#' @param sd 
-#' @param ed 
+#' @param sd       #Start date for sowing window
+#' @param ed       #End date for sowing window
 #' @param variety 
 #' @param fert 
 #' @param rep1 
@@ -17,6 +21,9 @@
 #' @export
 #'
 #' @examples
+
+#TODO review setwd use cases. Ideally replace with relative paths.
+#TODO need some clarity on tile numbering - i.e. center of grid cell?
 apsim.spatial <- function(my_list_clm, wkdir, crop, clck, sd, ed, variety, fert, rep1, rep2) {
   my_packages <- c("spdep", "rgdal", "maptools", "raster", "plyr", "ggplot2", "rgdal",
                    "dplyr", "cowplot","readxl", "apsimx", "gtools", "foreach","doParallel",
@@ -60,6 +67,8 @@ apsim.spatial <- function(my_list_clm, wkdir, crop, clck, sd, ed, variety, fert,
                         node = "Weather", 
                         value = paste0(extd.dir, "/", 'wth_loc_',i,'.met'), overwrite = TRUE)
   }
+  
+  #TODO Automate soil repairs with a function. na.approx from 'zoo' package?
   # Edit the soil depending on location there is an issue with soil where one may be required to edit the BD, SAT
   foreach (i =1:length(my_list_sol)) %do% {  
     setwd(paste0(extd.dir, '/', i))
@@ -70,7 +79,7 @@ apsim.spatial <- function(my_list_clm, wkdir, crop, clck, sd, ed, variety, fert,
     tryCatch(edit_apsimx_replace_soil_profile(crop, soil.profile = my_list_sol[[i]], overwrite = TRUE), error=function(err) NA)
   }
   
-  #Edit clock#
+  #Edit clock.
   foreach (i =1:length(my_list_sol)) %dopar% {  
     setwd(paste0(extd.dir, '/', i))
     apsimx::edit_apsimx(crop, 
@@ -80,6 +89,8 @@ apsim.spatial <- function(my_list_clm, wkdir, crop, clck, sd, ed, variety, fert,
                         overwrite = TRUE)
   }
   # Change the sowing rule for when rain is available
+  #TODO define 'when rain is available'. 1st day > 20mm for now? 
+  #TODO Sowing rule may need calibration based on local climate in the future.
   foreach (i =1:length(my_list_sol)) %dopar% {  
     setwd(paste0(extd.dir, '/', i))
     apsimx::edit_apsimx(crop, 
@@ -88,7 +99,6 @@ apsim.spatial <- function(my_list_clm, wkdir, crop, clck, sd, ed, variety, fert,
                         parm = "StartDate", ## This is for start date
                         value = sd,
                         overwrite = TRUE)
-    
     apsimx::edit_apsimx(crop, 
                         node = "Manager",
                         manager.child = "SowingRule",

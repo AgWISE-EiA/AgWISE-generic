@@ -31,17 +31,17 @@ foreach (i = 1:length(results))%do%{
 ##############################Graphs######################################
   foreach (i = 1:length(results))%do%{
     print(results[[i]]  %>%
-            ggplot(aes(x=Maize.SowingDate, y=Yield)) +
+            ggplot(aes(x=Potato.SowingDate, y=Yield)) +
             geom_point(na.rm=TRUE)+
             ggtitle(paste0("Yield ",i)))
   }
   #########################################################################
   final<- do.call("smartbind", results)
   FinalBound<-final
-  colnames(FinalBound)[colnames(FinalBound) == "Date"]  <- "Maize.HarvestingDate"  
-  FinalBound$Maize.SowingDate = format(as.Date(FinalBound$Maize.SowingDate), "%d/%m/%Y")
-  FinalBound$Maize.HarvestingDate = strptime(FinalBound$Maize.HarvestingDate, "%Y-%m-%d")
-  FinalBound$Maize.HarvestingDate = format(FinalBound$Maize.HarvestingDate, "%d/%m/%Y")
+  colnames(FinalBound)[colnames(FinalBound) == "Date"]  <- "Potato.HarvestingDate"  
+  FinalBound$Potato.SowingDate = format(as.Date(FinalBound$Potato.SowingDate), "%d/%m/%Y")
+  FinalBound$Potato.HarvestingDate = strptime(FinalBound$Potato.HarvestingDate, "%Y-%m-%d")
+  FinalBound$Potato.HarvestingDate = format(FinalBound$Potato.HarvestingDate, "%d/%m/%Y")
   
   finall<-final%>%
     group_by(Longitude, Latitude)%>%
@@ -52,9 +52,9 @@ foreach (i = 1:length(results))%do%{
   country<-geodata::gadm(country=b, level=0, path=tempdir())
   
   print(ggplot()+tidyterra::geom_spatvector(data=country, fill = "white")+
-          geom_point(data=finall, aes(x=Longitude, y=Latitude, color= Maize.SowingDate), size = 2))
+          geom_point(data=finall, aes(x=Longitude, y=Latitude, color= Potato.SowingDate), size = 2))
   
-  print(ggplot() + geom_point(data=final, aes(x=Longitude, y=Latitude, color= Maize.SowingDate), size = 2))
+  print(ggplot() + geom_point(data=final, aes(x=Longitude, y=Latitude, color= Potato.SowingDate), size = 2))
   
   print(ggplot()+tidyterra::geom_spatvector(data=country, fill = "white")+
           geom_point(data=finall, aes(x=Longitude, y=Latitude, color= Yield), size = 2))

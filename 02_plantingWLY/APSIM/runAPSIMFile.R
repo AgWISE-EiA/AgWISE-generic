@@ -7,24 +7,24 @@
 #TODO implement automated data sourcing system from module 1.
 #TODO Rename - suggests it runs single APSIM file. But runs spatial suite. 
 
-setwd("D:/j")
+setwd("D:/dev_agwise/AgWISE-generic/02_plantingWLY/APSIM/")
 #######################################################
 ## sourcing the data 
-stn<- read.csv("Rwanda/station.csv")
+stn<- read.csv("Rwanda_dummy_data/station.csv")
 names(stn)<- c("Longitude", 'Latitude', "Location")
 
-rain<-read.csv("Rwanda/Rainfall.data.coordinates_Rwanda.csv")
+rain<-read.csv("Rwanda_dummy_data/Rainfall.data.coordinates_Rwanda.csv")
 rain$Date = seq(as.Date("1981-01-01"), as.Date("2020-12-31"), by="days")
 date<- as.data.frame(rain$Date)
 rain<-rain[,-1]
   
-max<-read.csv("Rwanda/Tmax.data.coordinates_Rwanda.csv")
+max<-read.csv("Rwanda_dummy_data/Tmax.data.coordinates_Rwanda.csv")
 max<-max[,-1]
 
-min<-read.csv("Rwanda/Tmin.data.coordinates_Rwanda.csv")
+min<-read.csv("Rwanda_dummy_data/Tmin.data.coordinates_Rwanda.csv")
 min<-min[,-1]
 
-solar<-read.csv("Rwanda/S.Rad.data.coordinates_Rwanda.csv")
+solar<-read.csv("Rwanda_dummy_data/S.Rad.data.coordinates_Rwanda.csv")
 solar<-solar[,-1]
 
 #########################################################

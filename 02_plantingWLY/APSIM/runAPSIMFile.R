@@ -57,6 +57,5 @@ setwd("D:/dev_agwise/AgWISE-generic/02_plantingWLY/APSIM/")
 source('ApsimPlotFunction.R')
 PlantingDates<-apsim.plots(stn = stn,
             results=results, 
-            b= "RWANDA",
-            wkdir= "D:/project")
+            b= "RWANDA")
 

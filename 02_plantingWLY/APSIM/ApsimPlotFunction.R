@@ -1,15 +1,16 @@
 #' Title
 #'
+#' @param stn = Dataframe with the latlon data
 #' @param results = the results list obtained from apsim.spatial command
 #' @param b = the country shape file e.g "ZM" for Zimbabwe
 #' @param wkdir = the directory where station data is saved
 #'
-#' @return
+#' @return The planting dates
 #' @export
 #'
-#' @examples
-apsim.plots<- function(stn, results, b, wkdir){
-  setwd(wkdir)
+#' @examples apsim.plots(stn = stn, results=results, b= "RWANDA")
+
+apsim.plots<- function(stn, results, b){
    foreach (i = 1:length(results))%do%{
   results[[i]]$Longitude<-stn$Longitude[[i]]
   results[[i]]$Latitude<-stn$Latitude[[i]]

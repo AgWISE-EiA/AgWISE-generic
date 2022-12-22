@@ -18,7 +18,7 @@
 #' @param rep1    #Additional parameter to include "yield": rep1 = "[Maize].Grain.Total.Wt*10 as Yield"
 #' @param rep2    #Additional parameter to include "sowingdate": rep2 = "[Maize].SowingDate"
 #'
-#' @return
+#' @return 
 #' @export
 #'
 #' @examples apsim.spatial(my_list_clm = my_list_clm, wkdir ="D:/project", crop = "Maize.apsimx", 

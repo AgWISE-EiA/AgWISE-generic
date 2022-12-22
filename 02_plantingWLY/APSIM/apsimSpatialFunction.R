@@ -7,26 +7,28 @@
 #'TODO provide explanation of file and path handling.
 #'
 #'
-#' @param wkdir 
-#' @param cell 
-#' @param b 
-#' @param date 
-#' @param crop 
-#' @param clck 
-#' @param sd       #Start date for sowing window
-#' @param ed       #End date for sowing window
-#' @param variety 
-#' @param fert 
-#' @param rep1 
-#' @param rep2 
+#' @param my_list_clm   #List containing the met files: my_list_clm = my_list_clm
+#' @param wkdir   #Provide path to where you wish to save the apsimx files: wkdir ="D:/project"
+#' @param crop    #Crop in apsimx examples you wish to simulate: crop = "Maize.apsimx"
+#' @param clck    #Period the simulation should run: clck = c("2019-01-01T00:00:00", "2020-12-01T00:00:00") 
+#' @param sd       #Start date for sowing window: sd = "1-jan"
+#' @param ed       #End date for sowing window: ed = "30-dec"
+#' @param variety   #Cultivar to be simulated: variety = "sc501"
+#' @param fert     #Amount of fertilizer to be used: fert = 200
+#' @param rep1    #Additional parameter to include "yield": rep1 = "[Maize].Grain.Total.Wt*10 as Yield"
+#' @param rep2    #Additional parameter to include "sowingdate": rep2 = "[Maize].SowingDate"
 #'
 #' @return
 #' @export
 #'
-#' @examples
+#' @examples apsim.spatial(my_list_clm = my_list_clm, wkdir ="D:/project", crop = "Maize.apsimx", 
+#' clck = c("2019-01-01T00:00:00", "2020-12-01T00:00:00"),
+#' sd = "1-jan", ed = "30-dec",variety = "sc501",fert = 200,
+#' rep1 = "[Maize].Grain.Total.Wt*10 as Yield", rep2 = "[Maize].SowingDate")
 
 #TODO review setwd use cases. Ideally replace with relative paths.
 #TODO need some clarity on tile numbering - i.e. center of grid cell?
+
 apsim.spatial <- function(my_list_clm, wkdir, crop, clck, sd, ed, variety, fert, rep1, rep2) {
   my_packages <- c("spdep", "rgdal", "maptools", "raster", "plyr", "ggplot2", "rgdal",
                    "dplyr", "cowplot","readxl", "apsimx", "gtools", "foreach","doParallel",

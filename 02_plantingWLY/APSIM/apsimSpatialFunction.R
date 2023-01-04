@@ -93,7 +93,7 @@ apsim.spatial <- function(my_list_clm, wkdir, crop, clck, sd, ed, variety, fert,
                         value = clck,
                         overwrite = TRUE)
   }
-  # Change the sowing rule for when rain is available
+  ## Change the sowing rule for when rain is available
   #TODO define 'when rain is available'. 1st day > 20mm for now? 
   #TODO Sowing rule may need calibration based on local climate in the future.
   foreach (i =1:length(my_list_sol)) %dopar% {  

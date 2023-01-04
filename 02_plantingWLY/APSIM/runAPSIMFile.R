@@ -50,7 +50,7 @@ results <- apsim.spatial(my_list_clm = my_list_clm,
                         rep1 = "[Maize].Grain.Total.Wt*10 as Yield" ,
                         rep2 = "[Maize].SowingDate")
  
-#########################################################
+########################################################
 ## sourcing function to create plot
 
 setwd("D:/dev_agwise/AgWISE-generic/02_plantingWLY/APSIM/")

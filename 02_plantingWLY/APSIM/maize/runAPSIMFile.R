@@ -29,7 +29,7 @@ solar<-solar[,-1]
 
 #########################################################
 ## sourcing function to create met file
-setwd("D:/dev_agwise/AgWISE-generic/02_plantingWLY/APSIM/")
+setwd("D:/dev_agwise/AgWISE-generic/02_plantingWLY/APSIM/maize")
 source('createMetFileFunction.R')
 
 my_list_clm<-createMetFile(rain = rain,max = max,min = min,solar = solar,stn = stn)
@@ -37,7 +37,7 @@ my_list_clm<-createMetFile(rain = rain,max = max,min = min,solar = solar,stn = s
 #########################################################
 ## sourcing function to create spatialize apsim
 #TODO clarify output format of this (suppose it's a list).
-setwd("D:/dev_agwise/AgWISE-generic/02_plantingWLY/APSIM/")
+setwd("D:/dev_agwise/AgWISE-generic/02_plantingWLY/APSIM/maize")
 source('apsimSpatialFunction.R')
 results <- apsim.spatial(my_list_clm = my_list_clm,
                         wkdir ="D:/project", 
@@ -53,7 +53,7 @@ results <- apsim.spatial(my_list_clm = my_list_clm,
 ########################################################
 ## sourcing function to create plot
 
-setwd("D:/dev_agwise/AgWISE-generic/02_plantingWLY/APSIM/")
+setwd("D:/dev_agwise/AgWISE-generic/02_plantingWLY/APSIM/maize")
 source('ApsimPlotFunction.R')
 PlantingDates<-apsim.plots(stn = stn,
             results=results, 

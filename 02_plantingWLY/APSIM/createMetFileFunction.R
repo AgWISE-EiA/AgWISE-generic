@@ -44,7 +44,7 @@ createMetFile<-function(rain,max, min,solar,stn,filename = NULL){
   
   comments <- paste("!data from various areas. retrieved: ", Sys.time())
   
-  ## Calculating annual amplitude in mean monthly temperature
+  ### Calculating annual amplitude in mean monthly temperature
   pwr<- foreach(i = 1:length(pwr2))%do%{                   
     attr(pwr2[[i]], "filename") <- filename
     attr(pwr2[[i]], "site") <- paste("site =", sub(".met", "", filename, fixed = TRUE))

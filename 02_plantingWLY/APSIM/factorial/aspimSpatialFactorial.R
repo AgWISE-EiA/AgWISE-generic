@@ -59,7 +59,7 @@ apsimSpatialFactorial <- function(my_list_clm, wkdir, crop, clck, variety, rep1,
 #saveRDS(my_list_sol, file="soil.RData")
   
 #my_list_soil<- readRDS("soil.RData")
-  ##APSIM PART##
+  #APSIM PART##
   #Write the weather files to a working directory and Edit the weather as per location
   foreach (i =1:length(my_list_clm)) %dopar% {
     apsimx::write_apsim_met(my_list_clm[[i]], wrt.dir = extd.dir, filename = paste0('wth_loc_',i,'.met'))}

@@ -28,7 +28,7 @@ foreach (i = 1:length(results))%do%{
     results[[i]] <- NULL
   }
 }
-##############################Graphs######################################
+##############################Graphs#####################################
   foreach (i = 1:length(results))%do%{
     print(results[[i]]  %>%
             ggplot(aes(x=Maize.SowingDate, y=Yield)) +

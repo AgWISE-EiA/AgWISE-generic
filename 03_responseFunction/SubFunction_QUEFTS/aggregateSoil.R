@@ -50,51 +50,28 @@ invisible(lapply(vars_isric,
 
 #################################################################################################################
 ## crop for the AOI: cropped layers will be available as input data in "pathOut"
+## pedo-transfer function from harvest choice is used to get soil hydraulics based on sand, silt, clay and OM in percentage 
 #################################################################################################################
 ## source cropping function
 source("./AgWise/EiA_Analytics/AgWISE-UseCaseRAB/03_responseFunction/SubFunction_QUEFTS/aggregateSoil_Functions.R")
 
-
-## read all soil layers
-listRaster <-list.files(path="./AgWise/rawData/1_soil/", pattern=".tif$")
-
-
-
-## crop the layers for the country and get raster
-lapply(listRaster,       
-                 function(i) {
-                   cropSoil(i, pathIn = "./AgWise/rawData/1_soil/",
-                            pathOut = "./AgWise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/soil", 
-                            returnFormat = "raster", countryName = "Rwanda")
-                 }
-)
-
-
 ## crop for GPS coordinates
 Rwanda_coor <- read.csv("AgWise/EiA_Analytics/useCase_RAB/Rice/inputData/RAB_Rice_Coordinates.csv")
 
-lapply(listRaster,       
-       function(i) {
-         cropSoil(i, pathIn = "./AgWise/rawData/1_soil/",
-                  pathOut = "./AgWise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/soil", 
-                  returnFormat = "point", countryCoord = Rwanda_coor, countryName = "Rwanda")
-       }
-)
+## running the cropping function
+Rwanda_iSDAsoils <- cropSoil(pathIn = "./AgWise/rawData/1_soil/",
+                             pathOut = "./AgWise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/soil", 
+                             countryCoord = Rwanda_coor, 
+                             countryName = "Rwanda")
+head(Rwanda_iSDAsoils)
 
 
 
-
-
-#####################################################################################################
-## pedo-transfer function from harvest choice to get soil hydraulics based on sand, silt, clay and OM in percentage 
-######################################################################################################
-
-
-get_soilHydraulics(pathIn = "./AgWise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/soil",
-                   countryName = "Rwanda", pathOut = "./AgWise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/soil",
-                   returnFormat = "raster")
-
-
-get_soilHydraulics(pathIn = "./AgWise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/soil",
-                   countryName = "Rwanda", pathOut = "./AgWise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/soil",
-                   returnFormat = "point", countryCoord = Rwanda_coor)
+# ## crop the layers for the country and get raster
+# lapply(listRaster,       
+#                  function(i) {
+#                    cropSoil(i, pathIn = "./AgWise/rawData/1_soil/",
+#                             pathOut = "./AgWise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/soil", 
+#                             returnFormat = "raster", countryName = "Rwanda")
+#                  }
+# )

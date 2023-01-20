@@ -1,7 +1,6 @@
 
 # package names
-packages <- c("readxl", "tidyverse", "reshape2", "mapview", "lubridate", "sf", 
-              "geodata", "lmerTest", "lme4", "predictmeans", "topmodel")
+packages <- c("readxl", "tidyverse", "reshape2", "mapview", "lubridate", "sf", "geodata")
 
 # install packages
 installed_packages <- packages %in% rownames(installed.packages())
@@ -15,11 +14,6 @@ invisible(lapply(packages, library, character.only = TRUE))
 # potato fertiliser data 22a
 data_22a <- read_excel('./data/raw/rwasis-potato/RwaSIS data template_Potato_2022A_RBJ_17Jan2023.xlsx', sheet='RS-PFR-1')
 
-# get farmID based on unique coordinates
-gps <- unique(data_22a[c(3,4)])
-gps$farm_id <- row.names(gps)
-data_22a <- merge(data_22a, gps, by=c("GPS-lon", "GPS-lat"))
-
 # calculate potato yield
 colnames(data_22a)[12] <- 'plot_area_m2'
 colnames(data_22a)[13] <- 'harvest_kgplot'
@@ -27,16 +21,16 @@ data_22a$yield_kgha <- 10000 * data_22a$harvest_kgplot / data_22a$plot_area_m2
 data_22a$yield_tha <- data_22a$yield_kgha/1000
 
 # get columns of interest
-data_22a <- data_22a[c(20, 1, 2, 5, 6, 7, 8, 9, 10, 11, 22)]
-colnames(data_22a)[2] <- 'gps_lon'
-colnames(data_22a)[3] <- 'gps_lat'
-colnames(data_22a)[4] <- 'treatment'
-colnames(data_22a)[5] <- 'nfert_kgha'
-colnames(data_22a)[6] <- 'pfert_kgha'
-colnames(data_22a)[7] <- 'kfert_kgha'
-colnames(data_22a)[8] <- 'lime_kgha'
-colnames(data_22a)[9] <- 'planting_date'
-colnames(data_22a)[10] <- 'harvest_date'
+data_22a <- data_22a[c(3, 4, 5, 6, 7, 8, 9, 10, 11, 21)]
+colnames(data_22a)[1] <- 'gps_lon'
+colnames(data_22a)[2] <- 'gps_lat'
+colnames(data_22a)[3] <- 'treatment'
+colnames(data_22a)[4] <- 'nfert_kgha'
+colnames(data_22a)[5] <- 'pfert_kgha'
+colnames(data_22a)[6] <- 'kfert_kgha'
+colnames(data_22a)[7] <- 'lime_kgha'
+colnames(data_22a)[8] <- 'planting_date'
+colnames(data_22a)[9] <- 'harvest_date'
 
 # format dates  
 data_22a$planting_date <- as.Date(data_22a$planting_date, format='%d/%m/%Y')
@@ -54,11 +48,6 @@ data_22b <- subset(data_22b, projectCode == 'RS')
 data_22b <- subset(data_22b, !is.na(tubersFW))
 data_22b <- data_22b[,colSums(is.na(data_22b))==0] # remove columns with NA only
 
-# get farmID based on unique coordinates
-gps <- unique(data_22b[c(17,18)])
-gps$farm_id <- row.names(gps)
-data_22b <- merge(data_22b, gps, by=c("lon", "lat"))
-
 # calculate potato yield
 data_22b$plotWidth <- ifelse(data_22b$plotWidth > 10, data_22b$plotWidth/10, data_22b$plotWidth)
 data_22b$plotWidth <- ifelse(data_22b$plotWidth == 0, mean(data_22b$plotWidth), data_22b$plotWidth)
@@ -68,9 +57,9 @@ data_22b$yield_kgha <- 10000 * data_22b$tubersFW / data_22b$plotArea_m2
 data_22b$yield_tha <- data_22b$yield_kgha/1000
 
 # get columns of interest
-data_22b <- data_22b[c(1, 2, 32, 42, 45)]
-colnames(data_22b)[1] <- 'gps_lon'  
-colnames(data_22b)[2] <- 'gps_lat'  
+data_22b <- data_22b[c(13, 14, 32, 44)]
+colnames(data_22b)[1] <- 'gps_lat'  
+colnames(data_22b)[2] <- 'gps_lon'  
 colnames(data_22b)[3] <- 'treatment'  
 
 # clean treatment variable
@@ -114,6 +103,11 @@ data_22b_npk$season <- '2022B'
 # ------------------------------------------------------------------------------
 # bind two season data
 data_potato <- rbind(data_22a, data_22b_npk)
+
+# get farmID based on unique coordinates
+gps <- unique(data_potato[c(1, 2, 13)])
+gps$farm_id <- row.names(gps)
+data_potato <- merge(data_potato, gps, by=c("gps_lon", "gps_lat", 'season'))
 
 # add admin zones from GADM
 rwa <- geodata::gadm(country = "RWA", level = 3, path='./data/raw/')

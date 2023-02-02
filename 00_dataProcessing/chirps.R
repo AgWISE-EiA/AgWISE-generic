@@ -12,7 +12,7 @@ chirps <- function(startDate, endDate, raster = FALSE, df = NULL){
   dates <- seq.Date(as.Date(startDate, format = "%Y-%m-%d"), as.Date(endDate, format = "%Y-%m-%d"), by = "day")
   year <- unique(format(dates, "%Y"))
   chirps <- terra::rast()
-  for (file in list.files('/home/jovyan/AgWise/rawData/2_weather/rain_chirps/raw', pattern = paste0(year, collapse = '|'), full.names = TRUE)) {
+  for (file in list.files('/home/jovyan/agwise/rawData/2_weather/rain_chirps/raw', pattern = paste0(year, collapse = '|'), full.names = TRUE)) {
     terra::add(chirps) <- terra::rast(file)
   }
   names(chirps) <- as.character(format(as.Date(terra::time(chirps)), "%Y%m%d"))

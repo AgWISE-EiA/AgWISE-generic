@@ -3,7 +3,7 @@
 #' @df data.frame with 2 columns (LatLong)
 #' @return data.frame
 #' @examples
-#' chirps(df = data.frame("x" = c(9.57, 10.55), "y" = c(11.55, 12.43)))
+#' isda(df = data.frame("x" = c(9.57, 10.55), "y" = c(11.55, 12.43)))
 
 isda <- function(df = NULL){
   dep <- c("20"="0..20cm","50"="20..50cm")

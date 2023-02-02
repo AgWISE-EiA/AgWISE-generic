@@ -52,3 +52,42 @@ isda <- function(df = NULL){
   }
   return(out)
 }
+
+#' Extract and format iSDA data
+#'
+#' @df data.frame with 2 columns (LatLong)
+#' @return data.frame
+#' @examples
+#' extract clay values for set of coordinates
+#' isda(coords = data.frame("x" = c(9.57, 10.55), "y" = c(11.55, 12.43)))
+#' extract clay values for AOI
+#' isda(coords = data.frame("x" = c(9.57, 10.55), "y" = c(11.55, 12.43)), raster = TRUE)
+
+isda.geodata <- function(variable = NULL, depth = NULL, coords = NULL, raster = NULL){
+  # Create output
+  out <- coords
+  out$location <- paste(out[[2]], out[[1]], sep = "_")
+  out <- out[,c(3,2,1)]
+  # Construct file name
+  d <- sub(".*-(\\d+).*", "\\1", depth)
+  file <- paste("isda", variable, depth, "v0.13_30s.tif", sep = "_")
+  # Check if file is locally available; if not download
+  if(!file.exists(paste0("~/agwise/rawData/", file))){
+    geodata::soil_af_isda(var = variable, depth = d, path = "~/agwise/rawData/")
+  }
+  # Read file
+  r <- suppressWarnings(terra::rast(paste0("~/agwise/rawData/", file)))
+  # Create AOI from coords
+  aoi <- suppressWarnings(terra::vect(sf::st_as_sf(sf::st_as_sfc(sf::st_bbox(c(xmin = min(coords[,1]), xmax = max(coords[,1]), ymax = max(coords[,2]), ymin = min(coords[,2])), crs = sf::st_crs(4326))))))
+  # Subset AOI
+  data <- suppressWarnings(terra::crop(r, aoi))
+  if(isTRUE(raster)){
+    return(data)
+  }
+  else {
+    vals <- terra::extract(data, coords)[2]
+    out <- cbind(out, vals)
+    return(out)  
+  }
+}
+

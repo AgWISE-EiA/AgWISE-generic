@@ -1,4 +1,14 @@
-agera5 <- function(startDate, endDate, coordPoints = NULL, raster = FALSE){
+#' Extract and format AgERA5 data
+#'
+#' @param startDate starting date of the data extraction
+#' @param endDate ending date of the data extraction
+#' @coords data.frame with 2 columns (Latitude and Longitude)
+#' @raster optional boolean to export results in SpatRast (terra) format
+#' @return data.frame or SpatRast
+#' @examples
+#' agera5(startDate = "2017-05-13", endDate = "2018-09-28", coords = data.frame("x" = c(9.57, 10.55), "y" = c(11.55, 12.43)), raster = FALSE)
+ 
+agera5 <- function(startDate, endDate, coords = NULL, raster = FALSE){
   dates <- seq.Date(as.Date(startDate, format = "%Y-%m-%d"), as.Date(endDate, format = "%Y-%m-%d"), by = "day")
   year <- unique(format(dates, "%Y"))
   wind <- terra::rast()
@@ -35,15 +45,15 @@ agera5 <- function(startDate, endDate, coordPoints = NULL, raster = FALSE){
     names(rhum) <- as.character(paste0("rhum", format(as.Date(terra::time(rhum)), "%Y%m%d")))
     names(srad) <- as.character(paste0("srad", format(as.Date(terra::time(srad)), "%Y%m%d")))
     agera <- c(wind, temp, tmin, tmax, rhum, srad)
-    aoi <- suppressWarnings(terra::vect(sf::st_as_sf(sf::st_as_sfc(sf::st_bbox(c(xmin = min(coordPoints[,1]), xmax = max(coordPoints[,1]), ymax = max(coordPoints[,2]), ymin = min(coordPoints[,2])), crs = sf::st_crs(4326))))))
+    aoi <- suppressWarnings(terra::vect(sf::st_as_sf(sf::st_as_sfc(sf::st_bbox(c(xmin = min(coords[,1]), xmax = max(coords[,1]), ymax = max(coords[,2]), ymin = min(coords[,2])), crs = sf::st_crs(4326))))))
     agera <- terra::crop(agera,aoi)
     return(agera)
   }
   else {
     w <- data.frame()
-    for (pnt in seq(1:nrow(coordPoints))){
-      lon <- coordPoints[pnt, 1]
-      lat <- coordPoints[pnt, 2]
+    for (pnt in seq(1:nrow(coords))){
+      lon <- coords[pnt, 1]
+      lat <- coords[pnt, 2]
       z.wind <- terra::extract(wind,data.frame(lon,lat))
       z.temp <- terra::extract(temp,data.frame(lon,lat))
       z.tmin <- terra::extract(tmin,data.frame(lon,lat))

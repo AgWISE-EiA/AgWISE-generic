@@ -2,13 +2,13 @@
 #'
 #' @param startDate starting date of the data extraction
 #' @param endDate ending date of the data extraction
-#' @df data.frame with 2 columns (LatLong)
-#' @raster optional boolean to export results in raster format
-#' @return data.frame
+#' @coords data.frame with 2 columns (Latitude and Longitude)
+#' @raster optional boolean to export results in SpatRast (terra) format
+#' @return data.frame or SpatRast
 #' @examples
-#' chirps(startDate = "2021-05-13", endDate = "2021-09-28", df = data.frame("x" = c(9.57, 10.55), "y" = c(11.55, 12.43)))
+#' chirps(startDate = "2021-05-13", endDate = "2021-09-28", coords = data.frame("x" = c(9.57, 10.55), "y" = c(11.55, 12.43)))
 
-chirps <- function(startDate, endDate, raster = FALSE, df = NULL){
+chirps <- function(startDate, endDate, raster = FALSE, coords = NULL){
   dates <- seq.Date(as.Date(startDate, format = "%Y-%m-%d"), as.Date(endDate, format = "%Y-%m-%d"), by = "day")
   year <- unique(format(dates, "%Y"))
   chirps <- terra::rast()
@@ -18,15 +18,15 @@ chirps <- function(startDate, endDate, raster = FALSE, df = NULL){
   names(chirps) <- as.character(format(as.Date(terra::time(chirps)), "%Y%m%d"))
   chirps <- chirps[[as.character(format(dates, format = "%Y%m%d"))]]
   if (raster){
-    aoi <- suppressWarnings(terra::vect(sf::st_as_sf(sf::st_as_sfc(sf::st_bbox(c(xmin = min(df[,1]), xmax = max(df[,1]), ymax = max(df[,2]), ymin = min(df[,2])), crs = sf::st_crs(4326))))))
+    aoi <- suppressWarnings(terra::vect(sf::st_as_sf(sf::st_as_sfc(sf::st_bbox(c(xmin = min(coords[,1]), xmax = max(coords[,1]), ymax = max(coords[,2]), ymin = min(coords[,2])), crs = sf::st_crs(4326))))))
     chirps <- terra::crop(chirps,aoi)
     return(chirps)
   }
   else {
     w <- data.frame()
-    for (pnt in seq(1:nrow(df))){
-      lon <- df[pnt, 1]
-      lat <- df[pnt, 2]
+    for (pnt in seq(1:nrow(coords))){
+      lon <- coords[pnt, 1]
+      lat <- coords[pnt, 2]
       z <- terra::extract(chirps,data.frame(lon,lat))
       out <- data.frame("dates" = dates)
       out$X <- lon

@@ -74,9 +74,9 @@ agera5 <- function(startDate, endDate, coords = NULL, raster = FALSE){
                       "month" = format(as.Date(out$dates), format = "%m"),
                       "day" = format(as.Date(out$dates), format = "%d"),
                       "WIND" = out$WIND,
-                      "TEMP" = out$TEMP-273,
-                      "TMIN" = out$TMIN-273,
-                      "TMAX" = out$TMAX-273,
+                      "TEMP" = out$TEMP-273.15,
+                      "TMIN" = out$TMIN-273.15,
+                      "TMAX" = out$TMAX-273.15,
                       "RHUM" = out$RELH,
                       "SRAD" = out$RADN*1e-6)
       w <- rbind(w, out)

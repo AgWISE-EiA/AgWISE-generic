@@ -1,5 +1,5 @@
 ##############################################################################################
-## Aggregate the covariates for weather:
+## Aggregate the covariates for rainfall:
 ##############################################################################################
 #
 #' Title: function to aggregate rainfall data from get_covariates (eg.sum of the daily rainfall over the cropping season) 
@@ -16,10 +16,10 @@ aggregate_rain_calibrate <- function(pathInC,
                                      thr){
   
   #' @param pathInC the directory where are stored the rainfall data
-  #' @param pathInO the directory where are stored the ground data (Use Case Data)
+  #' @param pathInO the pathway where are stored the ground data (Use Case Data), should be csv with sep=";"
   #' @param pathOut the directory where will be stored the aggregated rainfall data
   #' @param thr the rain-rate threshold for a rainy days given in mm of rain/day (float). Default value is set to 1 mm/day.
-  #' @param col a vector containing the column index of the variables used in the function c(ID, long, lat, Crop, Year, pl_Date, hv_Date, N, P, K, Yield) 
+  #' @param col a vector containing the column index of the variables used in the function c(ID, long, lat, Crop, season, pl_Date, hv_Date, N, P, K, Yield) 
   #' @return a data frame containing the col information & columns corresponding to the rainfall parameters :
   #'        tr : Total rainfall between pl_Date and hv_Date (mm)
   #'        nrd : Number of rainy days between pl_Date and hv_Date (days)
@@ -30,7 +30,7 @@ aggregate_rain_calibrate <- function(pathInC,
   # Check the installation
   
   # packages required
-  packages_required <- c("sf", "rgdal", "raster", "terra")
+  packages_required <- c("sf", "rgdal", "raster")
   
   # check and install packages that are not yet installed
   installed_packages <- packages_required %in% rownames(installed.packages())
@@ -38,23 +38,25 @@ aggregate_rain_calibrate <- function(pathInC,
     install.packages(packages_required[!installed_packages])}
   
   # load required packages
-  invisible(lapply(packages_required, library, character.only = TRUE))
+  # invisible(lapply(packages_required, library, character.only = TRUE)) # temporary the time to fix the issue
 
   # 1 List all the rainfall and read them ####
   listRaster<-list.files(path=pathInC, pattern=".nc", full.names = T)
   
   # 2 Load and shaping of the ground data ####
-  ground<-read.csv(pathInO, sep=',', dec='.', header=T)
+  ground<-read.csv(pathInO, sep=';', dec='.', header=T)
   ground <- ground[,col] # Select the targeted column
-  names(ground)<- c("ID", "Long", "Lat", "Crop", "Year","Planting", "Harvesting", "N","P","K", "Yield")
+  names(ground)<- c("ID", "Long", "Lat", "Crop", "Season","Planting", "Harvesting", "N","P","K", "Yield")
   
   ground$Planting <- as.Date(ground$Planting, "%Y-%m-%d") # Planting date in Date format
   ground$Harvesting <- as.Date(ground$Harvesting, "%Y-%m-%d") # Harvesting date in Date format
   
   # 3 Compute the median planting and harvesting date over the ground data in case of NA ####
+  planting.med.y <- format(as.POSIXlt(median(ground$Planting, na.rm=T)), "%Y")
   planting.med.m <- format(as.POSIXlt(median(ground$Planting, na.rm=T)), "%m")
   planting.med.d <- format(as.POSIXlt(median(ground$Planting, na.rm=T)), "%d")
   
+  harvesting.med.y <- format(as.POSIXlt(median(ground$Harvesting, na.rm=T)), "%Y")
   harvesting.med.m <- format(as.POSIXlt(median(ground$Harvesting, na.rm=T)), "%m")
   harvesting.med.d <- format(as.POSIXlt(median(ground$Harvesting, na.rm=T)), "%d")
   
@@ -69,10 +71,10 @@ aggregate_rain_calibrate <- function(pathInC,
 
   # Test for presence of planting and harvesting date
   if (is.na(groundi$Planting)){
-    groundi$Planting <-as.Date(paste0(groundi$Year, '-', planting.med.m, '-',planting.med.d), "%Y-%m-%d")
+    groundi$Planting <-as.Date(paste0(planting.med.y, '-', planting.med.m, '-',planting.med.d), "%Y-%m-%d")
   } 
   if (is.na(groundi$Harvesting)) {
-    groundi$Harvesting <-as.Date(paste0(groundi$Year, '-', harvesting.med.m, '-',harvesting.med.d), "%Y-%m-%d")
+    groundi$Harvesting <-as.Date(paste0(harvesting.med.y, '-', harvesting.med.m, '-',harvesting.med.d), "%Y-%m-%d")
   }
   
   # Test if the cropping season overlaps two civil year
@@ -100,7 +102,7 @@ aggregate_rain_calibrate <- function(pathInC,
     
     ### 4.2.2 Read for the corresponding years and date ####
     rasti1<-listRaster[which(grepl(yearPi, listRaster, fixed=TRUE) == T)]
-    rasti1 <- terra::rast(rasti1, lyrs=c(pl_j:nlyr(rast(rasti1))))
+    rasti1 <- terra::rast(rasti1, lyrs=c(pl_j:terra::nlyr(terra::rast(rasti1))))
     rasti2 <-listRaster[which(grepl(yearHi, listRaster, fixed=TRUE) == T)]
     rasti2 <- terra::rast(rasti2, lyrs=c(1:hv_j))
     rasti <- c(rasti1, rasti2)
@@ -140,7 +142,7 @@ aggregate_rain_calibrate <- function(pathInC,
 
 dirName<-pathOut
 if (!dir.exists(dirName)){
-  dir.create(dirName)
+  dir.create(dirName, recursive = T)
 }
   
   saveRDS(object = groundOut, 
@@ -167,13 +169,13 @@ if (!dir.exists(dirName)){
 # fake$ID<-paste0(fake$longitude, '-', fake$latitude, '-', fake$Year)
 # write.csv(fake, "./AgWise/EiA_Analytics/AgWISE-UseCaseRAB/03_responseFunction/SubFunction_ML/FAKE_RAB_Rice_Coordinates.csv")
 
-pathInC<-'./AgWise/rawData/2_weather/rain_chirps/raw'
-pathInO <-"./AgWise/EiA_Analytics/AgWISE-UseCaseRAB/03_responseFunction/SubFunction_ML/FAKE_RAB_Rice_Coordinates.csv"
-pathOut <- "./AgWise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/Rainfall/Rice/ResponseFunction/ML_Covariates"
-col<-c(13,2,3,5,6,11,12,7,8,9,10) # ID, long, lat, Crop, Year, pl_Date, hv_Date, N, P, K, Yield
-thr <- 1
-
-aggregate_rain_calibrate(pathC, pathO, pathOut, col, thr)
+# pathInC<-'./agwise/rawData/2_weather/rain_chirps/raw'
+# pathInO <-"./agwise/EiA_Analytics/AgWISE-UseCaseRAB/03_responseFunction/SubFunction_ML/RAB_potato_2023_shared_format.csv"
+# pathOut <- "./agwise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/Rainfall/Potato/ResponseFunction/ML_Covariates"
+# col<-c(1,5,6,10,9,16,17,12,13,14,15) # ID, long, lat, Crop, season, pl_Date, hv_Date, N, P, K, Yield
+# thr <- 1
+# 
+# aggregate_rain_calibrate(pathInC, pathInO, pathOut, col, thr)
 
 # 2. Aggregate Rainfall for prediction  -----------------------------------
 
@@ -206,7 +208,7 @@ aggregate_rain_predict <-function(pathIn,
 # Check the installation
 
   # packages required
-  packages_required <- c( "sf", "rgdal", "raster", "readxl")
+  packages_required <- c( "sf", "rgdal", "raster", "terra","readxl")
   
   # check and install packages that are not yet installed
   installed_packages <- packages_required %in% rownames(installed.packages())
@@ -214,7 +216,7 @@ aggregate_rain_predict <-function(pathIn,
     install.packages(packages_required[!installed_packages])}
   
   # load required packages
-  invisible(lapply(packages_required, library, character.only = TRUE))
+  # invisible(lapply(packages_required, library, character.only = TRUE)) # temporary the time to fix the issue
 
 # 1 List all the rainfall and read them ####
 listRaster<-list.files(pathInC, pattern=".nc", full.names = T)
@@ -360,7 +362,7 @@ print ("Calculation of the quantiles completed")
 
 dirName<-paste0(pathOut, '/ResponseFunction/ML_Covariates')
 if (!dir.exists(dirName)){
-  dir.create(dirName)
+  dir.create(dirName, recursive=T)
 }
 
 names(tot.q)<-c("tr_below", "tr_normal", "tr_above")
@@ -373,17 +375,17 @@ terra::writeRaster(nrd.q, paste0(dirName,"/",crop,"_",season, "_", agroeco,"_",s
 print ("End of the aggregate rain function for prediction ")
 }
 
-pathInC<-'./agwise/rawData/2_weather/rain_chirps/raw'
-pathInO <- 'agwise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/plantingDates_2.xlsx'
-pathOut <- './agwise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/Rainfall/Rice' # Should be the same than path when Module 1 codes will be ready
-
-crop <-"Rice"
-season <- 1
-agroeco <- 'lowland'
-
-source<-'CHIRPS'
-shp<-terra::vect('./agwise/rawData/6_country/gadm36_RWA_1.shp')
-
-aggregate_rain_predict(pathInC, pathInO, pathOut, shp, crop, season,agroeco, thr, source)
+# pathInC<-'./agwise/rawData/2_weather/rain_chirps/raw'
+# pathInO <- 'agwise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/plantingDates_2.xlsx'
+# pathOut <- './agwise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/Rainfall/Rice' # Should be the same than path when Module 1 codes will be ready
+# 
+# crop <-"Rice"
+# season <- 1
+# agroeco <- 'lowland'
+# 
+# source<-'CHIRPS'
+# shp<-terra::vect('./agwise/rawData/6_country/gadm36_RWA_1.shp')
+# 
+# aggregate_rain_predict(pathInC, pathInO, pathOut, shp, crop, season,agroeco, thr, source)
 
 

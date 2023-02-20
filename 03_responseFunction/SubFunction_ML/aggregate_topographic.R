@@ -9,7 +9,7 @@
 #' @param pathInD directory where dem data are stored
 #' @param pathInO directory where observation data are stored
 #' @param obs observation data
-#' @param col a vector containing the column index of the observation variables used in the function c(ID, long, lat, Crop, Year, pl_Date, hv_Date, N, P, K, Yield) 
+#' @param col a vector containing the column index of the observation variables used in the function c(ID, long, lat, Crop, season, pl_Date, hv_Date, N, P, K, Yield) 
 #' @param pathOut the directory for writing the outputs
 #' @return a data frame containing the col information & columns corresponding to the topographic parameters :
 #'        slope : slope
@@ -26,7 +26,7 @@
 #'                     dem = "rwanda_dem.tif", countryName = "Rwanda")
 #'
 ##############################################################################################
-create_topo_covariate <-function(pathInD, pathInO, obs, pathOut, dem, countryName
+create_topo_covariate <-function(pathInD, pathInO, obs, col, pathOut, dem, countryName
                                ){
   # Check the installation
   
@@ -39,7 +39,7 @@ create_topo_covariate <-function(pathInD, pathInO, obs, pathOut, dem, countryNam
   }
 
   # packages loading
-  invisible(lapply(packages, library, character.only = TRUE))
+  #invisible(lapply(packages, library, character.only = TRUE)) # temporary the time to fix the issue
   
   # specify the country name
   if(countryName == "Rwanda"){
@@ -100,7 +100,7 @@ create_topo_covariate <-function(pathInD, pathInO, obs, pathOut, dem, countryNam
   # Check if the directory exists
   dirName <- pathOut
   if (!dir.exists(dirName)){
-    dir.create(dirName)
+    dir.create(dirName, recursive=T)
   }
 
   # write the results
@@ -119,9 +119,12 @@ create_topo_covariate <-function(pathInD, pathInO, obs, pathOut, dem, countryNam
     print(noquote("extracting topographic covariates"))
     
     ## Load and shaping of the ground data ####
-    ground <- read.csv(paste(pathInO, obs, sep = "/"), header = T, sep = ',')
+    ground <- read.csv(paste(pathInO, obs, sep = "/"), header = T, sep = ';')
     ground <- ground[,col]
-    names(ground)<-c("ID", "Long", "Lat", "Crop", "Year","Planting", "Harvesting", "N","P","K", "Yield") 
+    names(ground)<-c("ID", "Long", "Lat", "Crop", "Season","Planting", "Harvesting", "N","P","K", "Yield") 
+    
+    ground$Planting <- as.Date(ground$Planting, "%Y-%m-%d") # Planting date in Date format
+    ground$Harvesting <- as.Date(ground$Harvesting, "%Y-%m-%d") # Harvesting date in Date format
     
     ## Load and read the topographic raster variables             
     ground.vect<- terra::vect(ground,geom = c("Long", "Lat"), crs = "epsg:4326")
@@ -133,4 +136,3 @@ create_topo_covariate <-function(pathInD, pathInO, obs, pathOut, dem, countryNam
     saveRDS(object = output, 
             file = paste0(pathOut, '/ML_Topo_Calibration.RDS'))
 }
-

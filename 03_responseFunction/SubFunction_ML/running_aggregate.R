@@ -11,13 +11,14 @@ source('./agwise/EiA_Analytics/AgWISE-UseCaseRAB/03_responseFunction/SubFunction
 # 2. Run aggregate_rain --------------------------------------------------
 ## Calibrate
 
-pathInC<-'./agwise/rawData/2_weather/rain_chirps/raw'
+pathInR<-'./agwise/rawData/2_weather/rain_chirps/raw'
+pathInT<-'./agwise/rawData'
 pathInO <-"./agwise/EiA_Analytics/AgWISE-UseCaseRAB/03_responseFunction/SubFunction_ML/RAB_potato_2023_shared_format.csv"
 pathOut <- "./agwise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/Rainfall/Potato/ResponseFunction/ML_Covariates"
 col<-c(1,5,6,10,9,16,17,12,13,14,15) # ID, long, lat, Crop, season, pl_Date, hv_Date, N, P, K, Yield
 thr <- 1
 
-aggregate_rain_calibrate(pathInC, pathInO, pathOut, col, thr)
+aggregate_rain_calibrate(pathInR, pathInT, pathInO, pathOut, col, thr)
 
 ## Predict
 ## To do

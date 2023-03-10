@@ -49,6 +49,8 @@ worldclim<- function(var, res, raster = TRUE, coords = NULL){
     }else if (var == "elev"){
       #rasfiles<-list.files(url, pattern =sprintf("wc2.1_%s_%s_%02d.tif", res, var, 1:12) ,full.names=TRUE)
       rasfiles<-file.path(url, sprintf("wc2.1_%s_%s.tif", res, var))
+      #names(rasfiles)<-paste0("elev")
+      
     }else {
       #rasfiles<-list.files(url, pattern =sprintf("wc2.1_%s_%s_%02d.tif", res, var, 1:12) ,full.names=TRUE)
       rasfiles<-file.path(url, sprintf("wc2.1_%s_%s_%02d.tif", res, var, 1:12))
@@ -65,11 +67,32 @@ worldclim<- function(var, res, raster = TRUE, coords = NULL){
   }
   
   
+  
   if (raster) {       #for raster output raster=TRUE
+    #crop raster for given aoi/ coords bounds
+    # if (!is.null(coords)){
+    #   aoi <- suppressWarnings(terra::vect(sf::st_as_sf(sf::st_as_sfc(sf::st_bbox(c(xmin = min(coords[,1]), xmax = max(coords[,1]), ymax = max(coords[,2]), ymin = min(coords[,2])), crs = sf::st_crs(4326))))))
+    #   # Subset AOI
+    #   ras.all <- suppressWarnings(terra::crop(ras.all, aoi))
+    # }
     return(ras.all)
     
+    
   } else{             #for TABLE output raster=False
-    df <- terra::extract(ras.all,coords)
+    
+    df <- data.frame()
+    for (pnt in seq(1:nrow(coords))){
+      lon <- coords[pnt, 1]
+      lat <- coords[pnt, 2]
+      df1 <- data.frame(terra::extract(ras.all,data.frame(lon,lat)))
+      X <- lon
+      Y <- lat
+      df1<- data.frame(X, Y, df1)
+      df <- rbind(df, df1)
+    }
+    #df %>% rename_with(~str_replace(., 'likes_comment', 'number_likes'))
+    names(df) <- sub(sprintf("wc2.1_%s_", res), "", names(df))
+    names(df) <- sub("layer", "elev", names(df))
     return(df)
     
   }
@@ -77,11 +100,10 @@ worldclim<- function(var, res, raster = TRUE, coords = NULL){
 }
 
 
-## up Next:: update table - rename colnames, append coords col  use loop
 
 
-# s<-worldclim(var=c("bio","tmin"),10,raster = TRUE) 
-# s
-# d<-worldclim(var=c("elev","tmin"),10,raster = FALSE,coords = data.frame("x" = c(9.57, 10.55), "y" = c(11.55, 12.43))) 
+# worldclim(var=c("bio","tmin"),10,raster = TRUE)
+# 
+# d<-worldclim(var=c("elev","tmin"),10,raster = FALSE,coords = data.frame("x" = c(9.57, 10.55), "y" = c(11.55, 12.43)))
 # View(d)
 

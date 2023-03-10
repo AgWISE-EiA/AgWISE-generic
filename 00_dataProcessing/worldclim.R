@@ -30,11 +30,8 @@ worldclim<- function(var, res, raster = TRUE, coords = NULL){
     res<-ifelse ((grepl("m", res,)), res, paste0(res, "m"))
     if (res=="0.5m" || res=="0.5" || res=="30" || res=="30s") {res<-"30s"} 
     
-    
     #file name
     file<-paste0("wc2.1_",res,"_",var)
-    
-    
     
     #check if file available
     if(!file.exists(paste0(url, file, ".zip"))){    #if not available download, unzip and stack, retun rasterstack
@@ -50,22 +47,16 @@ worldclim<- function(var, res, raster = TRUE, coords = NULL){
       #rasfiles<-list.files(url, pattern =sprintf("wc2.1_%s_%s_%02d.tif", res, var, 1:12) ,full.names=TRUE)
       rasfiles<-file.path(url, sprintf("wc2.1_%s_%s.tif", res, var))
       #names(rasfiles)<-paste0("elev")
-      
     }else {
       #rasfiles<-list.files(url, pattern =sprintf("wc2.1_%s_%s_%02d.tif", res, var, 1:12) ,full.names=TRUE)
       rasfiles<-file.path(url, sprintf("wc2.1_%s_%s_%02d.tif", res, var, 1:12))
     }
     #stack all the rasters 
-    
     ras <- raster::stack(rasfiles)
-    
     
     # and return raster stack for all provided vars
     ras.all <- raster::stack(ras.all,ras)
-    
-    
   }
-  
   
   
   if (raster) {       #for raster output raster=TRUE
@@ -77,9 +68,7 @@ worldclim<- function(var, res, raster = TRUE, coords = NULL){
     # }
     return(ras.all)
     
-    
   } else{             #for TABLE output raster=False
-    
     df <- data.frame()
     for (pnt in seq(1:nrow(coords))){
       lon <- coords[pnt, 1]
@@ -94,7 +83,6 @@ worldclim<- function(var, res, raster = TRUE, coords = NULL){
     names(df) <- sub(sprintf("wc2.1_%s_", res), "", names(df))
     names(df) <- sub("layer", "elev", names(df))
     return(df)
-    
   }
   
 }

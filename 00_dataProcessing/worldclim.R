@@ -7,9 +7,9 @@
 #' @var    list of required variables c("tavg", "tmin", "tmax", "prec", "bio",  "elev", "wind", "vapr", "srad")
 #' @return SpatRast
 #' @examples
+#' worldclim(var, res, raster = TRUE, coords = NULL)
 #' worldclim(var=c("bio","tmin"),10,raster = TRUE) 
 #' worldclim(var=c("elev","tmin"),10,raster = FALSE,coords = data.frame("x" = c(9.57, 10.55), "y" = c(11.55, 12.43))) 
-
 
 
 #Extracts worldclim historical data (1970-2000)
@@ -36,19 +36,16 @@ worldclim<- function(var, res, raster = TRUE, coords = NULL){
     #check if file available
     if(!file.exists(paste0(url, file, ".zip"))){    #if not available download, unzip and stack, retun rasterstack
       download.file(paste0(url_download,file,".zip"), paste0(url,file,".zip"), mode="wb")
-      suppressWarnings(unzip(paste0(url, file,".zip"), exdir=url, overwrite=FALSE))
     }
+    suppressWarnings(unzip(paste0(url, file,".zip"), exdir=url, overwrite=FALSE))
     #list files for matching var, res
     if(var == "bio"){
       # 19 bioclimatic variables
-      #rasfiles<-list.files(url, pattern =sprintf("wc2.1_%s_%s_%02d.tif", res, var, 1:19) ,full.names=TRUE)
       rasfiles<-file.path(url, sprintf("wc2.1_%s_%s_%d.tif", res, var, 1:19))
     }else if (var == "elev"){
-      #rasfiles<-list.files(url, pattern =sprintf("wc2.1_%s_%s_%02d.tif", res, var, 1:12) ,full.names=TRUE)
       rasfiles<-file.path(url, sprintf("wc2.1_%s_%s.tif", res, var))
-      #names(rasfiles)<-paste0("elev")
+      
     }else {
-      #rasfiles<-list.files(url, pattern =sprintf("wc2.1_%s_%s_%02d.tif", res, var, 1:12) ,full.names=TRUE)
       rasfiles<-file.path(url, sprintf("wc2.1_%s_%s_%02d.tif", res, var, 1:12))
     }
     #stack all the rasters 
@@ -79,7 +76,7 @@ worldclim<- function(var, res, raster = TRUE, coords = NULL){
       df1<- data.frame(X, Y, df1)
       df <- rbind(df, df1)
     }
-    #df %>% rename_with(~str_replace(., 'likes_comment', 'number_likes'))
+
     names(df) <- sub(sprintf("wc2.1_%s_", res), "", names(df))
     names(df) <- sub("layer", "elev", names(df))
     return(df)
@@ -90,8 +87,111 @@ worldclim<- function(var, res, raster = TRUE, coords = NULL){
 
 
 
-# worldclim(var=c("bio","tmin"),10,raster = TRUE)
-# 
-# d<-worldclim(var=c("elev","tmin"),10,raster = FALSE,coords = data.frame("x" = c(9.57, 10.55), "y" = c(11.55, 12.43)))
-# View(d)
+###################################################################################################
+###################################################################################################
 
+#' Extract worldclim historical monthly data
+#'
+
+#' @param startDate starting date of the data extraction
+#' @param endDate ending date of the data extraction
+#' @coords data.frame with 2 columns (Latitude and Longitude)
+#' @raster optional boolean to export results in SpatRast (terra) format
+#' @var    list of required variables c( "tmin", "tmax", "prec")
+#' @return SpatRast
+#' @examples
+#' worldclim_monthly(startDate, endDate, var,  raster = TRUE, coords = NULL)
+#' worldclim_monthly("2010-01-01", "2013-10-01", "prec", raster = TRUE)
+#' worldclim_monthly("2010-01-01", "2013-10-01", "prec", raster = FALSE, coords = data.frame("x" = c(9.57, 10.55), "y" = c(11.55, 12.43)))
+
+
+#Extracts worldclim historical monthly data (1960-2018)
+worldclim_monthly<- function(startDate, endDate, var,  raster = TRUE, coords = NULL){
+  #resolution available -  2.5m
+  #variables available are tmin,tmax and prec
+  #define function elements and paths
+  #downloaded file path
+  url<-"datadownload/"
+  # url to download from  ##historical climate data (1960-2018)
+  url_download<-"https://geodata.ucdavis.edu/climate/worldclim/2_1/hist/"
+  res<-"2.5m"
+  var<-as.character(var)
+  ras.all<-raster::stack()
+  #loop through list of required vars
+  for (i in var) {
+    var<-i
+    
+    #check variable 
+    stopifnot(var %in% c("tmin", "tmax", "prec"))
+    
+    #dates
+    dates <- seq.Date(as.Date(startDate, format = "%Y-%m-%d"), as.Date(endDate, format = "%Y-%m-%d"), by = "month")
+    years <- unique(format(dates, "%Y"))
+    months <- unique(format(dates, "%m"))
+    year_month<-unique(format(dates, "%Y-%m"))
+    
+    #check year range for download
+    for (i in years) {
+      #file name
+      if      (i %in% c(format(seq.Date(as.Date("1960",format = "%Y"),as.Date("1969",format = "%Y"), by="year"),"%Y"))){year<-"1960-1969"}
+      else if (i %in% c(format(seq.Date(as.Date("1970",format = "%Y"),as.Date("1979",format = "%Y"), by="year"),"%Y"))){year<-"1970-1979"}
+      else if (i %in% c(format(seq.Date(as.Date("1980",format = "%Y"),as.Date("1989",format = "%Y"), by="year"),"%Y"))){year<-"1980-1989"}
+      else if (i %in% c(format(seq.Date(as.Date("1990",format = "%Y"),as.Date("1999",format = "%Y"), by="year"),"%Y"))){year<-"1990-1999"}
+      else if (i %in% c(format(seq.Date(as.Date("2000",format = "%Y"),as.Date("2009",format = "%Y"), by="year"),"%Y"))){year<-"2000-2009"}
+      else if (i %in% c(format(seq.Date(as.Date("2010",format = "%Y"),as.Date("2018",format = "%Y"), by="year"),"%Y"))){year<-"2010-2018"}
+      
+      file<-paste0("wc2.1_",res,"_",var,"_",year,".zip")
+      
+      #check if file available
+      if(!file.exists(paste0(url, file))){    #if not available download, unzip and stack, retun rasterstack
+        download.file(paste0(url_download,file), paste0(url,file), mode="wb")
+      }
+      suppressWarnings(unzip(paste0(url, file), exdir=url, overwrite=FALSE))
+      
+    }
+    
+    #list all files for the given months and year 
+    rasfiles<-file.path(url, sprintf("wc2.1_%s_%s_%s.tif", res, var, c(year_month)))
+    
+    #stack all the rasters 
+    ras <- raster::stack(rasfiles)
+    
+    # and return raster stack for all provided vars
+    ras.all <- raster::stack(ras.all,ras)
+  
+  }
+  
+  
+  if (raster) {       #for raster output raster=TRUE
+    #crop raster for given aoi/ coords bounds
+    # if (!is.null(coords)){
+    #   aoi <- suppressWarnings(terra::vect(sf::st_as_sf(sf::st_as_sfc(sf::st_bbox(c(xmin = min(coords[,1]), xmax = max(coords[,1]), ymax = max(coords[,2]), ymin = min(coords[,2])), crs = sf::st_crs(4326))))))
+    #   # Subset AOI
+    #   ras.all <- suppressWarnings(terra::crop(ras.all, aoi))
+    # }
+    
+    return(ras.all)
+    
+  } else{             #for TABLE output raster=False
+    df <- data.frame()
+    for (pnt in seq(1:nrow(coords))){
+      lon <- coords[pnt, 1]
+      lat <- coords[pnt, 2]
+      df1 <- data.frame(terra::extract(ras.all,data.frame(lon,lat)))
+      X <- lon
+      Y <- lat
+      df1<- data.frame(X, Y, df1)
+      df <- rbind(df, df1)
+    }
+    
+    names(df) <- sub(sprintf("wc2.1_%s_", res), "", names(df))
+    
+    return(df)
+  }
+  
+}
+
+
+
+###################################################################################################
+###################################################################################################

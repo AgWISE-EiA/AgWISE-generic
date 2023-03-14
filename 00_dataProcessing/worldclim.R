@@ -158,6 +158,9 @@ worldclim_monthly<- function(startDate, endDate, var,  raster = TRUE, coords = N
     
     # and return raster stack for all provided vars
     ras.all <- raster::stack(ras.all,ras)
+    
+    #rename raster layer names
+    names(ras.all)<-paste(var, c(year_month))
   
   }
   

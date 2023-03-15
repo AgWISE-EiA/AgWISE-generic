@@ -202,3 +202,104 @@ worldclim_monthly<- function(startDate, endDate, var,  raster = TRUE, coords = N
 
 ###################################################################################################
 ###################################################################################################
+
+#' Extract worldclim future data
+#'
+
+#' @coords data.frame with 2 columns (Latitude and Longitude)
+#' @raster optional boolean to export results in SpatRast (terra) format
+#' @res    resolution  can be either 2.5m, 5m or 10m
+#' @var    list of required variables c("tmin", "tmax", "prec", "bio")
+#' @ssp    Shared Socio-economic Pathways (SSPs): 126, 245, 370 and 585.
+#' @model  global climate models (GCMs)
+#' @period time periods: 2021-2040, 2041-2060, 2061-2080, and 2081-2100. 
+#' @return SpatRast
+#' @examples
+#'
+
+#Extracts worldclim historical monthly data (1960-2018)
+worldclim_future<- function(var, res, ssp, model, period,  raster = TRUE, coords = NULL){
+  #define function elements and paths
+  #downloaded file path
+  ifelse(!dir.exists(file.path("geodata/")), dir.create(file.path("geodata/")), FALSE)
+  url<-"geodata/"
+  
+  # url to download from  ##future climate data
+  url_download<-"https://geodata.ucdavis.edu/climate/worldclim/2_1/fut/"
+  
+  
+  #update path for given res
+  
+  ras.all<-raster::stack()
+  #loop through list of required vars
+  for (i in var) {
+    var<-i
+    stopifnot(res %in% c("2.5", "5", "10", "2.5m", "5m", "10m"))
+    stopifnot(var %in% c( "tmin", "tmax", "prec", "bio","bioc"))
+    stopifnot(ssp %in% c("126","245","370","585"))
+    stopifnot(period %in% c("2021-2040", "2041-2060", "2061-2080", "2081-2100"))
+    stopifnot(model %in% c("BCC-CSM2-MR","CNRM-CM6-1","CNRM-ESM2-1","CanESM5",
+                           "GFDL-ESM4","IPSL-CM6A-LR", "MIROC-ES2L","MIROC6","MRI-ESM2-0"))
+    res<-ifelse ((grepl("m", res,)), res, paste0(res, "m"))
+    ssp<-paste0("ssp",ssp)
+    
+    if (var=="bio") {var<-"bioc"}
+    
+    if (res=="2.5m") {url_download<-paste0(url_download,"2.5m/")}
+    else if (res=="5m") {url_download<-paste0(url_download,"5m/")}
+    else if (res=="10m") {url_download<-paste0(url_download,"10m/")}
+    
+    file<-paste0("wc2.1_",res,"_",var,"_",model,"_",ssp,"_",period)
+    
+    if(!file.exists(paste0(url, file,".zip"))){    #if not available download, unzip and stack, retun rasterstack
+      download.file(paste0(url_download,file,".zip"), paste0(url,file,".zip"), mode="wb")
+      
+    }
+    suppressWarnings(unzip(paste0(url, file,".zip"), exdir=url, overwrite=FALSE))
+    
+    file_url<-paste0(url,"share/spatial03/worldclim/cmip6/7_fut/",res,"/",model,"/",ssp,"/")
+    
+    rasfiles<-paste0(file_url,file,".tif")
+    
+    #stack all the rasters 
+    
+    ras <- raster::stack(rasfiles)
+    
+    
+    # and return raster stack for all provided vars
+    ras.all <- raster::stack(ras.all,ras)
+    
+  }
+  
+  if (raster) {       #for raster output raster=TRUE
+    #crop raster for any given aoi/ coords bounds
+    # if (!is.null(coords)){
+    #   aoi <- suppressWarnings(terra::vect(sf::st_as_sf(sf::st_as_sfc(sf::st_bbox(c(xmin = min(coords[,1]), xmax = max(coords[,1]), ymax = max(coords[,2]), ymin = min(coords[,2])), crs = sf::st_crs(4326))))))
+    #   # Subset AOI
+    #   ras.all <- suppressWarnings(terra::crop(ras.all, aoi))
+    # }
+    return(ras.all)
+    
+    
+  } else{             #for TABLE output raster=False
+    df <- data.frame()
+    for (pnt in seq(1:nrow(coords))){
+      lon <- coords[pnt, 1]
+      lat <- coords[pnt, 2]
+      df1 <- data.frame(terra::extract(ras.all,data.frame(lon,lat)))
+      X <- lon
+      Y <- lat
+      df1<- data.frame(X, Y, df1)
+      df <- rbind(df, df1)
+    }
+    
+    #names(df) <- sub(sprintf("wc2.1_%s_", res), "", names(df))
+    
+    return(df)
+    
+    
+  }
+  
+  
+  
+}

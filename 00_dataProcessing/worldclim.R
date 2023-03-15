@@ -17,7 +17,9 @@ worldclim<- function(var, res, raster = TRUE, coords = NULL){
   
   #define function elements and paths
   #downloaded file path
-  url<-"datadownload/"
+  ifelse(!dir.exists(file.path("geodata/")), dir.create(file.path("geodata/")), FALSE)
+  url<-"geodata/"
+  #url<-"datadownload/"
   # url to download from  ##historical climate data (1970-2000)
   url_download<-"https://geodata.ucdavis.edu/climate/worldclim/2_1/base/"
   
@@ -111,7 +113,9 @@ worldclim_monthly<- function(startDate, endDate, var,  raster = TRUE, coords = N
   #variables available are tmin,tmax and prec
   #define function elements and paths
   #downloaded file path
-  url<-"datadownload/"
+  ifelse(!dir.exists(file.path("geodata/")), dir.create(file.path("geodata/")), FALSE)
+  url<-"geodata/"
+  #url<-"datadownload/"
   # url to download from  ##historical climate data (1960-2018)
   url_download<-"https://geodata.ucdavis.edu/climate/worldclim/2_1/hist/"
   res<-"2.5m"

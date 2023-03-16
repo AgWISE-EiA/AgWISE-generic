@@ -17,8 +17,8 @@ worldclim<- function(var, res, raster = TRUE, coords = NULL){
   
   #define function elements and paths
   #downloaded file path
-  ifelse(!dir.exists(file.path("/home/jovyan/agwise/rawData/geodata/")), dir.create(file.path("/home/jovyan/agwise/rawData/geodata/")), FALSE)
-  url<-"/home/jovyan/agwise/rawData/geodata/"
+  ifelse(!dir.exists(file.path("/home/jovyan/agwise/rawData/geodata/worldclim21_hist/")), dir.create(file.path("/home/jovyan/agwise/rawData/geodata/worldclim21_hist/")), FALSE)
+  url<-"/home/jovyan/agwise/rawData/geodata/worldclim21_hist/"
   #url<-"datadownload/"
   # url to download from  ##historical climate data (1970-2000)
   url_download<-"https://geodata.ucdavis.edu/climate/worldclim/2_1/base/"
@@ -37,7 +37,7 @@ worldclim<- function(var, res, raster = TRUE, coords = NULL){
     
     #check if file available
     if(!file.exists(paste0(url, file, ".zip"))){    #if not available download, unzip and stack, retun rasterstack
-      options(timeout=600)
+      options(timeout=0)
       download.file(paste0(url_download,file,".zip"), paste0(url,file,".zip"), mode="wb")
     }
     suppressWarnings(unzip(paste0(url, file,".zip"), exdir=url, overwrite=FALSE))
@@ -89,7 +89,7 @@ worldclim<- function(var, res, raster = TRUE, coords = NULL){
 }
 
 
-
+worldclim(var=c("bio","tmin"),10,raster = TRUE) 
 
 ###################################################################################################
 ###################################################################################################
@@ -115,8 +115,8 @@ worldclim_monthly<- function(startDate, endDate, var,  raster = TRUE, coords = N
   #variables available are tmin,tmax and prec
   #define function elements and paths
   #downloaded file path
-  ifelse(!dir.exists(file.path("/home/jovyan/agwise/rawData/geodata/")), dir.create(file.path("/home/jovyan/agwise/rawData/geodata/")), FALSE)
-  url<-"/home/jovyan/agwise/rawData/geodata/"
+  ifelse(!dir.exists(file.path("/home/jovyan/agwise/rawData/geodata/worlclim21_hist_monthly/")), dir.create(file.path("/home/jovyan/agwise/rawData/geodata/worlclim21_hist_monthly/")), FALSE)
+  url<-"/home/jovyan/agwise/rawData/geodata/worlclim21_hist_monthly/"
   #url<-"datadownload/"
   # url to download from  ##historical climate data (1960-2018)
   url_download<-"https://geodata.ucdavis.edu/climate/worldclim/2_1/hist/"
@@ -150,7 +150,7 @@ worldclim_monthly<- function(startDate, endDate, var,  raster = TRUE, coords = N
       
       #check if file available
       if(!file.exists(paste0(url, file))){    #if not available download, unzip and stack, retun rasterstack
-        options(timeout=600)
+        options(timeout=0)
         download.file(paste0(url_download,file), paste0(url,file), mode="wb")
       }
       suppressWarnings(unzip(paste0(url, file), exdir=url, overwrite=FALSE))
@@ -228,8 +228,8 @@ worldclim_monthly<- function(startDate, endDate, var,  raster = TRUE, coords = N
 worldclim_future<- function(var, res, ssp, model, period,  raster = TRUE, coords = NULL){
   #define function elements and paths
   #downloaded file path
-  ifelse(!dir.exists(file.path("/home/jovyan/agwise/rawData/geodata/")), dir.create(file.path("/home/jovyan/agwise/rawData/geodata/")), FALSE)
-  url<-"/home/jovyan/agwise/rawData/geodata/"
+  ifelse(!dir.exists(file.path("/home/jovyan/agwise/rawData/geodata/worlclim21_fut/")), dir.create(file.path("/home/jovyan/agwise/rawData/geodata/worlclim21_fut/")), FALSE)
+  url<-"/home/jovyan/agwise/rawData/geodata/worlclim21_fut/"
   
   # url to download from  ##future climate data
   url_download<-"https://geodata.ucdavis.edu/climate/worldclim/2_1/fut/"
@@ -255,7 +255,7 @@ worldclim_future<- function(var, res, ssp, model, period,  raster = TRUE, coords
     file<-paste0("wc2.1_",res,"_",var,"_",model,"_",ssp,"_",period)
     
     if(!file.exists(paste0(url, file,".zip"))){    #if not available download, unzip and stack, retun rasterstack
-      options(timeout=600)
+      options(timeout=0)
       download.file(paste0(url_download,file,".zip"), paste0(url,file,".zip"), mode="wb")
       
     }

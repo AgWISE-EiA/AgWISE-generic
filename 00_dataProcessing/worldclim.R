@@ -244,14 +244,18 @@ worldclim_future<- function(var, res, ssp, model, period,  raster = TRUE, coords
   res<-ifelse ((grepl("m", res,)), res, paste0(res, "m"))
   ssp<-paste0("ssp",ssp)
   
+  
+  if (res=="2.5m") {url_download<-paste0(url_download,"2.5m/")}
+  else if (res=="5m") {url_download<-paste0(url_download,"5m/")}
+  else if (res=="10m") {url_download<-paste0(url_download,"10m/")}
+  
+  
   ras.all<-raster::stack()
   #loop through list of required vars
   for (i in var) {
     var<-i
     if (var=="bio") {var<-"bioc"}
-    if (res=="2.5m") {url_download<-paste0(url_download,"2.5m/")}
-    else if (res=="5m") {url_download<-paste0(url_download,"5m/")}
-    else if (res=="10m") {url_download<-paste0(url_download,"10m/")}
+    
     
     file<-paste0("wc2.1_",res,"_",var,"_",model,"_",ssp,"_",period)
     

@@ -37,6 +37,7 @@ worldclim<- function(var, res, raster = TRUE, coords = NULL){
     
     #check if file available
     if(!file.exists(paste0(url, file, ".zip"))){    #if not available download, unzip and stack, retun rasterstack
+      options(timeout=600)
       download.file(paste0(url_download,file,".zip"), paste0(url,file,".zip"), mode="wb")
     }
     suppressWarnings(unzip(paste0(url, file,".zip"), exdir=url, overwrite=FALSE))
@@ -149,6 +150,7 @@ worldclim_monthly<- function(startDate, endDate, var,  raster = TRUE, coords = N
       
       #check if file available
       if(!file.exists(paste0(url, file))){    #if not available download, unzip and stack, retun rasterstack
+        options(timeout=600)
         download.file(paste0(url_download,file), paste0(url,file), mode="wb")
       }
       suppressWarnings(unzip(paste0(url, file), exdir=url, overwrite=FALSE))
@@ -253,6 +255,7 @@ worldclim_future<- function(var, res, ssp, model, period,  raster = TRUE, coords
     file<-paste0("wc2.1_",res,"_",var,"_",model,"_",ssp,"_",period)
     
     if(!file.exists(paste0(url, file,".zip"))){    #if not available download, unzip and stack, retun rasterstack
+      options(timeout=600)
       download.file(paste0(url_download,file,".zip"), paste0(url,file,".zip"), mode="wb")
       
     }

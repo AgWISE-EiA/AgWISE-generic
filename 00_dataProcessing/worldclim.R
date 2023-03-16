@@ -11,7 +11,7 @@
 #' worldclim(var=c("bio","tmin"),10,raster = TRUE) 
 #' worldclim(var=c("elev","tmin"),10,raster = FALSE,coords = data.frame("x" = c(9.57, 10.55), "y" = c(11.55, 12.43))) 
 
-
+worldclim(var=c("bio","tmin"),10,raster = TRUE) 
 #Extracts worldclim historical data (1970-2000)
 worldclim<- function(var, res, raster = TRUE, coords = NULL){
   
@@ -23,14 +23,15 @@ worldclim<- function(var, res, raster = TRUE, coords = NULL){
   # url to download from  ##historical climate data (1970-2000)
   url_download<-"https://geodata.ucdavis.edu/climate/worldclim/2_1/base/"
   
+  stopifnot(res %in% c("0.5","2.5", "5", "10", "0.5m","2.5m", "5m", "10m","30", "30s"))
+  stopifnot(var %in% c("tavg", "tmin", "tmax", "prec", "bio",  "elev", "wind", "vapr", "srad"))
+  res<-ifelse ((grepl("m", res,)), res, paste0(res, "m"))
+  if (res=="0.5m" || res=="0.5" || res=="30" || res=="30s") {res<-"30s"} 
+  
   ras.all<-raster::stack()
   #loop through list of required vars
   for (i in var) {
     var<-i
-    stopifnot(res %in% c("0.5","2.5", "5", "10", "0.5m","2.5m", "5m", "10m","30", "30s"))
-    stopifnot(var %in% c("tavg", "tmin", "tmax", "prec", "bio",  "elev", "wind", "vapr", "srad"))
-    res<-ifelse ((grepl("m", res,)), res, paste0(res, "m"))
-    if (res=="0.5m" || res=="0.5" || res=="30" || res=="30s") {res<-"30s"} 
     
     #file name
     file<-paste0("wc2.1_",res,"_",var)
@@ -231,14 +232,15 @@ worldclim_future<- function(var, res, ssp, model, period,  raster = TRUE, coords
   url<-"/home/jovyan/agwise/rawData/geodata/worlclim21_fut/"
   
   # url to download from  ##future climate data
-  url_download<-"https://geodata.ucdavis.edu/climate/worldclim/2_1/fut/"
+  url_download<-"https://geodata.ucdavis.edu/cmip6/"
   
   stopifnot(res %in% c("2.5", "5", "10", "2.5m", "5m", "10m"))
   stopifnot(var %in% c( "tmin", "tmax", "prec", "bio","bioc"))
   stopifnot(ssp %in% c("126","245","370","585"))
   stopifnot(period %in% c("2021-2040", "2041-2060", "2061-2080", "2081-2100"))
-  stopifnot(model %in% c("BCC-CSM2-MR","CNRM-CM6-1","CNRM-ESM2-1","CanESM5",
-                         "GFDL-ESM4","IPSL-CM6A-LR", "MIROC-ES2L","MIROC6","MRI-ESM2-0"))
+  stopifnot(model %in% c("ACCESS-CM2","ACCESS-ESM1-5","AWI-CM-1-1-MR","BCC-CSM2-MR","CMCC-ESM2","CNRM-CM6-1-HR","CNRM-CM6-1","MPI-ESM1-2-LR",
+                         "CNRM-ESM2-1","CanESM5-CanOE","CanESM5","EC-Earth3-Veg-LR","EC-Earth3-Veg","FIO-ESM-2-0","GFDL-ESM4","GISS-E2-1-G","UKESM1-0-LL",
+                         "GISS-E2-1-H","HadGEM3-GC31-LL","INM-CM4-8","INM-CM5-0","IPSL-CM6A-LR","MIROC-ES2L","MIROC6","MPI-ESM1-2-HR","MRI-ESM2-0"))
   res<-ifelse ((grepl("m", res,)), res, paste0(res, "m"))
   ssp<-paste0("ssp",ssp)
   
@@ -253,16 +255,13 @@ worldclim_future<- function(var, res, ssp, model, period,  raster = TRUE, coords
     
     file<-paste0("wc2.1_",res,"_",var,"_",model,"_",ssp,"_",period)
     
-    if(!file.exists(paste0(url, file,".zip"))){    #if not available download, unzip and stack, retun rasterstack
+    if(!file.exists(paste0(url, file,".tif"))){    #if not available download, unzip and stack, retun rasterstack
       options(timeout=0)
-      download.file(paste0(url_download,file,".zip"), paste0(url,file,".zip"), mode="wb")
+      download.file(paste0(url_download,model,"/",ssp,"/",file,".tif"), paste0(url,file,".tif"), mode="wb")
       
     }
-    suppressWarnings(unzip(paste0(url, file,".zip"), exdir=url, overwrite=FALSE))
-    
-    file_url<-paste0(url,"share/spatial03/worldclim/cmip6/7_fut/",res,"/",model,"/",ssp,"/")
-    
-    rasfiles<-paste0(file_url,file,".tif")
+  
+    rasfiles<-paste0(url,file,".tif")
     
     #stack all the rasters 
     ras <- raster::stack(rasfiles)

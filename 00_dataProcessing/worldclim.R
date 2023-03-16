@@ -11,7 +11,7 @@
 #' worldclim(var=c("bio","tmin"),10,raster = TRUE) 
 #' worldclim(var=c("elev","tmin"),10,raster = FALSE,coords = data.frame("x" = c(9.57, 10.55), "y" = c(11.55, 12.43))) 
 
-worldclim(var=c("bio","tmin"),10,raster = TRUE) 
+
 #Extracts worldclim historical data (1970-2000)
 worldclim<- function(var, res, raster = TRUE, coords = NULL){
   

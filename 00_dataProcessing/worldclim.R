@@ -17,8 +17,8 @@ worldclim<- function(var, res, raster = TRUE, coords = NULL){
   
   #define function elements and paths
   #downloaded file path
-  ifelse(!dir.exists(file.path("geodata/")), dir.create(file.path("geodata/")), FALSE)
-  url<-"geodata/"
+  ifelse(!dir.exists(file.path("/home/jovyan/agwise/rawData/geodata/")), dir.create(file.path("/home/jovyan/agwise/rawData/geodata/")), FALSE)
+  url<-"/home/jovyan/agwise/rawData/geodata/"
   #url<-"datadownload/"
   # url to download from  ##historical climate data (1970-2000)
   url_download<-"https://geodata.ucdavis.edu/climate/worldclim/2_1/base/"
@@ -60,11 +60,12 @@ worldclim<- function(var, res, raster = TRUE, coords = NULL){
   
   if (raster) {       #for raster output raster=TRUE
     #crop raster for given aoi/ coords bounds
-    # if (!is.null(coords)){
-    #   aoi <- suppressWarnings(terra::vect(sf::st_as_sf(sf::st_as_sfc(sf::st_bbox(c(xmin = min(coords[,1]), xmax = max(coords[,1]), ymax = max(coords[,2]), ymin = min(coords[,2])), crs = sf::st_crs(4326))))))
-    #   # Subset AOI
-    #   ras.all <- suppressWarnings(terra::crop(ras.all, aoi))
-    # }
+    if (!is.null(coords)){
+      ras.all <- suppressWarnings(terra::rast (ras.all))
+      aoi <- suppressWarnings(terra::vect(sf::st_as_sf(sf::st_as_sfc(sf::st_bbox(c(xmin = min(coords[,1]), xmax = max(coords[,1]), ymax = max(coords[,2]), ymin = min(coords[,2])), crs = sf::st_crs(4326))))))
+      # Subset AOI
+      ras.all <- suppressWarnings(terra::crop(ras.all, aoi))
+    }
     return(ras.all)
     
   } else{             #for TABLE output raster=False
@@ -113,8 +114,8 @@ worldclim_monthly<- function(startDate, endDate, var,  raster = TRUE, coords = N
   #variables available are tmin,tmax and prec
   #define function elements and paths
   #downloaded file path
-  ifelse(!dir.exists(file.path("geodata/")), dir.create(file.path("geodata/")), FALSE)
-  url<-"geodata/"
+  ifelse(!dir.exists(file.path("/home/jovyan/agwise/rawData/geodata/")), dir.create(file.path("/home/jovyan/agwise/rawData/geodata/")), FALSE)
+  url<-"/home/jovyan/agwise/rawData/geodata/"
   #url<-"datadownload/"
   # url to download from  ##historical climate data (1960-2018)
   url_download<-"https://geodata.ucdavis.edu/climate/worldclim/2_1/hist/"
@@ -171,11 +172,12 @@ worldclim_monthly<- function(startDate, endDate, var,  raster = TRUE, coords = N
   
   if (raster) {       #for raster output raster=TRUE
     #crop raster for given aoi/ coords bounds
-    # if (!is.null(coords)){
-    #   aoi <- suppressWarnings(terra::vect(sf::st_as_sf(sf::st_as_sfc(sf::st_bbox(c(xmin = min(coords[,1]), xmax = max(coords[,1]), ymax = max(coords[,2]), ymin = min(coords[,2])), crs = sf::st_crs(4326))))))
-    #   # Subset AOI
-    #   ras.all <- suppressWarnings(terra::crop(ras.all, aoi))
-    # }
+    if (!is.null(coords)){
+      ras.all <- suppressWarnings(terra::rast (ras.all))
+      aoi <- suppressWarnings(terra::vect(sf::st_as_sf(sf::st_as_sfc(sf::st_bbox(c(xmin = min(coords[,1]), xmax = max(coords[,1]), ymax = max(coords[,2]), ymin = min(coords[,2])), crs = sf::st_crs(4326))))))
+      # Subset AOI
+      ras.all <- suppressWarnings(terra::crop(ras.all, aoi))
+    }
     
     return(ras.all)
     
@@ -215,36 +217,35 @@ worldclim_monthly<- function(startDate, endDate, var,  raster = TRUE, coords = N
 #' @period time periods: 2021-2040, 2041-2060, 2061-2080, and 2081-2100. 
 #' @return SpatRast
 #' @examples
-#'
+#' worldclim_future(var=c("prec","bioc"),res= 5,ssp="126",model="CNRM-ESM2-1",period="2021-2040",raster = FALSE, coords = data.frame("x" = c(9.57, 10.55), "y" = c(11.55, 12.43)))
+#'worldclim_future(var=c("prec","bioc"),res= 5,ssp="126",model="CNRM-ESM2-1",period="2021-2040",raster = TRUE, coords = NULL)
+
+
 
 #Extracts worldclim historical monthly data (1960-2018)
 worldclim_future<- function(var, res, ssp, model, period,  raster = TRUE, coords = NULL){
   #define function elements and paths
   #downloaded file path
-  ifelse(!dir.exists(file.path("geodata/")), dir.create(file.path("geodata/")), FALSE)
-  url<-"geodata/"
+  ifelse(!dir.exists(file.path("/home/jovyan/agwise/rawData/geodata/")), dir.create(file.path("/home/jovyan/agwise/rawData/geodata/")), FALSE)
+  url<-"/home/jovyan/agwise/rawData/geodata/"
   
   # url to download from  ##future climate data
   url_download<-"https://geodata.ucdavis.edu/climate/worldclim/2_1/fut/"
   
-  
-  #update path for given res
+  stopifnot(res %in% c("2.5", "5", "10", "2.5m", "5m", "10m"))
+  stopifnot(var %in% c( "tmin", "tmax", "prec", "bio","bioc"))
+  stopifnot(ssp %in% c("126","245","370","585"))
+  stopifnot(period %in% c("2021-2040", "2041-2060", "2061-2080", "2081-2100"))
+  stopifnot(model %in% c("BCC-CSM2-MR","CNRM-CM6-1","CNRM-ESM2-1","CanESM5",
+                         "GFDL-ESM4","IPSL-CM6A-LR", "MIROC-ES2L","MIROC6","MRI-ESM2-0"))
+  res<-ifelse ((grepl("m", res,)), res, paste0(res, "m"))
+  ssp<-paste0("ssp",ssp)
   
   ras.all<-raster::stack()
   #loop through list of required vars
   for (i in var) {
     var<-i
-    stopifnot(res %in% c("2.5", "5", "10", "2.5m", "5m", "10m"))
-    stopifnot(var %in% c( "tmin", "tmax", "prec", "bio","bioc"))
-    stopifnot(ssp %in% c("126","245","370","585"))
-    stopifnot(period %in% c("2021-2040", "2041-2060", "2061-2080", "2081-2100"))
-    stopifnot(model %in% c("BCC-CSM2-MR","CNRM-CM6-1","CNRM-ESM2-1","CanESM5",
-                           "GFDL-ESM4","IPSL-CM6A-LR", "MIROC-ES2L","MIROC6","MRI-ESM2-0"))
-    res<-ifelse ((grepl("m", res,)), res, paste0(res, "m"))
-    ssp<-paste0("ssp",ssp)
-    
     if (var=="bio") {var<-"bioc"}
-    
     if (res=="2.5m") {url_download<-paste0(url_download,"2.5m/")}
     else if (res=="5m") {url_download<-paste0(url_download,"5m/")}
     else if (res=="10m") {url_download<-paste0(url_download,"10m/")}
@@ -262,10 +263,7 @@ worldclim_future<- function(var, res, ssp, model, period,  raster = TRUE, coords
     rasfiles<-paste0(file_url,file,".tif")
     
     #stack all the rasters 
-    
     ras <- raster::stack(rasfiles)
-    
-    
     # and return raster stack for all provided vars
     ras.all <- raster::stack(ras.all,ras)
     
@@ -273,11 +271,12 @@ worldclim_future<- function(var, res, ssp, model, period,  raster = TRUE, coords
   
   if (raster) {       #for raster output raster=TRUE
     #crop raster for any given aoi/ coords bounds
-    # if (!is.null(coords)){
-    #   aoi <- suppressWarnings(terra::vect(sf::st_as_sf(sf::st_as_sfc(sf::st_bbox(c(xmin = min(coords[,1]), xmax = max(coords[,1]), ymax = max(coords[,2]), ymin = min(coords[,2])), crs = sf::st_crs(4326))))))
-    #   # Subset AOI
-    #   ras.all <- suppressWarnings(terra::crop(ras.all, aoi))
-    # }
+    if (!is.null(coords)){
+      ras.all <- suppressWarnings(terra::rast (ras.all))
+      aoi <- suppressWarnings(terra::vect(sf::st_as_sf(sf::st_as_sfc(sf::st_bbox(c(xmin = min(coords[,1]), xmax = max(coords[,1]), ymax = max(coords[,2]), ymin = min(coords[,2])), crs = sf::st_crs(4326))))))
+      # Subset AOI
+      ras.all <- suppressWarnings(terra::crop(ras.all, aoi))
+    }
     return(ras.all)
     
     
@@ -293,13 +292,10 @@ worldclim_future<- function(var, res, ssp, model, period,  raster = TRUE, coords
       df <- rbind(df, df1)
     }
     
-    #names(df) <- sub(sprintf("wc2.1_%s_", res), "", names(df))
-    
+    names(df) <- sub(sprintf("wc2.1_%s_", res), "", names(df))
     return(df)
     
-    
   }
-  
   
   
 }

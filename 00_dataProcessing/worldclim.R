@@ -5,7 +5,7 @@
 #' @raster optional boolean to export results in SpatRast (terra) format
 #' @res    resolution
 #' @var    list of required variables c("tavg", "tmin", "tmax", "prec", "bio",  "elev", "wind", "vapr", "srad")
-#' @return SpatRast
+#' @return data.frame or SpatRast
 #' @examples
 #' worldclim(var, res, raster = TRUE, coords = NULL)
 #' worldclim(var=c("bio","tmin"),10,raster = TRUE) 
@@ -102,7 +102,7 @@ worldclim<- function(var, res, raster = TRUE, coords = NULL){
 #' @coords data.frame with 2 columns (Latitude and Longitude)
 #' @raster optional boolean to export results in SpatRast (terra) format
 #' @var    list of required variables c( "tmin", "tmax", "prec")
-#' @return SpatRast
+#' @return data.frame or SpatRast
 #' @examples
 #' worldclim_monthly(startDate, endDate, var,  raster = TRUE, coords = NULL)
 #' worldclim_monthly("2010-01-01", "2013-10-01", "prec", raster = TRUE)
@@ -217,14 +217,14 @@ worldclim_monthly<- function(startDate, endDate, var,  raster = TRUE, coords = N
 #' @ssp    Shared Socio-economic Pathways (SSPs): 126, 245, 370 and 585.
 #' @model  global climate models (GCMs)
 #' @period time periods: 2021-2040, 2041-2060, 2061-2080, and 2081-2100. 
-#' @return SpatRast
+#' @return data.frame or SpatRast
 #' @examples
 #' worldclim_future(var=c("prec","bioc"),res= 5,ssp="126",model="CNRM-ESM2-1",period="2021-2040",raster = FALSE, coords = data.frame("x" = c(9.57, 10.55), "y" = c(11.55, 12.43)))
 #'worldclim_future(var=c("prec","bioc"),res= 5,ssp="126",model="CNRM-ESM2-1",period="2021-2040",raster = TRUE, coords = NULL)
 
 
 
-#Extracts worldclim historical monthly data (1960-2018)
+#Extracts worldclim future data 
 worldclim_future<- function(var, res, ssp, model, period,  raster = TRUE, coords = NULL){
   #define function elements and paths
   #downloaded file path

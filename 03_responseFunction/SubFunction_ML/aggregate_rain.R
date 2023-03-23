@@ -11,13 +11,15 @@ aggregate_rain_calibrate <- function(pathInR,
                                      pathInT,
                                      pathInO, 
                                      pathOut, 
+                                     outName,
                                      col, 
                                      thr){
   
   #' @param pathInR the directory where are stored the rainfall data
   #' @param pathInT the directory where are stored the temperature data
-  #' @param pathInO the pathway where are stored the ground data (Use Case Data), should be csv with sep=";"
+  #' @param pathInO the pathway where are stored the ground data (Use Case Data), should be a RDS file
   #' @param pathOut the directory where will be stored the aggregated rainfall data
+  #' @param outName output name - the name of the use case ; should be the Country_Crop
   #' @param thr the rain-rate threshold for a rainy days given in mm of rain/day (float). Default value is set to 1 mm/day.
   #' @param col a vector containing the column index of the variables used in the function c(ID, long, lat, Crop, season, pl_Date, hv_Date, N, P, K, Yield) 
   #' @return a data frame containing the col information & columns corresponding to the rainfall parameters :
@@ -36,12 +38,12 @@ aggregate_rain_calibrate <- function(pathInR,
   packages_required <- c("sf", "rgdal", "terra")
   
   # check and install packages that are not yet installed
-  installed_packages <- packages_required %in% rownames(installed.packages())
-  if(any(installed_packages == FALSE)){
-    install.packages(packages_required[!installed_packages])}
-  
+  # installed_packages <- packages_required %in% rownames(installed.packages())
+  # if(any(installed_packages == FALSE)){
+  #   install.packages(packages_required[!installed_packages])}
+  # 
   # load required packages
-  # invisible(lapply(packages_required, library, character.only = TRUE)) # temporary the time to fix the issue
+  invisible(lapply(packages_required, library, character.only = TRUE)) # temporary the time to fix the issue
 
   # 1 List all the rainfall & temperature and read them ####
   listRasterR<-list.files(path=pathInR, pattern=".nc", full.names = T) # rainfall
@@ -51,7 +53,7 @@ aggregate_rain_calibrate <- function(pathInR,
   
   
   # 2 Load and shaping of the ground data ####
-  ground<-read.csv(pathInO, sep=';', dec='.', header=T)
+  ground<-readRDS(pathInO)
   ground <- ground[,col] # Select the targeted column
   names(ground)<- c("ID", "Long", "Lat", "Crop", "Season","Planting", "Harvesting", "N","P","K", "Yield")
   
@@ -73,7 +75,7 @@ aggregate_rain_calibrate <- function(pathInR,
   for(i in 1:nrow(ground)){
     
   # Extract the information for the i-th row
-  print(paste0("Compute TR, DI and NRD for ID ", i))
+  print(paste0("Compute TR, DI, NRD, Tmean, Tmin and Tmax for ID ", i))
   groundi<-ground[i,]
 
   # Test for presence of planting and harvesting date
@@ -204,7 +206,7 @@ if (!dir.exists(dirName)){
 }
   
   saveRDS(object = groundOut, 
-          file=paste0(pathOut, '/ML_Rain_Temp_Calibration.RDS'))
+          file=paste0(pathOut, '/', outName, '_ML_Rain_Temperature_Calibration.RDS'))
   
   print ("End of the aggregate rain function for prediction ")
 }
@@ -237,7 +239,8 @@ if (!dir.exists(dirName)){
 
 # 2. Aggregate Rainfall for prediction  -----------------------------------
 
-aggregate_rain_predict <-function(pathIn,
+aggregate_rain_predict <-function(pathInR,
+                    pathInT,              
                     pathInO,
                     pathOut,
                     shp,
@@ -245,40 +248,54 @@ aggregate_rain_predict <-function(pathIn,
                     season,
                     agroeco,
                     thr,
-                    source){
+                    sourceR,
+                    sourceT,
+                    outName){
   
-  #' @param pathInC the directory where are stored the rainfall data
-  #' @param pathInO the pathway where are stored the planting data (Use Case Data) - Should have "Crop", "Season", "agroecology", "planting date" and "harvest date" columns
+  #' @param pathInR the directory where are stored the rainfall data
+  #' @param pathInT the directory where are stored the temperature data
+  #' @param pathInO the pathway where are stored the planting data (Use Case Data) - In Excel format - Should have "Crop", "Season", "agroecology", "planting date" and "harvest date" columns
   #' @param pathOut the directory where will be stored the aggregated rainfall data
   #' @param shp a shapefile containing the extent of the study area
   #' @param crop the targeted crop, should be the same that the one in the planting date file
   #' @param season the targeted season (integer), should be the same that the one in the planting date file
   #' @param agroeco the targeted agroecology, should be the same that the one in the planting date file
   #' @param thr the rain-rate threshold for a rainy days given in mm of rain/day (float). Default value is set to 1 mm/day.
-  #' @param source the name of the rainfall data sources
+  #' @param sourceR the name of the rainfall data sources
+  #' @param sourceT the name of the temperature data sources
+  #' @param outName output name - the name of the use case
   #'  
   #' @return for each parameters, return a raster stack of 3 layers corresponding to the values for each scenario :
   #'        tot_rf : Total rainfall between pl_Date and hv_Date (mm)
   #'        nrd : Number of rainy days between pl_Date and hv_Date (days)
   #'        di : Average daily rainfall between pl_Date and hv_Date (mm/day)
+  #'        tmean : Average tmean temperature between pl_Date and hv_Date
+  #'        tmin : Average tmin temperature between pl_Date and hv_Date 
+  #'        tmax : Average tmax temperature between pl_Date and hv_Date
   #' @examples: 
   
 # Check the installation
 
   # packages required
-  packages_required <- c( "sf", "rgdal", "raster", "terra","readxl")
+  packages_required <- c( "sf", "rgdal", "terra","readxl")
   
   # check and install packages that are not yet installed
-  installed_packages <- packages_required %in% rownames(installed.packages())
-  if(any(installed_packages == FALSE)){
-    install.packages(packages_required[!installed_packages])}
+  # installed_packages <- packages_required %in% rownames(installed.packages())
+  # if(any(installed_packages == FALSE)){
+  #   install.packages(packages_required[!installed_packages])}
   
   # load required packages
-  # invisible(lapply(packages_required, library, character.only = TRUE)) # temporary the time to fix the issue
+  invisible(lapply(packages_required, library, character.only = TRUE)) # temporary the time to fix the issue
 
-# 1 List all the rainfall and read them ####
-listRaster<-list.files(pathInC, pattern=".nc", full.names = T)
-listRaster<-listRaster[c(1:length(listRaster)-1)] # to get the last complete year and remove the ongoing one
+# 1 List all the rainfall ant temperature and read them ####
+listRasterR<-list.files(pathInR, pattern=".nc", full.names = T)
+listRasterR<-listRasterR[c(1:length(listRasterR)-1)] # to get the last complete year and remove the ongoing one
+listRasterTmean<-list.files(path=pathInT, pattern="temp", full.names=T) # Mean Temp
+listRasterTmean<- listRasterTmean[c(1:length(listRasterTmean)-1)]
+listRasterTmin <-list.files(path=pathInT, pattern="tmin", full.names=T) # Min Temp
+listRasterTmin<- listRasterTmin[c(1:length(listRasterTmin)-1)]
+listRasterTmax <-list.files(path=pathInT, pattern="tmax", full.names=T) # Max Temp
+listRasterTmax<- listRasterTmax[c(1:length(listRasterTmax)-1)]
 
 # 2 Read Observed data and subset the specific information ####
 ground<-readxl::read_excel(pathInO)
@@ -295,30 +312,43 @@ hv_Date<-as.POSIXlt(hv_Date)$yday
 
 # 3 Loop on all the years to calculate the parameters ####
 # Initialize empty raster for the storage
-tot.out<-terra::rast(listRaster[1], lyrs=1)
+# For rainfall
+tot.out<-terra::rast(listRasterR[1], lyrs=1)
 tot.out<-terra::crop(tot.out, shp)
 tot.out[]<-'NA'
 nrd.out<-tot.out
 di.out<-tot.out
+# For temperature
+tmean.out<-terra::rast(listRasterTmean[1], lyrs=1)
+tmean.out<-terra::crop(tmean.out, shp)
+tmean.out[]<-'NA'
+tmin.out<-tmean.out
+tmax.out<-tmean.out
 
   ## 3.1 Case same year ###
 
   if (pl_Date < hv_Date) {
     # Loop on each year
     
-    for (i in 1:length(listRaster)){
+    for (i in 1:length(listRasterR)){
       
       
-      # Read raster
-      readLayers<-terra::rast(listRaster[i], lyrs=c(pl_Date:hv_Date))
+      # Read raster Rainfall and Temperature
+      readLayersR<-terra::rast(listRasterR[i], lyrs=c(pl_Date:hv_Date))
+      readLayersTmean<-terra::rast(listRasterTmean[i], lyrs=c(pl_Date:hv_Date))
+      readLayersTmin<-terra::rast(listRasterTmin[i], lyrs=c(pl_Date:hv_Date))
+      readLayersTmax<-terra::rast(listRasterTmax[i], lyrs=c(pl_Date:hv_Date))
       
-      # Crop the raster !!!!! This should be remove and done by Eduardo
-      croppedLayers<-terra::crop(readLayers, shp)
+      # Crop the raster Rainfall and Temperature !!!!! This should be remove and done by Eduardo
+      croppedLayersR<-terra::crop(readLayersR, shp)
+      croppedLayersTmean<-terra::crop(readLayersTmean, shp)
+      croppedLayersTmin<-terra::crop(readLayersTmin, shp)
+      croppedLayersTmax<-terra::crop(readLayersTmax, shp)
       
       if (i == 1) {
-        print(paste0("Compute TR, DI and NRD for year ", i))
+        print(paste0("Compute TR, DI, NRD, Tmean, Tmin and Tmax for year ", i))
         # Compute the total amount of rainfall
-        toti<-terra::app(croppedLayers, fun='sum')
+        toti<-terra::app(croppedLayersR, fun='sum')
         tot.out<-toti
         
         # Compute the Daily intensity
@@ -326,16 +356,29 @@ di.out<-tot.out
         di.out<-dii
         
         # Compute the Number of rainy day
-        nrdi<- croppedLayers
-        nrdi[croppedLayers<thr] <- 0
-        nrdi[croppedLayers>=thr]<-1
+        nrdi<- croppedLayersR
+        nrdi[croppedLayersR<thr] <- 0
+        nrdi[croppedLayersR>=thr]<-1
         nrdi<-terra::app(nrdi, fun='sum')
         nrd.out<- nrdi
+        
+        # Compute the average Mean temperature
+        tmeani<-terra::app(croppedLayersTmean, fun='mean')
+        tmean.out<-tmeani
+        
+        # Compute the average Min temperature
+        tmini<-terra::app(croppedLayersTmin, fun='mean')
+        tmin.out<-tmini
+        
+        # Compute the average Max temperature
+        tmaxi<-terra::app(croppedLayersTmax, fun='mean')
+        tmax.out<-tmaxi
+        
       } else {
-        print(paste0("Compute TR, DI and NRD for year ", i))
+        print(paste0("Compute TR, DI, NRD, Tmean, Tmin and Tmax for year ", i))
         
         # Compute the total amount of rainfall
-        toti<-terra::app(croppedLayers, fun='sum')
+        toti<-terra::app(croppedLayersR, fun='sum')
         terra::add(tot.out)<-toti
         
         # Compute the Daily intensity
@@ -343,11 +386,24 @@ di.out<-tot.out
         terra::add(di.out)<-dii
         
         # Compute the Number of rainy day
-        nrdi<- croppedLayers
-        nrdi[croppedLayers<thr] <- 0
-        nrdi[croppedLayers>=thr]<-1
+        nrdi<- croppedLayersR
+        nrdi[croppedLayersR<thr] <- 0
+        nrdi[croppedLayersR>=thr]<-1
         nrdi<-terra::app(nrdi, fun='sum')
         terra::add(nrd.out)<- nrdi
+        
+        # Compute the average Mean temperature
+        tmeani<-terra::app(croppedLayersTmean, fun='mean')
+        terra::add(tmean.out)<-tmeani
+        
+        # Compute the average Min temperature
+        tmini<-terra::app(croppedLayersTmin, fun='mean')
+        terra::add(tmin.out)<-tmini
+        
+        # Compute the average Max temperature
+        tmaxi<-terra::app(croppedLayersTmax, fun='mean')
+        terra::add(tmax.out)<-tmaxi
+        
       }
     }
   }
@@ -360,18 +416,33 @@ if (pl_Date > hv_Date) {
   for (i in 1:(length(listRaster)-1)){
     # Stop of the loop one the second to last year
     
-    # Read raster
-    readLayers1<-terra::rast(listRaster[i], lyrs=c(pl_Date:terra::nlyr(terra::rast(listRaster[i]))))
-    readLayers2<-terra::rast(listRaster[i+1], lyrs=c(1:hv_Date))
-    readLayers<-c(rasti1,rasti2)
+    # Read raster rainfall and temperature
+    readLayersR1<-terra::rast(listRasterR[i], lyrs=c(pl_Date:terra::nlyr(terra::rast(listRasterR[i]))))
+    readLayersR2<-terra::rast(listRasterR[i+1], lyrs=c(1:hv_Date))
+    readLayersR<-c(readLayersR1,readLayersR2)
     
-    # Crop the raster !!!!! This should be remove and done by Eduardo
-    croppedLayers<-terra::crop(readLayers, shp)
+    readLayersTmean1<-terra::rast(listRasterTmean[i], lyrs=c(pl_Date:terra::nlyr(terra::rast(listRasterTmean[i]))))
+    readLayersTmean2<-terra::rast(listRasterTmean[i+1], lyrs=c(1:hv_Date))
+    readLayersTmean<-c(readLayersTmean1,readLayersTmean2)
+    
+    readLayersTmin1<-terra::rast(listRasterTmin[i], lyrs=c(pl_Date:terra::nlyr(terra::rast(listRasterTmin[i]))))
+    readLayersTmin2<-terra::rast(listRasterTmin[i+1], lyrs=c(1:hv_Date))
+    readLayersTmin<-c(readLayersTmin1,readLayersTmin2)
+    
+    readLayersTmax1<-terra::rast(listRasterTmax[i], lyrs=c(pl_Date:terra::nlyr(terra::rast(listRasterTmax[i]))))
+    readLayersTmax2<-terra::rast(listRasterTmax[i+1], lyrs=c(1:hv_Date))
+    readLayersTmax<-c(readLayersTmax1,readLayersTmax2)
+    
+    # Crop the raster rainfall and temperature !!!!! This should be remove and done by Eduardo
+    croppedLayersR<-terra::crop(readLayersR, shp)
+    croppedLayersTmean<-terra::crop(readLayersTmean, shp)
+    croppedLayersTmin<-terra::crop(readLayersTmin, shp)
+    croppedLayersTmax<-terra::crop(readLayersTmax, shp)
     
     if (i == 1) {
-      print(paste0("Compute TR, DI and NRD for year ", i))
+      print(paste0("Compute TR, DI, NRD, Tmean, Tmin and Tmax for year ", i))
       # Compute the total amount of rainfall
-      toti<-terra::app(croppedLayers, fun='sum')
+      toti<-terra::app(croppedLayersR, fun='sum')
       tot.out<-toti
       
       # Compute the Daily intensity
@@ -379,16 +450,28 @@ if (pl_Date > hv_Date) {
       di.out<-dii
       
       # Compute the Number of rainy day
-      nrdi<- croppedLayers
-      nrdi[croppedLayers<thr] <- 0
-      nrdi[croppedLayers>=thr]<-1
+      nrdi<- croppedLayersR
+      nrdi[croppedLayersR<thr] <- 0
+      nrdi[croppedLayersR>=thr]<-1
       nrdi<-terra::app(nrdi, fun='sum')
       nrd.out<- nrdi
+      
+      # Compute the average Mean temperature
+      tmeani<-terra::app(croppedLayersTmean, fun='mean')
+      tmean.out<-tmeani
+      
+      # Compute the average Min temperature
+      tmini<-terra::app(croppedLayersTmin, fun='mean')
+      tmin.out<-tmini
+      
+      # Compute the average Max temperature
+      tmaxi<-terra::app(croppedLayersTmax, fun='mean')
+      tmax.out<-tmaxi
     } else {
-      print(paste0("Compute TR, DI and NRD for year ", i))
+      print(paste0("Compute TR, DI, NRD, Tmean, Tmin and Tmax for year ", i))
       
       # Compute the total amount of rainfall
-      toti<-terra::app(croppedLayers, fun='sum')
+      toti<-terra::app(croppedLayersR, fun='sum')
       terra::add(tot.out)<-toti
       
       # Compute the Daily intensity
@@ -396,16 +479,28 @@ if (pl_Date > hv_Date) {
       terra::add(di.out)<-dii
       
       # Compute the Number of rainy day
-      nrdi<- croppedLayers
-      nrdi[croppedLayers<thr] <- 0
-      nrdi[croppedLayers>=thr]<-1
+      nrdi<- croppedLayersR
+      nrdi[croppedLayersR<thr] <- 0
+      nrdi[croppedLayersR>=thr]<-1
       nrdi<-terra::app(nrdi, fun='sum')
       terra::add(nrd.out)<- nrdi
+      
+      # Compute the average Mean temperature
+      tmeani<-terra::app(croppedLayersTmean, fun='mean')
+      terra::add(tmean.out)<-tmeani
+      
+      # Compute the average Min temperature
+      tmini<-terra::app(croppedLayersTmin, fun='mean')
+      terra::add(tmin.out)<-tmini
+      
+      # Compute the average Max temperature
+      tmaxi<-terra::app(croppedLayersTmax, fun='mean')
+      terra::add(tmax.out)<-tmaxi
     }
   }
 }
 
-print("Calculation of TR, DI and NDR completed")
+print("Compute TR, DI, NRD, Tmean, Tmin and Tmax completed")
 # End of the loop for yearly parameters calculation
 
 # 4 Calculation of the quantiles for scenarios ####
@@ -413,6 +508,9 @@ print("Calculation of the quantiles 0.25, 0.50 and 0.75 for scenarios")
 tot.q<-quantile(tot.out, probs=c(0.25,0.5, 0.75))
 di.q <- quantile(di.out, probs=c(0.25,0.5, 0.75))
 nrd.q <-quantile(nrd.out, probs=c(0.25,0.5, 0.75))
+tmean.q<-quantile(tmean.out,probs=c(0.25,0.5, 0.75))
+tmin.q<-quantile(tmin.out,probs=c(0.25,0.5, 0.75))
+tmax.q<-quantile(tmax.out,probs=c(0.25,0.5, 0.75))
 print ("Calculation of the quantiles completed")
 
 # 5 Writting of output ####
@@ -424,11 +522,18 @@ if (!dir.exists(dirName)){
 }
 
 names(tot.q)<-c("tr_below", "tr_normal", "tr_above")
-terra::writeRaster(tot.q, paste0(dirName,"/",crop,"_",season, "_", agroeco,"_",source,"_Total_Rainfall_Scenarios.tif"), filetype="GTiff")
+terra::writeRaster(tot.q, paste0(dirName,"/",crop,"_",season, "_", agroeco,"_",sourceR,"_Total_Rainfall_Scenarios.tif"), filetype="GTiff")
 names(di.q) <- c("di_below", "di_normal", "di_above")
-terra::writeRaster(di.q, paste0(dirName,"/",crop,"_",season, "_", agroeco,"_",source,"_Daily_Intensity_Scenarios.tif"), filetype="GTiff")
+terra::writeRaster(di.q, paste0(dirName,"/",crop,"_",season, "_", agroeco,"_",sourceR,"_Daily_Intensity_Scenarios.tif"), filetype="GTiff")
 names(nrd.q) <- c("nrd_below", "nrd_normal", "nrd_above")
-terra::writeRaster(nrd.q, paste0(dirName,"/",crop,"_",season, "_", agroeco,"_",source,"_Number_Of_Rainy_Days_Scenarios.tif"), filetype="GTiff")
+terra::writeRaster(nrd.q, paste0(dirName,"/",crop,"_",season, "_", agroeco,"_",sourceR,"_Number_Of_Rainy_Days_Scenarios.tif"), filetype="GTiff")
+names(tmean.q)<-c("tmean_below", "tmean_normal", "tmean_above")
+terra::writeRaster(tmean.q, paste0(dirName,"/",outName, "_",crop,"_",season, "_", agroeco,"_",sourceT,"_Temperature_Mean_Scenarios.tif"), filetype="GTiff")
+names(tmin.q)<-c("tmin_below", "tmin_normal", "tmin_above")
+terra::writeRaster(tmin.q, paste0(dirName,"/",outName, "_",crop,"_",season, "_", agroeco,"_",sourceT,"_Temperature_Min_Scenarios.tif"), filetype="GTiff")
+names(tmax.q)<-c("tmax_below", "tmax_normal", "tmax_above")
+terra::writeRaster(tmax.q, paste0(dirName,"/",outName, "_",crop,"_",season, "_", agroeco,"_",sourceT,"_Temperature_Max_Scenarios.tif"), filetype="GTiff")
+
 
 print ("End of the aggregate rain function for prediction ")
 }
@@ -445,5 +550,3 @@ print ("End of the aggregate rain function for prediction ")
 # shp<-terra::vect('./agwise/rawData/6_country/gadm36_RWA_1.shp')
 # 
 # aggregate_rain_predict(pathInC, pathInO, pathOut, shp, crop, season,agroeco, thr, source)
-
-

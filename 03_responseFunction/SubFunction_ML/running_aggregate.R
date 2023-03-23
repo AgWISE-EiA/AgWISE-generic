@@ -13,22 +13,39 @@ source('./agwise/EiA_Analytics/AgWISE-UseCaseRAB/03_responseFunction/SubFunction
 
 pathInR<-'./agwise/rawData/2_weather/rain_chirps/raw'
 pathInT<-'./agwise/rawData'
-pathInO <-"./agwise/EiA_Analytics/AgWISE-UseCaseRAB/03_responseFunction/SubFunction_ML/RAB_potato_2023_shared_format.csv"
-pathOut <- "./agwise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/Rainfall/Potato/ResponseFunction/ML_Covariates"
-col<-c(1,5,6,10,9,16,17,12,13,14,15) # ID, long, lat, Crop, season, pl_Date, hv_Date, N, P, K, Yield
+pathInO <-"./agwise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/RAB_rice_coordinates_field.RDS"
+pathOut <- "./agwise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/Rainfall/Rice/ResponseFunction/ML_Covariates"
+outName <- 'Rwanda_Rice'
+col<-c(13,1,2,4,7,5,6,10,11,12,9) # ID, long, lat, Crop, season, pl_Date, hv_Date, N, P, K, Yield
 thr <- 1
 
-aggregate_rain_calibrate(pathInR, pathInT, pathInO, pathOut, col, thr)
+
+aggregate_rain_calibrate(pathInR, pathInT, pathInO, pathOut, outName, col, thr)
 
 ## Predict
-## To do
+pathInR<-'./agwise/rawData/2_weather/rain_chirps/raw'
+pathInT<-'./agwise/rawData'
+pathInO <- "./agwise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/RAB_plantingDates.xlsx"
+pathOut <- './agwise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/Rainfall/Rice' # Should be the same than path when Module 1 codes will be ready
+crop <-"Rice"
+season <- 1
+agroeco <- 'lowland'
+thr<-1
+sourceR<-'CHIRPS'
+sourceT <- 'AgERA'
+outName <- 'Rwanda'
+
+shp<-terra::vect('./agwise/rawData/6_country/gadm36_RWA_1.shp')
+
+aggregate_rain_predict(pathInR, pathInT, pathInO, shp, crop, season, agroeco, thr, sourceR, sourceT, outName)
+
 
 # 3. Run aggregate_topographic --------------------------------------------------
 pathInD = './agwise/rawData/7_DEM'
-pathInO = './agwise/EiA_Analytics/AgWISE-UseCaseRAB/03_responseFunction/SubFunction_ML'
-obs = "RAB_potato_2023_shared_format.csv"
-col<-c(1,5,6,10,9,16,17,12,13,14,15)
-pathOut = './agwise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/DEM/Potato/ResponseFunction/ML_Covariates'
+pathInO = './agwise/EiA_Analytics/AgWISE-UseCaseRAB/inputData'
+obs = "RAB_rice_coordinates_field.RDS"
+col<-c(13,1,2,4,7,5,6,10,11,12,9) # ID, long, lat, Crop, season, pl_Date, hv_Date, N, P, K, Yield
+pathOut = './agwise/EiA_Analytics/AgWISE-UseCaseRAB/inputData/DEM/Rice/ResponseFunction/ML_Covariates'
 dem = "rwanda_dem.tif"
 countryName = "Rwanda"
 

@@ -9,16 +9,15 @@
 #variety = The cultivar you want to simulate e.g "A_103"
 #rep1 = An additional value to report e.g. "[Maize].Grain.Total.Wt*10 as Yield" ,
 #rep2 =An additional value to report e.g. "[Maize].SowingDate"
-
 #' Title
 #'
+#' @param scfl 
+#' @param my_list_clm 
 #' @param wkdir 
-#' @param cell 
-#' @param b 
-#' @param date 
 #' @param crop 
 #' @param clck 
 #' @param variety 
+#' @param ppln 
 #' @param rep1 
 #' @param rep2 
 #'
@@ -26,7 +25,7 @@
 #' @export
 #'
 #' @examples
-apsimSpatialFactorial <- function(my_list_clm, wkdir, crop, clck, variety, rep1, rep2) {
+apsimSpatialFactorial <- function(scfl, my_list_clm, wkdir, crop, clck, variety, ppln, rep1, rep2) {
   my_packages <- c("spdep", "rgdal", "maptools", "raster", "plyr", "ggplot2", "rgdal",
                    "dplyr", "cowplot","readxl", "apsimx", "gtools", "foreach","doParallel",
                    "ranger")
@@ -42,7 +41,7 @@ apsimSpatialFactorial <- function(my_list_clm, wkdir, crop, clck, variety, rep1,
   
   #Change depending on where you crop.apsimx file is stored, this script used the examples#
   setwd(wkdir)
-  ex.dir <- "D:/rwanda"
+  ex.dir <- scfl
   #ex.dir <- system.file("extdata", package = "apsimx")
   extd.dir <-wkdir
   file.copy(paste0(ex.dir, "/", crop),  extd.dir, overwrite = TRUE)
@@ -50,20 +49,10 @@ apsimSpatialFactorial <- function(my_list_clm, wkdir, crop, clck, variety, rep1,
   list.files(ex.dir)
   list.files(extd.dir)
   
-#Get soil data from iscric
-  my_list_sol <- foreach (i = 1:nrow(stn)-1) %dopar% {
-    tryCatch(apsimx::get_isric_soil_profile(lonlat = c(stn$Longitude[i], stn$Latitude[[i]]))
-             , error=function(err) NA)
-  }
-  
 #saveRDS(my_list_sol, file="soil.RData")
-  
-#my_list_soil<- readRDS("soil.RData")
+#defaultsoil<- apsimx::get_isric_soil_profile(lonlat = c(29.025, -2.725), fix = TRUE)
   #APSIM PART##
-  #Write the weather files to a working directory and Edit the weather as per location
-  foreach (i =1:length(my_list_clm)) %dopar% {
-    apsimx::write_apsim_met(my_list_clm[[i]], wrt.dir = extd.dir, filename = paste0('wth_loc_',i,'.met'))}
-  
+
   foreach (i =1:length(my_list_clm)) %dopar% {
     dir.create(paste0(extd.dir, '/', i))
     apsimx::edit_apsimx(paste0(crop), 
@@ -80,11 +69,12 @@ apsimSpatialFactorial <- function(my_list_clm, wkdir, crop, clck, variety, rep1,
     #tryCatch({my_list_sol[[i]]$soil$BD <-  my_list_sol[[i]]$soil$BD * 0.86}, error=function(e) {NA}) 
     #tryCatch({my_list_sol[[i]]$soil$crop.LL <-  my_list_sol[[i]]$soil$LL15 + 0.01}, error=function(e) {NA}) 
     #tryCatch({my_list_sol[[i]]$soil$SAT <-c(0.521, 0.521, 0.497, 0.488, 0.478, 0.440)}, error=function(e) {NA}) 
+    #tryCatch({edit_apsimx_replace_soil_profile(crop, root = c("pd", "Base_one"), soil.profile = my_list_sol[[i]], overwrite = TRUE)}, 
+             #error=function(e) {NA})
     tryCatch({edit_apsimx_replace_soil_profile(crop, root = c("pd", "Base_one"), soil.profile = my_list_sol[[i]], overwrite = TRUE)}, 
              error=function(e) {NA})
   }
   
-
   #Edit clock#
   foreach (i =1:length(my_list_clm)) %dopar% {  
     setwd(paste0(extd.dir, '/', i))
@@ -109,7 +99,7 @@ apsimSpatialFactorial <- function(my_list_clm, wkdir, crop, clck, variety, rep1,
                  node = "Manager",
                  manager.child = "SowingRule",
                  parm = "Population", ## This is for end date
-                 value = 6,
+                 value = ppln,
                  overwrite = TRUE)
     apsimx::edit_apsimx(crop,
                         root = c("pd", "Base_one"),
@@ -124,14 +114,6 @@ apsimSpatialFactorial <- function(my_list_clm, wkdir, crop, clck, variety, rep1,
                         value = rep2, 
                         verbose = TRUE, overwrite = TRUE)
   }
-  
-  # Run the simulation for the entire study area  
-  my_list_sim<- foreach (i=1:length(my_list_clm)) %dopar% {  
-    setwd(paste0(extd.dir, '/', i))  
-    tryCatch(apsimx::apsimx(crop, value = "HarvestReport"), error=function(err) NA)
-    #apsim.spatial("D:/project", 3, "KE", c("2020-01-01","2022-01-01"), "soybean.apsimx", c("2010-11-01T00:00:00", "2020-12-31T00:00:00"),"1-nov", "30-nov", "Davis")
-  }
-  return(my_list_sim)
-}
+ }
 
 

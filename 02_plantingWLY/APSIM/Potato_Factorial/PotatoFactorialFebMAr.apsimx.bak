@@ -1,7 +1,7 @@
 {
   "$type": "Models.Core.Simulations, Models",
-  "ExplorerWidth": 285,
-  "Version": 159,
+  "ExplorerWidth": 300,
+  "Version": 160,
   "Name": "Simulations",
   "ResourceName": null,
   "Children": [
@@ -42,7 +42,7 @@
               "Children": [
                 {
                   "$type": "Models.Factorial.Factor, Models",
-                  "Specification": "[SowingRule].Script.SowDate =01-feb, 08-feb, 15-feb, 22-feb, 28-feb, 07-mar, 14-mar, 21-mar, 28-mar",
+                  "Specification": "[SowingRule].Script.SowDate =01-jan, 08-jan, 15-jan, 22-jan, 29-jan, 05-feb, 12-feb, 19-feb, 26-feb, 05-mar, 12-mar, 19-mar, 26-mar, 02-apr, 09-apr, 16-apr, 23-apr, 30-apr",
                   "Name": "SowDate",
                   "ResourceName": null,
                   "Children": [],
@@ -127,7 +127,8 @@
                     "Mean of [Weather].MaxT from [Potato].Sowing to [Potato].Harvesting as InCropMaxTemperature",
                     "Mean of [Weather].MinT from [Potato].Sowing to [Potato].Harvesting as InCropMinTemperature",
                     "Sum of [Soil].SoilWater.Eo from [Potato].Sowing to [Potato].Harvesting as InCropET",
-                    "Sum of [Soil].SoilWater.Es from [Potato].Sowing to [Potato].Harvesting as InCropES"
+                    "Sum of [Soil].SoilWater.Es from [Potato].Sowing to [Potato].Harvesting as InCropES",
+                    "sum([Soil].SoilWater.ESW) as TotalESW"
                   ],
                   "EventNames": [
                     "[Potato].Harvesting"
@@ -165,25 +166,25 @@
                 },
                 {
                   "$type": "Models.Soils.Soil, Models",
-                  "RecordNumber": -1,
-                  "ASCOrder": "NA",
-                  "ASCSubOrder": "NA",
-                  "SoilType": "Haplic Acrisols",
+                  "RecordNumber": 0,
+                  "ASCOrder": null,
+                  "ASCSubOrder": null,
+                  "SoilType": "SoilType =  clay loam",
                   "LocalName": null,
-                  "Site": "NA",
-                  "NearestTown": "NA",
-                  "Region": "NA",
-                  "State": "NA",
+                  "Site": null,
+                  "NearestTown": null,
+                  "Region": null,
+                  "State": null,
                   "Country": "Burundi",
-                  "NaturalVegetation": "NA",
-                  "ApsoilNumber": "9999",
-                  "Latitude": -2.875,
+                  "NaturalVegetation": null,
+                  "ApsoilNumber": "0",
+                  "Latitude": -2.825,
                   "Longitude": 29.375,
-                  "LocationAccuracy": "+- 250 m",
-                  "YearOfSampling": "2019",
-                  "DataSource": "ISRIC SoilGrids",
-                  "Comments": "",
-                  "Name": "Synthetic Soil Derived from ISRIC SoilGrids",
+                  "LocationAccuracy": null,
+                  "YearOfSampling": null,
+                  "DataSource": "Original source is www.isric.org. See: https://www.isric.org/explore/soilgrids/faq-soilgrids  2023-03-01 16:15:09",
+                  "Comments": "resolution = 250m - taxonomic classification name = clay loam - drainage class = NA - elevation = NA - slope = NA - geomdesc = NA",
+                  "Name": "SoilType =  clay loam",
                   "ResourceName": null,
                   "Children": [
                     {
@@ -212,6 +213,7 @@
                         0.24,
                         0.24
                       ],
+                      "InitialPAWmm": 20.092228961199982,
                       "RelativeTo": "LL15",
                       "FilledFromTop": true,
                       "Name": "Water",
@@ -223,126 +225,86 @@
                     {
                       "$type": "Models.Soils.Physical, Models",
                       "Thickness": [
+                        50.0,
+                        100.0,
                         150.0,
-                        150.0,
-                        150.0,
-                        150.0,
-                        200.0,
-                        200.0,
-                        200.0,
-                        200.0,
                         300.0,
-                        300.0
+                        400.0,
+                        1000.0
                       ],
                       "ParticleSizeClay": [
-                        34.3,
+                        33.3,
                         35.0,
-                        35.5,
-                        36.5,
-                        37.0,
-                        37.0,
-                        36.9,
-                        36.7,
-                        36.4,
-                        36.1
+                        34.4,
+                        39.8,
+                        40.5,
+                        38.9
                       ],
                       "ParticleSizeSand": [
-                        39.7,
-                        39.0,
-                        38.7,
-                        38.2,
-                        38.3,
-                        38.8,
-                        39.0,
-                        39.0,
-                        39.0,
-                        39.0
+                        37.8,
+                        38.0,
+                        38.9,
+                        35.7,
+                        35.2,
+                        35.6
                       ],
                       "ParticleSizeSilt": [
-                        26.0,
-                        26.0,
-                        25.8,
-                        25.2,
-                        25.0,
-                        25.0,
-                        24.9,
-                        24.7,
-                        24.4,
-                        24.1
+                        28.9,
+                        27.0,
+                        26.7,
+                        24.5,
+                        24.3,
+                        25.5
                       ],
                       "Rocks": null,
                       "Texture": null,
                       "BD": [
-                        0.95,
-                        1.042,
-                        1.086,
-                        1.112,
-                        1.133,
-                        1.147,
-                        1.158,
-                        1.163,
-                        1.17,
-                        1.179
+                        0.97,
+                        1.01,
+                        1.05,
+                        1.07,
+                        1.14,
+                        1.18
                       ],
                       "AirDry": [
-                        0.086,
-                        0.082,
-                        0.08,
-                        0.08,
-                        0.08,
-                        0.08,
-                        0.08,
-                        0.08,
-                        0.08,
-                        0.08
+                        0.100786203542,
+                        0.211255327,
+                        0.207289476532,
+                        0.238281380416,
+                        0.2421281287,
+                        0.2327245309
                       ],
                       "LL15": [
-                        0.258,
-                        0.245,
-                        0.24,
-                        0.24,
-                        0.24,
-                        0.24,
-                        0.24,
-                        0.24,
-                        0.24,
-                        0.24
+                        0.201572407084,
+                        0.211255327,
+                        0.207289476532,
+                        0.238281380416,
+                        0.2421281287,
+                        0.2327245309
                       ],
                       "DUL": [
-                        0.418,
-                        0.393,
-                        0.381,
-                        0.376,
-                        0.373,
-                        0.373,
-                        0.372,
-                        0.37,
-                        0.367,
-                        0.364
+                        0.326230335312944,
+                        0.33490253957546,
+                        0.330238158024959,
+                        0.363319297988497,
+                        0.367593608669083,
+                        0.358482883564248
                       ],
                       "SAT": [
-                        0.572,
-                        0.54,
-                        0.528,
-                        0.522,
-                        0.518,
-                        0.512,
-                        0.509,
-                        0.507,
-                        0.505,
-                        0.501
+                        0.424764613108944,
+                        0.42798623321546,
+                        0.425133560384959,
+                        0.441442502481297,
+                        0.443743281769083,
+                        0.439038772864247
                       ],
                       "KS": [
-                        6.546,
-                        6.059,
-                        5.717,
-                        5.091,
-                        4.804,
-                        4.804,
-                        4.86,
-                        4.974,
-                        5.121,
-                        5.302
+                        247.327345467544,
+                        207.329314409592,
+                        219.828849575044,
+                        121.97458563762,
+                        112.952536945181,
+                        134.174937115223
                       ],
                       "BDMetadata": null,
                       "AirDryMetadata": null,
@@ -361,34 +323,22 @@
                         {
                           "$type": "Models.Soils.SoilCrop, Models",
                           "LL": [
-                            0.258,
-                            0.245,
-                            0.241,
-                            0.251,
-                            0.267,
-                            0.284,
-                            0.302,
-                            0.318,
-                            0.338,
-                            0.359
+                            0.201572407084,
+                            0.211255327,
+                            0.207289476532,
+                            0.238281380416,
+                            0.2421281287,
+                            0.2327245309
                           ],
                           "KL": [
                             0.06,
-                            0.06,
-                            0.06,
-                            0.055,
-                            0.048,
-                            0.04,
-                            0.032,
-                            0.024,
-                            0.014,
-                            0.003
+                            0.0491238451846789,
+                            0.0402192027621384,
+                            0.0329286981656416,
+                            0.0269597378470333,
+                            0.0220727664702865
                           ],
                           "XF": [
-                            1.0,
-                            1.0,
-                            1.0,
-                            1.0,
                             1.0,
                             1.0,
                             1.0,
@@ -408,34 +358,22 @@
                         {
                           "$type": "Models.Soils.SoilCrop, Models",
                           "LL": [
-                            0.258,
-                            0.245,
-                            0.241,
-                            0.251,
-                            0.267,
-                            0.284,
-                            0.302,
-                            0.318,
-                            0.338,
-                            0.359
+                            0.201572407084,
+                            0.211255327,
+                            0.207289476532,
+                            0.238281380416,
+                            0.2421281287,
+                            0.2327245309
                           ],
                           "KL": [
                             0.06,
-                            0.06,
-                            0.06,
-                            0.055,
-                            0.048,
-                            0.04,
-                            0.032,
-                            0.024,
-                            0.014,
-                            0.003
+                            0.0491238451846789,
+                            0.0402192027621384,
+                            0.0329286981656416,
+                            0.0269597378470333,
+                            0.0220727664702865
                           ],
                           "XF": [
-                            1.0,
-                            1.0,
-                            1.0,
-                            1.0,
                             1.0,
                             1.0,
                             1.0,
@@ -455,34 +393,22 @@
                         {
                           "$type": "Models.Soils.SoilCrop, Models",
                           "LL": [
-                            0.258,
-                            0.245,
-                            0.241,
-                            0.251,
-                            0.267,
-                            0.284,
-                            0.302,
-                            0.318,
-                            0.338,
-                            0.359
+                            0.201572407084,
+                            0.211255327,
+                            0.207289476532,
+                            0.238281380416,
+                            0.2421281287,
+                            0.2327245309
                           ],
                           "KL": [
                             0.06,
-                            0.06,
-                            0.06,
-                            0.055,
-                            0.048,
-                            0.04,
-                            0.032,
-                            0.024,
-                            0.014,
-                            0.003
+                            0.0491238451846789,
+                            0.0402192027621384,
+                            0.0329286981656416,
+                            0.0269597378470333,
+                            0.0220727664702865
                           ],
                           "XF": [
-                            1.0,
-                            1.0,
-                            1.0,
-                            1.0,
                             1.0,
                             1.0,
                             1.0,
@@ -1743,28 +1669,20 @@
                       "CatchmentArea": 10.0,
                       "PSIDul": -100.0,
                       "Thickness": [
+                        50.0,
+                        100.0,
                         150.0,
-                        150.0,
-                        150.0,
-                        150.0,
-                        200.0,
-                        200.0,
-                        200.0,
-                        200.0,
                         300.0,
-                        300.0
+                        400.0,
+                        1000.0
                       ],
                       "SWCON": [
-                        0.194,
-                        0.191,
-                        0.184,
-                        0.171,
-                        0.132,
-                        0.136,
-                        0.139,
-                        0.141,
-                        0.104,
-                        0.107
+                        0.4,
+                        0.4,
+                        0.4,
+                        0.4,
+                        0.4,
+                        0.4
                       ],
                       "KLAT": null,
                       "Name": "SoilWater",
@@ -1777,77 +1695,53 @@
                       "$type": "Models.Soils.Organic, Models",
                       "FOMCNRatio": 40.0,
                       "Thickness": [
+                        50.0,
+                        100.0,
                         150.0,
-                        150.0,
-                        150.0,
-                        150.0,
-                        200.0,
-                        200.0,
-                        200.0,
-                        200.0,
                         300.0,
-                        300.0
+                        400.0,
+                        1000.0
                       ],
                       "Carbon": [
-                        6.863,
-                        4.415,
-                        3.522,
-                        3.143,
-                        2.854,
-                        2.647,
-                        2.529,
-                        2.496,
-                        2.456,
-                        2.408
+                        6.97,
+                        5.95,
+                        4.37,
+                        2.48,
+                        1.75,
+                        1.45
                       ],
                       "CarbonUnits": 0,
                       "SoilCNRatio": [
-                        11.0,
-                        11.0,
-                        11.0,
-                        11.0,
-                        11.0,
-                        11.0,
-                        11.0,
-                        11.0,
-                        11.0,
-                        11.0
+                        12.0,
+                        12.0,
+                        12.0,
+                        12.0,
+                        12.0,
+                        12.0
                       ],
                       "FBiom": [
                         0.04,
-                        0.031,
-                        0.014,
-                        0.01,
-                        0.01,
-                        0.01,
-                        0.01,
-                        0.01,
-                        0.01,
-                        0.01
+                        0.0327492301231193,
+                        0.0268128018414256,
+                        0.0219524654437611,
+                        0.0179731585646889,
+                        0.0147151776468577
                       ],
                       "FInert": [
-                        0.485,
-                        0.688,
-                        0.827,
-                        0.905,
-                        0.979,
-                        0.99,
-                        0.99,
-                        0.99,
-                        0.99,
-                        0.99
+                        0.8,
+                        0.808040133667335,
+                        0.816161072021405,
+                        0.824363627162814,
+                        0.832648619353911,
+                        0.841016877100819
                       ],
                       "FOM": [
-                        72.77279668895999,
-                        58.11025844061324,
-                        46.401983841128654,
-                        37.052736679751774,
-                        27.44934245848192,
-                        20.33497303897571,
-                        15.064518544344693,
-                        11.16006982344818,
-                        7.115974693495192,
-                        4.537345790800654
+                        150.0,
+                        122.809612961697,
+                        100.548006905346,
+                        82.321745414104,
+                        67.3993446175832,
+                        55.1819161757163
                       ],
                       "CarbonMetadata": null,
                       "FOMMetadata": null,
@@ -1860,28 +1754,20 @@
                     {
                       "$type": "Models.Soils.Chemical, Models",
                       "Thickness": [
+                        50.0,
+                        100.0,
                         150.0,
-                        150.0,
-                        150.0,
-                        150.0,
-                        200.0,
-                        200.0,
-                        200.0,
-                        200.0,
                         300.0,
-                        300.0
+                        400.0,
+                        1000.0
                       ],
                       "PH": [
+                        4.9,
+                        4.9,
+                        4.9,
+                        5.0,
                         5.1,
-                        5.1,
-                        5.12,
-                        5.18,
-                        5.2,
-                        5.2,
-                        5.2,
-                        5.2,
-                        5.2,
-                        5.2
+                        5.0
                       ],
                       "PHUnits": 0,
                       "EC": null,
@@ -2127,29 +2013,6 @@
                 },
                 {
                   "$type": "Models.Manager, Models",
-                  "Code": "using Models.Soils;\r\nusing System;\r\nusing Models.Core;\r\nusing Models.PMF;\r\n\r\nnamespace Models\r\n{\r\n    [Serializable]\r\n    public class Script : Model\r\n    {\r\n        [Link]\r\n        private Fertiliser fertiliser;\r\n\r\n           [Link]\r\n           private Clock clock;\r\n\r\n        [Description(\"Amount (kg/ha) of fertiliser to apply\")]\r\n        public double ApplicationAmount {get; set;}\r\n\r\n        [Description(\"Type of fertiliser to apply\")]\r\n        public Fertiliser.Types FertType { get; set; }\r\n\r\n        [Description(\"Date of fertiliser application\")]\r\n        public DateTime ApplicationDate {get; set;}\r\n\r\n        [EventSubscribe(\"DoManagement\")]\r\n        private void OnDoManagement(object sender, EventArgs e)\r\n        {\r\n            if (clock.Today.Date.Equals(ApplicationDate))\r\n                fertiliser.Apply(Amount:ApplicationAmount,Type:FertType);\r\n        }\r\n    }\r\n}\r\n",
-                  "Parameters": [
-                    {
-                      "Key": "ApplicationAmount",
-                      "Value": "300"
-                    },
-                    {
-                      "Key": "FertType",
-                      "Value": "DAP"
-                    },
-                    {
-                      "Key": "ApplicationDate",
-                      "Value": "12/30/2019 00:00:00"
-                    }
-                  ],
-                  "Name": "FertiliserRule",
-                  "ResourceName": null,
-                  "Children": [],
-                  "Enabled": true,
-                  "ReadOnly": false
-                },
-                {
-                  "$type": "Models.Manager, Models",
                   "Code": "using APSIM.Shared.Utilities;\r\nusing Models.Utilities;\r\nusing Models.Soils;\r\nusing Models.PMF;\r\nusing Models.Core;\r\nusing System;\r\n\r\nnamespace Models\r\n{\r\n    [Serializable]\r\n    public class Script : Model\r\n    {\r\n        [Link] Clock Clock;\r\n        [Link] Fertiliser Fertiliser;\r\n        [Link] Summary Summary;\r\n        [Link] Soil Soil;\r\n        \r\n        [Description(\"Crop\")]\r\n        public IPlant Crop { get; set; }\r\n\r\n        [Description(\"Sowing date (d-mmm)\")]\r\n        public string SowDate { get; set; }\r\n\r\n        [Display(Type = DisplayType.CultivarName)]\r\n        [Description(\"Cultivar to be sown\")]\r\n        public string CultivarName { get; set; }\r\n\r\n        [Description(\"Sowing depth (mm)\")]\r\n        public double SowingDepth { get; set; }\r\n\r\n        [Description(\"Row spacing (mm)\")]\r\n        public double RowSpacing { get; set; }\r\n\r\n        [Description(\"Plant population (/m2)\")]\r\n        public double Population { get; set; }\r\n\r\n        [EventSubscribe(\"DoManagement\")]\r\n        private void OnDoManagement(object sender, EventArgs e)\r\n        {\r\n            if (DateUtilities.WithinDates(SowDate, Clock.Today, SowDate))\r\n            {\r\n                Crop.Sow(population: Population, cultivar: CultivarName, depth: SowingDepth, rowSpacing: RowSpacing);    \r\n            }\r\n        }\r\n    }\r\n}\r\n",
                   "Parameters": [
                     {
@@ -2197,6 +2060,52 @@
                     }
                   ],
                   "Name": "Fertilise topup",
+                  "ResourceName": null,
+                  "Children": [],
+                  "Enabled": true,
+                  "ReadOnly": false
+                },
+                {
+                  "$type": "Models.Manager, Models",
+                  "Code": "using Models.Soils.Nutrients;\r\nusing APSIM.Shared.Utilities;\r\nusing Models.Surface;\r\nusing Models.Utilities;\r\nusing Models.Soils.Nutrients;\r\nusing Models.Soils;\r\nusing Models.PMF;\r\nusing Models.Core;\r\nusing System;\r\nusing Models.Interfaces;\r\n\r\nnamespace Models\r\n{\r\n    [Serializable]\r\n    public class Script : Model\r\n    {\r\n        [Link] private Plant Wheat;\r\n        [Link] private ISoilWater SoilWater;\r\n        [Link] private Nutrient nutrient;\r\n        [Link] private SurfaceOrganicMatter SOM;\r\n        [Link] private Summary Summary;\r\n\r\n        [Description(\"Reset Water? (Yes or No)\")]\r\n        public string ResetWater {get;set;}\r\n\r\n        [Description(\"Reset Soil Nutrients? (Yes or No)\")]\r\n        public string ResetNutrients {get;set;}\r\n\r\n        [Description(\"Reset Surface Organic Matter? (Yes or No)\")]\r\n        public string ResetSOM {get;set;}\r\n\r\n        [EventSubscribe(\"Sowing\")]\r\n        private void OnSowing(object sender, EventArgs e)\r\n        {\r\n            if (ResetWater == \"Yes\")\r\n            {\r\n                Summary.WriteMessage(this, \"Reset Water\", MessageType.Diagnostic);\r\n                SoilWater.Reset();\r\n            }\r\n            if (ResetNutrients == \"Yes\")\r\n            {\r\n                Summary.WriteMessage(this, \"Reset Nutrients\", MessageType.Diagnostic);\r\n                nutrient.Reset();\r\n            }\r\n            if (ResetSOM == \"Yes\")\r\n            {\r\n                Summary.WriteMessage(this, \"Reset Surface OM\", MessageType.Diagnostic);\r\n                SOM.Reset();\r\n            }\r\n        }\r\n    }\r\n}\r\n",
+                  "Parameters": [
+                    {
+                      "Key": "ResetWater",
+                      "Value": "Yes"
+                    },
+                    {
+                      "Key": "ResetNutrients",
+                      "Value": "Yes"
+                    },
+                    {
+                      "Key": "ResetSOM",
+                      "Value": "Yes"
+                    }
+                  ],
+                  "Name": "Reset on sowing",
+                  "ResourceName": null,
+                  "Children": [],
+                  "Enabled": true,
+                  "ReadOnly": false
+                },
+                {
+                  "$type": "Models.Manager, Models",
+                  "Code": "using Models.Soils;\r\nusing System;\r\nusing Models.Core;\r\nusing Models.PMF;\r\nnamespace Models\r\n{\r\n    [Serializable]\r\n    public class Script : Model\r\n    {\r\n        [Link] Clock Clock;\r\n        [Link] Fertiliser Fertiliser;\r\n        \r\n        [Description(\"Crop to be fertilised\")]\r\n        public IPlant Crop { get; set; }\r\n\r\n        [Description(\"Type of fertiliser to apply? \")] \r\n        public Fertiliser.Types FertiliserType { get; set; }\r\n    \r\n        [Description(\"Amount of fertiliser to be applied (kg/ha)\")]\r\n        public double Amount { get; set; }\r\n        \r\n        [EventSubscribe(\"Sowing\")]\r\n        private void OnSowing(object sender, EventArgs e)\r\n        {\r\n            Model crop = sender as Model;\r\n            if (Crop != null && crop.Name.ToLower() == (Crop as IModel).Name.ToLower())\r\n                Fertiliser.Apply(Amount: Amount, Type: FertiliserType);\r\n        }\r\n    }\r\n}\r\n",
+                  "Parameters": [
+                    {
+                      "Key": "Crop",
+                      "Value": "[Potato]"
+                    },
+                    {
+                      "Key": "FertiliserType",
+                      "Value": "DAP"
+                    },
+                    {
+                      "Key": "Amount",
+                      "Value": "300"
+                    }
+                  ],
+                  "Name": "Fertilise at sowing",
                   "ResourceName": null,
                   "Children": [],
                   "Enabled": true,
@@ -2423,6 +2332,7 @@
                         0.24,
                         0.24
                       ],
+                      "InitialPAWmm": 0.0,
                       "RelativeTo": "LL15",
                       "FilledFromTop": true,
                       "Name": "Water",
@@ -4049,16 +3959,16 @@
                         0.99
                       ],
                       "FOM": [
-                        72.77279668895999,
-                        58.11025844061324,
-                        46.401983841128654,
-                        37.052736679751774,
-                        27.44934245848192,
-                        20.33497303897571,
-                        15.064518544344693,
-                        11.16006982344818,
-                        7.115974693495192,
-                        4.537345790800654
+                        72.77279668896,
+                        58.1102584406132,
+                        46.4019838411287,
+                        37.0527366797518,
+                        27.4493424584819,
+                        20.3349730389757,
+                        15.0645185443447,
+                        11.1600698234482,
+                        7.11597469349519,
+                        4.53734579080065
                       ],
                       "CarbonMetadata": null,
                       "FOMMetadata": null,

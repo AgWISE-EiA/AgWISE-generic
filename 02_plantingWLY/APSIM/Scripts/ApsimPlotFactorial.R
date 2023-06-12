@@ -40,16 +40,16 @@ apsim.plots<- function(stn, results, b, wkdir){
     }
   }
   }
-  # ##############################Graphs######################################
-  # foreach (i = 1:length(results))%do%{
-  #  print(results[[i]]  %>%
-  #  ggplot(aes(x=SimulationID, y=Yield)) +
-  #  geom_point(na.rm=TRUE)+
-  # ggtitle(paste0("Yield ",i))+
-  # scale_x_continuous(breaks = seq(1, 365, by = 5))+
-  # theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-  #  )
-  #  }
+  ##############################Graphs######################################
+  foreach (i = 1:length(results))%do%{
+   print(results[[i]]  %>%
+   ggplot(aes(x=SimulationID, y=Yield)) +
+   geom_point(na.rm=TRUE)+
+  ggtitle(paste0("Yield ",i))+
+  scale_x_continuous(breaks = seq(1, 365, by = 5))+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+   )
+   }
   ###########################################################################
   final<- do.call("smartbind", results)
   glimpse(final)
@@ -58,7 +58,7 @@ apsim.plots<- function(stn, results, b, wkdir){
   stns<- read.csv("D:/dev_agwise/AgWISE-UseCaseRAB/02_plantingWLY/APSIM/stn.csv")
   
   final<-inner_join(final, stns, by= "lonlat")%>% 
-    select (-c(X, Longitude.y, Latitude.y))%>%
+    dplyr::select (-c(X, Longitude.y, Latitude.y))%>%
     rename(Longitude = Longitude.x , Latitude = Latitude.x)
   p_Win <- final  %>% 
     group_by(Longitude, Latitude)%>%

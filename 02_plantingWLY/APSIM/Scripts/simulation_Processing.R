@@ -38,19 +38,26 @@ unique(APSIM_MZ_SHT_S2$SowDate)
 unique(APSIM_MZ_MED_S2$SowDate)
 unique(APSIM_MZ_LNG_S2$SowDate)
 
-S1_SowDate <- c("01-feb", "08-feb", "15-feb", "22-feb", "28-feb","07-mar", "14-mar", "21-mar", "28-mar")
-S2_SowDate <- c("01-aug", "08-aug", "15-aug", "22-aug", "29-aug", "05-sep", "12-sep" ,"19-sep", "26-sep")
+S1_SowDate <- c("01-jan","08-jan","15-jan", "22-jan", "29-jan",
+                "05-feb", "12-feb", "19-feb", "26-feb",
+                "05-mar", "12-mar", "19-mar", "26-mar",
+                "02-apr", "09-apr", "16-apr", "23-apr", "30-apr")
+
+S2_SowDate <- c("01-jul","08-jul", "15-jul", "29-jul",
+                "05-aug", "12-aug", "19-aug", "26-aug",
+                "02-sep", "09-sep" ,"16-sep", "23-sep", "30-sep",
+                "07-oct", "14-oct", "21-oct", "28-oct")
 
 
 ## Maize simulation does not have location, get it from 
-# RAB_Location <- read.csv("D:/RwandaData/coordinates_Rwanda.csv")
-# RAB_Location$lonlat <- paste(RAB_Location$Lon, RAB_Location$Lat, sep="_")
-# RAB_Location$Location <- RAB_Location$Municipality
-# 
-# 
-# APSIM_MZ_SHT_S2 <- merge(APSIM_MZ_SHT_S2, RAB_Location[, c("lonlat", "Location")], by="lonlat")
-# APSIM_MZ_MED_S2 <- merge(APSIM_MZ_MED_S2, RAB_Location[, c("lonlat", "Location")], by="lonlat")
-# APSIM_MZ_LNG_S2 <- merge(APSIM_MZ_LNG_S2, RAB_Location[, c("lonlat", "Location")], by="lonlat")
+RAB_Location <- read.csv("D:/RwandaData/coordinates_Rwanda.csv")
+RAB_Location$lonlat <- paste(RAB_Location$Lon, RAB_Location$Lat, sep="_")
+RAB_Location$Location <- RAB_Location$Municipality
+
+
+APSIM_MZ_SHT_S2 <- merge(APSIM_MZ_SHT_S2, RAB_Location[, c("lonlat", "Location")], by="lonlat")
+APSIM_MZ_MED_S2 <- merge(APSIM_MZ_MED_S2, RAB_Location[, c("lonlat", "Location")], by="lonlat")
+APSIM_MZ_LNG_S2 <- merge(APSIM_MZ_LNG_S2, RAB_Location[, c("lonlat", "Location")], by="lonlat")
 
 
 ## map: remove points in water?: lon = 29.2 and lat = c(>-2.3, <-1.8)
@@ -61,7 +68,7 @@ RWA_sf <- suppressMessages(st_as_sf(RWA))
 RW_aez_sf <- suppressMessages(st_as_sf(RW_aez))
 
 
-mapData <- APSIM_MZ_MED_S2[APSIM_MZ_MED_S2$SowDate == "15-aug" & APSIM_MZ_MED_S2$SowYear == 2005, ]
+mapData <- APSIM_MZ_MED_S2[APSIM_MZ_MED_S2$SowDate == "15-jul" & APSIM_MZ_MED_S2$SowYear == 2005, ]
 ggplot() +
   # geom_sf(data = RW_aez_sf, aes(fill=as.factor(AEZs_no))) +
   geom_sf(data = RWA_sf, aes(fill=as.factor(NAME_1))) +
@@ -91,11 +98,15 @@ APSIM_MZ_MED_S2$cultivar <- "Medium"
 APSIM_MZ_LNG_S2$cultivar <- "Long"
 
 APSIM_MZ_S2 <- rbind(APSIM_MZ_SHT_S2, APSIM_MZ_MED_S2, APSIM_MZ_LNG_S2)
-
+# APSIM_MZ_S2<-subset(APSIM_MZ_S2, SowDate %in% c("01-jul","08-jul", "15-jul", "29-jul",
+#                                               "05-aug", "12-aug", "19-aug", "26-aug",
+#                                               "02-sep", "09-sep" ,"16-sep", "23-sep", "30-sep",
+#                                               "07-oct", "14-oct", "21-oct", "28-oct"))
+unique(APSIM_MZ_S2$SowDate)
 ###############################################################################################
 ## plotting for general observations
 ###############################################################################################
-
+unique(APSIM_MZ_S2$Location)
 ## across locations and years: very similar mean yield across sowing dates but different in variation 
 
 ggplot(APSIM_MZ_S2, aes(x= factor(SowDate, levels = S2_SowDate), y = Yield, col=factor(cultivar))) +
@@ -106,7 +117,7 @@ ggplot(APSIM_MZ_S2, aes(x= factor(SowDate, levels = S2_SowDate), y = Yield, col=
   theme(axis.text.x = element_text(angle=45, vjust=0.9, hjust=0.8, size=12), 
         axis.text.y = element_text(size=12), axis.title = element_text(size=14),
         plot.title = element_text(hjust=0.5))
-
+  # stat_summary(fun =mean, geom="point", shape=23, size=2)
 
 
 ## across years and by location: part of the variation can be explained by differences in location, 
@@ -116,6 +127,17 @@ ggplot(APSIM_MZ_S2, aes(x= factor(SowDate, levels = S2_SowDate), y = Yield, col=
   geom_boxplot() +
   facet_wrap(~Location) +
   xlab("Sowing date") + ylab("Yield") +
+  ggtitle("Yield: across Sowing Dates by locations") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle=45, vjust=0.9, hjust=0.8, size=12), 
+        axis.text.y = element_text(size=12), axis.title = element_text(size=14),
+        plot.title = element_text(hjust=0.5), legend.position = "none",
+        strip.text = element_text(size = 12))
+
+ggplot(APSIM_MZ_S2, aes(x= factor(SowYear), y = Yield, col=factor(cultivar)))+
+  geom_boxplot() +
+  facet_wrap(~Location) +
+  xlab("Years") + ylab("Yield") +
   ggtitle("Yield: across years by locations") +
   theme_bw()+
   theme(axis.text.x = element_text(angle=45, vjust=0.9, hjust=0.8, size=12), 
@@ -123,11 +145,35 @@ ggplot(APSIM_MZ_S2, aes(x= factor(SowDate, levels = S2_SowDate), y = Yield, col=
         plot.title = element_text(hjust=0.5), legend.position = "none",
         strip.text = element_text(size = 12))
 
-length(unique(APSIM_MZ_MED_S2[APSIM_MZ_MED_S2$Location == "Iburengerazuba", "lonlat"]))##131
-length(unique(APSIM_MZ_MED_S2[APSIM_MZ_MED_S2$Location == "Amajyepfo", "lonlat"]))##197
-length(unique(APSIM_MZ_MED_S2[APSIM_MZ_MED_S2$Location == "Amajyaruguru", "lonlat"]))##101
-length(unique(APSIM_MZ_MED_S2[APSIM_MZ_MED_S2$Location == "Iburasirazuba", "lonlat"]))##293
-length(unique(APSIM_MZ_MED_S2[APSIM_MZ_MED_S2$Location == "Umujyi wa Kigali","lonlat"]))##21
+ggplot(APSIM_MZ_S2, aes(x= factor(SowYear), y = InCropRainfall, col=factor(cultivar)))+
+  geom_boxplot() +
+  facet_wrap(~Location) +
+  xlab("Year") + ylab("Rainfall") +
+  ggtitle("Rainfall: across years by locations") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle=45, vjust=0.9, hjust=0.8, size=12), 
+        axis.text.y = element_text(size=12), axis.title = element_text(size=14),
+        plot.title = element_text(hjust=0.5), legend.position = "none",
+        strip.text = element_text(size = 12))
+
+
+ggplot(APSIM_MZ_S2, aes(x= factor(SowYear), y = TotalESW, col=factor(cultivar)))+
+  geom_boxplot() +
+  facet_wrap(~Location) +
+  xlab("Year") + ylab("Soil Water") +
+  ggtitle("Soil Water: across years by locations") +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle=45, vjust=0.9, hjust=0.8, size=12), 
+        axis.text.y = element_text(size=12), axis.title = element_text(size=14),
+        plot.title = element_text(hjust=0.5), legend.position = "none",
+        strip.text = element_text(size = 12))
+
+
+length(unique(APSIM_MZ_S2[APSIM_MZ_MED_S2$Location == "Iburengerazuba", "lonlat"]))##131
+length(unique(APSIM_MZ_S2[APSIM_MZ_MED_S2$Location == "Amajyepfo", "lonlat"]))##197
+length(unique(APSIM_MZ_S2[APSIM_MZ_MED_S2$Location == "Amajyaruguru", "lonlat"]))##101
+length(unique(APSIM_MZ_S2[APSIM_MZ_MED_S2$Location == "Iburasirazuba", "lonlat"]))##288
+length(unique(APSIM_MZ_S2[APSIM_MZ_MED_S2$Location == "Umujyi wa Kigali","lonlat"]))##21
 
 
 ###############################################################################################
@@ -138,18 +184,79 @@ length(unique(APSIM_MZ_MED_S2[APSIM_MZ_MED_S2$Location == "Umujyi wa Kigali","lo
 locations <- unique(APSIM_MZ_S2$Location)
 loc1 <- APSIM_MZ_S2[APSIM_MZ_S2$Location == locations[1], ]
 
-
+unique(APSIM_MZ_S2$SowDate)
+unique(S2_SowDate)
 #Location 1 A : Between sites yield differences by year and by sowing date
-ggplot(loc1,  aes(x= factor(SowYear), y = Yield, col=factor(cultivar))) +
+ggplot(loc1,  aes(x= reorder(factor(SowYear), -Yield), y = Yield, col=factor(cultivar))) +
   geom_boxplot() +
   facet_wrap(~ factor(SowDate, levels = S2_SowDate), scales="free") +
   xlab("Year") + ylab("Yield") +
   ggtitle(paste("Yield: across field sites by years and sowing date at ", locations[1], sep="")) +
   theme_bw()+
+  theme(axis.text.x = element_text(angle=90, vjust=0.5, hjust=0.5, size=10), 
+        axis.text.y = element_text(size=12), axis.title = element_text(size=14),
+        plot.title = element_text(hjust=0.5), legend.position = "none",
+        strip.text = element_text(size = 12))
+
+ggplot(loc1,  aes(x= reorder(factor(SowYear), -InCropRainfall), y = InCropRainfall, col=factor(cultivar))) +
+  geom_boxplot() +
+  facet_wrap(~ factor(SowDate, levels = S2_SowDate), scales="free") +
+  xlab("Year") + ylab("Rainfall (mm)") +
+  ggtitle(paste("Rainfall: across field sites by years and sowing date at ", locations[1], sep="")) +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle=90, vjust=0.5, hjust=0.5, size=10), 
+        axis.text.y = element_text(size=12), axis.title = element_text(size=14),
+        plot.title = element_text(hjust=0.5), legend.position = "none",
+        strip.text = element_text(size = 12))
+
+ggplot(loc1,  aes(x= reorder(factor(SowYear), -InCropMaxTemperature), y = InCropMaxTemperature, col=factor(cultivar))) +
+  geom_boxplot() +
+  facet_wrap(~ factor(SowDate, levels = S2_SowDate), scales="free") +
+  xlab("Year") + ylab("Max Temperature (C)") +
+  ggtitle(paste("Maximum Temperature: across field sites by years and sowing date at ", locations[1], sep="")) +
+  theme_bw()+
   theme(axis.text.x = element_text(angle=90, vjust=0.5, hjust=0.5, size=12), 
         axis.text.y = element_text(size=12), axis.title = element_text(size=14),
         plot.title = element_text(hjust=0.5), legend.position = "none",
         strip.text = element_text(size = 12))
+
+
+ggplot(loc1,  aes(x= reorder(factor(SowYear),-TotalESW), y = TotalESW, col=factor(cultivar))) +
+  geom_boxplot() +
+  facet_wrap(~ factor(SowDate, levels = S2_SowDate), scales="free") +
+  xlab("Year") + ylab("Max Temperature (C)") +
+  ggtitle(paste("Soil Water: across field sites by years and sowing date at ", locations[1], sep="")) +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle=90, vjust=0.5, hjust=0.5, size=12), 
+        axis.text.y = element_text(size=12), axis.title = element_text(size=14),
+        plot.title = element_text(hjust=0.5), legend.position = "none",
+        strip.text = element_text(size = 12))
+####################################################################################################
+loc1short<- loc1%>%
+  filter(loc1$cultivar=="Short")
+
+ggplot(loc1short,  aes(x= factor(SowYear), y = InCropRainfall)) +
+  geom_boxplot() +
+  facet_wrap(~ factor(SowDate, levels = S2_SowDate), scales="free") +
+  xlab("Year") + ylab("Rainfall (mm)") +
+  ggtitle(paste("Rainfall: across field sites by years and sowing date at ", locations[1], sep="")) +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle=90, vjust=0.5, hjust=0.5, size=12), 
+        axis.text.y = element_text(size=12), axis.title = element_text(size=14),
+        plot.title = element_text(hjust=0.5), legend.position = "none",
+        strip.text = element_text(size = 12))
+
+ggplot(loc1short,  aes(x= factor(SowYear), y = InCropMaxTemperature)) +
+  geom_boxplot() +
+  facet_wrap(~ factor(SowDate, levels = S2_SowDate), scales="free") +
+  xlab("Year") + ylab("Maximum Temperature (C)") +
+  ggtitle(paste("Maximum Temperature: across field sites by years and sowing date at ", locations[1], sep="")) +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle=90, vjust=0.5, hjust=0.5, size=12), 
+        axis.text.y = element_text(size=12), axis.title = element_text(size=14),
+        plot.title = element_text(hjust=0.5), legend.position = "none",
+        strip.text = element_text(size = 12))
+
 
 # Between locations yield variation increasing dramatically with a week difference in sowing date.
 # In some instances, the yield drops from >8 t/ha to <6 t/ha because the sowing date is shifted by 1week 
@@ -175,6 +282,8 @@ ggplot(loc1,  aes(x= factor(lonlat), y = Yield, col=factor(cultivar))) +
 
 
 
+
+
 loc1_YV <- loc1[loc1$SowDate == "19-sep" & loc1$Yield < 4000, ]
 loc1_YV[order(loc1_YV$lonlat, loc1_YV$SowYear), ]
 
@@ -197,7 +306,10 @@ hist(rf$InCropET)
 ## getting summary data for every sites by sowing date = summarizing the 40 years simulation
 ## we could ask by sowing date what was dose the map of max, min, ... yield looks like? 
 Summaries <- ddply(APSIM_MZ_S2, .(Longitude, Latitude, lonlat, SowDate, cultivar), summarize,
-                   minYield = as.integer(min(Yield)), maxYield = as.integer(max(Yield)), sdYield = as.integer(sd(Yield)),
+                   minYield = as.integer(min(Yield)), 
+                   maxYield = as.integer(max(Yield)), 
+                   meanYield = as.integer(mean(Yield)),
+                   sdYield = as.integer(sd(Yield)),
                    Q25Yield = as.integer(quantile(Yield, probs = 0.25)),
                    Q50Yield = as.integer(quantile(Yield, probs = 0.50)),
                    Q75Yield = as.integer(quantile(Yield, probs = 0.75)),
@@ -263,11 +375,36 @@ ggplot()+
   theme_ipsum()+
   theme(legend.position = "bottom")
 
-#####################################################################################################
+##########################JANE###########################################################################
+ggplot() +
+  geom_point(data = APSIM_MZ_LNG_S2, aes(WUE2, Yield, color = SowDate, group = SowYear))+
+  facet_wrap(~Location) +
+  scale_shape_manual()+
+  theme_bw()+
+  theme(legend.position = "left")
+
 ggplot() +
   geom_point(data = APSIM_MZ_LNG_S2, aes(InCropRainfall, Yield, color = SowDate, group = SowYear))+
   facet_wrap(~Location) +
   scale_shape_manual()+
   theme_bw()+
   theme(legend.position = "left")
+
+ggplot() +
+  geom_point(data = APSIM_MZ_LNG_S2, aes(InCropRainfall, InCropMaxTemperature, color = SowDate, group = SowYear))+
+  facet_wrap(~Location) +
+  scale_shape_manual()+
+  theme_bw()+
+  theme(legend.position = "left")
+
+df<- Summaries%>%filter(SowDate=="01-aug")
+  
+ggplot()+
+  geom_sf(data = RWA_sf) +
+  geom_point(data=df, aes(Longitude, Latitude, col=meanYield), size=2.5, shape=15) +
+  # scale_color_manual(values=cols28) +
+  scale_fill_gradient(low="white", high="blue") +
+  facet_wrap(~cultivar) +
+  theme_ipsum()+
+  theme(legend.position = "right")
 

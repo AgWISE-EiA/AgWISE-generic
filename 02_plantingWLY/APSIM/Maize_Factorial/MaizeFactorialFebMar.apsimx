@@ -1,7 +1,7 @@
 {
   "$type": "Models.Core.Simulations, Models",
-  "ExplorerWidth": 300,
-  "Version": 159,
+  "ExplorerWidth": 273,
+  "Version": 160,
   "Name": "Simulations",
   "ResourceName": null,
   "Children": [
@@ -42,7 +42,7 @@
               "Children": [
                 {
                   "$type": "Models.Factorial.Factor, Models",
-                  "Specification": "[SowingRule].Script.SowDate =01-feb, 08-feb, 15-feb, 22-feb, 28-feb, 07-mar, 14-mar, 21-mar, 28-mar",
+                  "Specification": "[SowingRule].Script.SowDate =01-jan, 08-jan, 15-jan, 22-jan, 29-jan, 05-feb, 12-feb, 19-feb, 26-feb, 05-mar, 12-mar, 19-mar, 26-mar, 02-apr, 09-apr, 16-apr, 23-apr, 30-apr",
                   "Name": "SowDate",
                   "ResourceName": null,
                   "Children": [],
@@ -122,6 +122,9 @@
                     "[Maize].Grain.NumberFunction",
                     "[Maize].Grain.N",
                     "[Maize].Total.Wt",
+                    "[Maize].Phenology.EmergenceDAS",
+                    "[Maize].Phenology.FloweringDAS",
+                    "[Maize].Phenology.MaturityDAS",
                     "Sum of [Weather].Rain from [Maize].Sowing to [Maize].Harvesting as InCropRainfall",
                     "Sum of [Weather].Radn from [Maize].Sowing to [Maize].Harvesting as InCropRadn",
                     "Mean of [Weather].MaxT from [Maize].Sowing to [Maize].Harvesting as InCropMaxTemperature",
@@ -129,6 +132,7 @@
                     "Sum of [Soil].SoilWater.Eo from [Maize].Sowing to [Maize].Harvesting as InCropET",
                     "Sum of [Soil].SoilWater.Es from [Maize].Sowing to [Maize].Harvesting as InCropES",
                     "([Maize].Grain.Wt * 10) / InCropET as WUE2 ",
+                    "sum([Soil].SoilWater.ESW) as TotalESW",
                     "[Maize].Grain.Total.Wt*10 as Yield",
                     "[Maize].SowingDate"
                   ],
@@ -159,7 +163,7 @@
                   "InitialResidueMass": 500.0,
                   "InitialStandingFraction": 0.0,
                   "InitialCPR": 0.0,
-                  "InitialCNR": 100.0,
+                  "InitialCNR": 10.0,
                   "Name": "SurfaceOrganicMatter",
                   "ResourceName": "SurfaceOrganicMatter",
                   "Children": [],
@@ -689,17 +693,55 @@
                     {
                       "$type": "Models.PMF.Cultivar, Models",
                       "Command": [
-                        "[Phenology].Juvenile.Target.FixedValue = 250",
+                        "[Phenology].Juvenile.Target.FixedValue = 260",
                         "[Phenology].Photosensitive.Target.XYPairs.X = 0, 12.5, 24",
                         "[Phenology].Photosensitive.Target.XYPairs.Y = 0, 0, 264.5",
                         "[Phenology].FlagLeafToFlowering.Target.FixedValue = 10",
                         "[Phenology].FloweringToGrainFilling.Target.FixedValue = 170",
                         "[Phenology].GrainFilling.Target.FixedValue = 550",
                         "[Rachis].DMDemands.Structural.DMDemandFunction.MaximumOrganWt.FixedValue = 14",
-                        "[Grain].MaximumGrainsPerCob.FixedValue = 468",
+                        "[Grain].MaximumGrainsPerCob.FixedValue = 486",
                         "[Grain].MaximumPotentialGrainSize.FixedValue = 0.361"
                       ],
-                      "Name": "rwanda",
+                      "Name": "Early",
+                      "ResourceName": null,
+                      "Children": [],
+                      "Enabled": true,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.PMF.Cultivar, Models",
+                      "Command": [
+                        "[Phenology].Juvenile.Target.FixedValue = 280",
+                        "[Phenology].Photosensitive.Target.XYPairs.X = 0, 12.5, 24",
+                        "[Phenology].Photosensitive.Target.XYPairs.Y = 0, 0, 264.5",
+                        "[Phenology].FlagLeafToFlowering.Target.FixedValue = 10",
+                        "[Phenology].FloweringToGrainFilling.Target.FixedValue = 170",
+                        "[Phenology].GrainFilling.Target.FixedValue = 550",
+                        "[Rachis].DMDemands.Structural.DMDemandFunction.MaximumOrganWt.FixedValue = 14",
+                        "[Grain].MaximumGrainsPerCob.FixedValue = 504",
+                        "[Grain].MaximumPotentialGrainSize.FixedValue = 0.361"
+                      ],
+                      "Name": "Mid",
+                      "ResourceName": null,
+                      "Children": [],
+                      "Enabled": true,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.PMF.Cultivar, Models",
+                      "Command": [
+                        "[Phenology].Juvenile.Target.FixedValue = 285",
+                        "[Phenology].Photosensitive.Target.XYPairs.X = 0, 12.5, 24",
+                        "[Phenology].Photosensitive.Target.XYPairs.Y = 0, 0, 0",
+                        "[Phenology].FlagLeafToFlowering.Target.FixedValue = 1",
+                        "[Phenology].FloweringToGrainFilling.Target.FixedValue = 170",
+                        "[Phenology].GrainFilling.Target.FixedValue = 865",
+                        "[Phenology].Maturing.Target.FixedValue = 1",
+                        "[Phenology].MaturityToHarvestRipe.Target.FixedValue = 100",
+                        "[Rachis].DMDemands.Structural.DMDemandFunction.MaximumOrganWt.FixedValue = 36"
+                      ],
+                      "Name": "Late",
                       "ResourceName": null,
                       "Children": [],
                       "Enabled": true,
@@ -807,6 +849,29 @@
                     }
                   ],
                   "Name": "Fertilise topup",
+                  "ResourceName": null,
+                  "Children": [],
+                  "Enabled": true,
+                  "ReadOnly": false
+                },
+                {
+                  "$type": "Models.Manager, Models",
+                  "Code": "using Models.Soils.Nutrients;\r\nusing APSIM.Shared.Utilities;\r\nusing Models.Surface;\r\nusing Models.Utilities;\r\nusing Models.Soils.Nutrients;\r\nusing Models.Soils;\r\nusing Models.PMF;\r\nusing Models.Core;\r\nusing System;\r\nusing Models.Interfaces;\r\n\r\nnamespace Models\r\n{\r\n    [Serializable]\r\n    public class Script : Model\r\n    {\r\n        [Link] private Plant Wheat;\r\n        [Link] private ISoilWater SoilWater;\r\n        [Link] private Nutrient nutrient;\r\n        [Link] private SurfaceOrganicMatter SOM;\r\n        [Link] private Summary Summary;\r\n\r\n        [Description(\"Reset Water? (Yes or No)\")]\r\n        public string ResetWater {get;set;}\r\n\r\n        [Description(\"Reset Soil Nutrients? (Yes or No)\")]\r\n        public string ResetNutrients {get;set;}\r\n\r\n        [Description(\"Reset Surface Organic Matter? (Yes or No)\")]\r\n        public string ResetSOM {get;set;}\r\n\r\n        [EventSubscribe(\"Sowing\")]\r\n        private void OnSowing(object sender, EventArgs e)\r\n        {\r\n            if (ResetWater == \"Yes\")\r\n            {\r\n                Summary.WriteMessage(this, \"Reset Water\", MessageType.Diagnostic);\r\n                SoilWater.Reset();\r\n            }\r\n            if (ResetNutrients == \"Yes\")\r\n            {\r\n                Summary.WriteMessage(this, \"Reset Nutrients\", MessageType.Diagnostic);\r\n                nutrient.Reset();\r\n            }\r\n            if (ResetSOM == \"Yes\")\r\n            {\r\n                Summary.WriteMessage(this, \"Reset Surface OM\", MessageType.Diagnostic);\r\n                SOM.Reset();\r\n            }\r\n        }\r\n    }\r\n}\r\n",
+                  "Parameters": [
+                    {
+                      "Key": "ResetWater",
+                      "Value": "Yes"
+                    },
+                    {
+                      "Key": "ResetNutrients",
+                      "Value": "Yes"
+                    },
+                    {
+                      "Key": "ResetSOM",
+                      "Value": "Yes"
+                    }
+                  ],
+                  "Name": "Reset on sowing",
                   "ResourceName": null,
                   "Children": [],
                   "Enabled": true,

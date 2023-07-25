@@ -33,7 +33,7 @@ SimFebMar<- apsimSpatialFactorial(scfl = "D:/dev_agwise/AgWISE-UseCaseRAB/02_pla
                                   wkdir ="D:/project", 
                                   crop = "MaizeFactorialFebMar.apsimx", 
                                   clck = c("1981-01-01T00:00:00", "2020-12-31T00:00:00"),
-                                  variety = "mh18",
+                                  variety = "Late",
                                   rep1 ="[Maize].Grain.Total.Wt*10 as Yield" ,
                                   rep2 ="[Maize].SowingDate",
                                   ppln = 5.3)
@@ -43,7 +43,7 @@ SimAugSep<- apsimSpatialFactorial(scfl = "D:/dev_agwise/AgWISE-UseCaseRAB/02_pla
                                   wkdir ="D:/project", 
                                   crop = "MaizeFactorialAugSep.apsimx", 
                                   clck = c("1981-01-01T00:00:00", "2020-12-31T00:00:00"),
-                                  variety = "mh18",
+                                  variety = "Late",
                                   rep1 ="[Maize].Grain.Total.Wt*10 as Yield" ,
                                   rep2 ="[Maize].SowingDate",
                                   ppln = 5.3)
@@ -68,7 +68,6 @@ resultsAugSep<-my_list_sim(crop = "MaizeFactorialAugSep.apsimx",
 save(resultsFebMar, file="D:/dev_agwise/AgWISE-UseCaseRAB/02_plantingWLY/APSIM/Maize_Results/season1_outputLA/resultsFebMar.RData")
 save(resultsAugSep, file="D:/dev_agwise/AgWISE-UseCaseRAB/02_plantingWLY/APSIM/Maize_Results/season2_outputLA/resultsAugSep.RData")
 ###########################################################################################################################
-
 
 ##############Here is the post processing Section
 load(file="D:/dev_agwise/AgWISE-UseCaseRAB/02_plantingWLY/APSIM/Maize_Results/season1_outputLA/resultsFebMar.RData")
@@ -97,6 +96,7 @@ PlantingDatesAugSep<-apsim.plots(stn = stn,
 save(PlantingDatesFebMar, file="D:/dev_agwise/AgWISE-UseCaseRAB/02_plantingWLY/APSIM/OutputData/APSIM_MZ_SHT_S1.RData")
 save(PlantingDatesAugSep, file="D:/dev_agwise/AgWISE-UseCaseRAB/02_plantingWLY/APSIM/OutputData/APSIM_MZ_SHT_S2.RData")
 
+
 #HERE########################################################
 ## sourcing function to create spatialize apsim
 setwd("D:/dev_agwise/AgWISE-UseCaseRAB/02_plantingWLY/APSIM/Scripts/")
@@ -107,7 +107,7 @@ SimFebMar<- apsimSpatialFactorial(scfl = "D:/dev_agwise/AgWISE-UseCaseRAB/02_pla
                                   wkdir ="D:/project", 
                                   crop = "MaizeFactorialFebMar.apsimx", 
                                   clck = c("1981-01-01T00:00:00", "2020-12-31T00:00:00"),
-                                  variety = "A_130",
+                                  variety = "Mid",
                                   rep1 ="[Maize].Grain.Total.Wt*10 as Yield" ,
                                   rep2 ="[Maize].SowingDate",
                                   ppln = 5.3)
@@ -117,7 +117,7 @@ SimAugSep<- apsimSpatialFactorial(scfl = "D:/dev_agwise/AgWISE-UseCaseRAB/02_pla
                                   wkdir ="D:/project", 
                                   crop = "MaizeFactorialAugSep.apsimx", 
                                   clck = c("1981-01-01T00:00:00", "2020-12-31T00:00:00"),
-                                  variety = "A_130",
+                                  variety = "Mid",
                                   rep1 ="[Maize].Grain.Total.Wt*10 as Yield" ,
                                   rep2 ="[Maize].SowingDate",
                                   ppln = 5.3)
@@ -179,7 +179,7 @@ SimFebMar<- apsimSpatialFactorial(scfl = "D:/dev_agwise/AgWISE-UseCaseRAB/02_pla
                                   wkdir ="D:/project", 
                                   crop = "MaizeFactorialFebMar.apsimx", 
                                   clck = c("1981-01-01T00:00:00", "2020-12-31T00:00:00"),
-                                  variety = "sc623",
+                                  variety = "Early",
                                   rep1 ="[Maize].Grain.Total.Wt*10 as Yield" ,
                                   rep2 ="[Maize].SowingDate",
                                   ppln = 5.3)
@@ -189,7 +189,7 @@ SimAugSep<- apsimSpatialFactorial(scfl = "D:/dev_agwise/AgWISE-UseCaseRAB/02_pla
                                   wkdir ="D:/project", 
                                   crop = "MaizeFactorialAugSep.apsimx", 
                                   clck = c("1981-01-01T00:00:00", "2020-12-31T00:00:00"),
-                                  variety = "sc623",
+                                  variety = "Early",
                                   rep1 ="[Maize].Grain.Total.Wt*10 as Yield" ,
                                   rep2 ="[Maize].SowingDate",
                                   ppln = 5.3)

@@ -1,7 +1,6 @@
 {
   "$type": "Models.Core.Simulations, Models",
-  "ExplorerWidth": 273,
-  "Version": 160,
+  "Version": 166,
   "Name": "Simulations",
   "ResourceName": null,
   "Children": [
@@ -521,6 +520,7 @@
                       "PHUnits": 0,
                       "EC": null,
                       "ESP": null,
+                      "CEC": null,
                       "ECMetadata": null,
                       "CLMetadata": null,
                       "ESPMetadata": null,
@@ -693,15 +693,17 @@
                     {
                       "$type": "Models.PMF.Cultivar, Models",
                       "Command": [
-                        "[Phenology].Juvenile.Target.FixedValue = 260",
+                        "[Phenology].Juvenile.Target.FixedValue = 135",
                         "[Phenology].Photosensitive.Target.XYPairs.X = 0, 12.5, 24",
                         "[Phenology].Photosensitive.Target.XYPairs.Y = 0, 0, 264.5",
+                        "[Structure].Phyllochron.Phyllochron.Phyllochron.XYPairs.X = 1, 2.4, 3.2",
+                        "[Structure].Phyllochron.Phyllochron.Phyllochron.XYPairs.Y = 22, 22, 34",
                         "[Phenology].FlagLeafToFlowering.Target.FixedValue = 10",
-                        "[Phenology].FloweringToGrainFilling.Target.FixedValue = 170",
-                        "[Phenology].GrainFilling.Target.FixedValue = 550",
+                        "[Phenology].FloweringToGrainFilling.Target.FixedValue = 140",
+                        "[Phenology].GrainFilling.Target.FixedValue = 280",
                         "[Rachis].DMDemands.Structural.DMDemandFunction.MaximumOrganWt.FixedValue = 14",
-                        "[Grain].MaximumGrainsPerCob.FixedValue = 486",
-                        "[Grain].MaximumPotentialGrainSize.FixedValue = 0.361"
+                        "[Grain].MaximumGrainsPerCob.FixedValue = 586",
+                        "[Grain].MaximumPotentialGrainSize.FixedValue = 0.341"
                       ],
                       "Name": "Early",
                       "ResourceName": null,
@@ -712,15 +714,18 @@
                     {
                       "$type": "Models.PMF.Cultivar, Models",
                       "Command": [
-                        "[Phenology].Juvenile.Target.FixedValue = 280",
+                        "[Phenology].Juvenile.Target.FixedValue = 150",
                         "[Phenology].Photosensitive.Target.XYPairs.X = 0, 12.5, 24",
-                        "[Phenology].Photosensitive.Target.XYPairs.Y = 0, 0, 264.5",
-                        "[Phenology].FlagLeafToFlowering.Target.FixedValue = 10",
+                        "[Phenology].Photosensitive.Target.XYPairs.Y = 0, 0, 0",
+                        "[Structure].Phyllochron.Phyllochron.Phyllochron.XYPairs.X = 1, 2.8, 3.3",
+                        "[Structure].Phyllochron.Phyllochron.Phyllochron.XYPairs.Y = 26, 26, 38",
+                        "[Phenology].FlagLeafToFlowering.Target.FixedValue = 1",
                         "[Phenology].FloweringToGrainFilling.Target.FixedValue = 170",
-                        "[Phenology].GrainFilling.Target.FixedValue = 550",
-                        "[Rachis].DMDemands.Structural.DMDemandFunction.MaximumOrganWt.FixedValue = 14",
-                        "[Grain].MaximumGrainsPerCob.FixedValue = 504",
-                        "[Grain].MaximumPotentialGrainSize.FixedValue = 0.361"
+                        "[Phenology].GrainFilling.Target.FixedValue = 410",
+                        "[Phenology].Maturing.Target.FixedValue = 1",
+                        "[Rachis].DMDemands.Structural.DMDemandFunction.MaximumOrganWt.FixedValue = 20",
+                        "[Grain].MaximumGrainsPerCob.FixedValue = 580",
+                        "[Grain].MaximumPotentialGrainSize.FixedValue = 0.381"
                       ],
                       "Name": "Mid",
                       "ResourceName": null,
@@ -731,15 +736,18 @@
                     {
                       "$type": "Models.PMF.Cultivar, Models",
                       "Command": [
-                        "[Phenology].Juvenile.Target.FixedValue = 285",
+                        "[Phenology].Juvenile.Target.FixedValue = 185",
                         "[Phenology].Photosensitive.Target.XYPairs.X = 0, 12.5, 24",
                         "[Phenology].Photosensitive.Target.XYPairs.Y = 0, 0, 0",
+                        "[Structure].Phyllochron.Phyllochron.Phyllochron.XYPairs.X = 1, 2.8, 3.3",
+                        "[Structure].Phyllochron.Phyllochron.Phyllochron.XYPairs.Y = 28, 28, 40",
                         "[Phenology].FlagLeafToFlowering.Target.FixedValue = 1",
-                        "[Phenology].FloweringToGrainFilling.Target.FixedValue = 170",
-                        "[Phenology].GrainFilling.Target.FixedValue = 865",
+                        "[Phenology].FloweringToGrainFilling.Target.FixedValue = 150",
+                        "[Phenology].GrainFilling.Target.FixedValue = 410",
                         "[Phenology].Maturing.Target.FixedValue = 1",
                         "[Phenology].MaturityToHarvestRipe.Target.FixedValue = 100",
-                        "[Rachis].DMDemands.Structural.DMDemandFunction.MaximumOrganWt.FixedValue = 36"
+                        "[Rachis].DMDemands.Structural.DMDemandFunction.MaximumOrganWt.FixedValue = 20",
+                        "[Grain].MaximumPotentialGrainSize.FixedValue = 0.361"
                       ],
                       "Name": "Late",
                       "ResourceName": null,
@@ -769,7 +777,54 @@
                 },
                 {
                   "$type": "Models.Manager, Models",
-                  "Code": "using APSIM.Shared.Utilities;\r\nusing Models.Utilities;\r\nusing Models.Soils;\r\nusing Models.PMF;\r\nusing Models.Core;\r\nusing System;\r\n\r\nnamespace Models\r\n{\r\n    [Serializable]\r\n    public class Script : Model\r\n    {\r\n        [Link] Clock Clock;\r\n        [Link] Fertiliser Fertiliser;\r\n        [Link] Summary Summary;\r\n        [Link] Soil Soil;\r\n        \r\n        [Description(\"Crop\")]\r\n        public IPlant Crop { get; set; }\r\n\r\n        [Description(\"Sowing date (d-mmm)\")]\r\n        public string SowDate { get; set; }\r\n\r\n        [Display(Type = DisplayType.CultivarName)]\r\n        [Description(\"Cultivar to be sown\")]\r\n        public string CultivarName { get; set; }\r\n\r\n        [Description(\"Sowing depth (mm)\")]\r\n        public double SowingDepth { get; set; }\r\n\r\n        [Description(\"Row spacing (mm)\")]\r\n        public double RowSpacing { get; set; }\r\n\r\n        [Description(\"Plant population (/m2)\")]\r\n        public double Population { get; set; }\r\n\r\n        [EventSubscribe(\"DoManagement\")]\r\n        private void OnDoManagement(object sender, EventArgs e)\r\n        {\r\n            if (DateUtilities.WithinDates(SowDate, Clock.Today, SowDate))\r\n            {\r\n                Crop.Sow(population: Population, cultivar: CultivarName, depth: SowingDepth, rowSpacing: RowSpacing);    \r\n            }\r\n        }\r\n    }\r\n}\r\n",
+                  "CodeArray": [
+                    "using APSIM.Shared.Utilities;",
+                    "using Models.Utilities;",
+                    "using Models.Soils;",
+                    "using Models.PMF;",
+                    "using Models.Core;",
+                    "using System;",
+                    "",
+                    "namespace Models",
+                    "{",
+                    "    [Serializable]",
+                    "    public class Script : Model",
+                    "    {",
+                    "        [Link] Clock Clock;",
+                    "        [Link] Fertiliser Fertiliser;",
+                    "        [Link] Summary Summary;",
+                    "        [Link] Soil Soil;",
+                    "        ",
+                    "        [Description(\"Crop\")]",
+                    "        public IPlant Crop { get; set; }",
+                    "",
+                    "        [Description(\"Sowing date (d-mmm)\")]",
+                    "        public string SowDate { get; set; }",
+                    "",
+                    "        [Display(Type = DisplayType.CultivarName)]",
+                    "        [Description(\"Cultivar to be sown\")]",
+                    "        public string CultivarName { get; set; }",
+                    "",
+                    "        [Description(\"Sowing depth (mm)\")]",
+                    "        public double SowingDepth { get; set; }",
+                    "",
+                    "        [Description(\"Row spacing (mm)\")]",
+                    "        public double RowSpacing { get; set; }",
+                    "",
+                    "        [Description(\"Plant population (/m2)\")]",
+                    "        public double Population { get; set; }",
+                    "",
+                    "        [EventSubscribe(\"DoManagement\")]",
+                    "        private void OnDoManagement(object sender, EventArgs e)",
+                    "        {",
+                    "            if (DateUtilities.WithinDates(SowDate, Clock.Today, SowDate))",
+                    "            {",
+                    "                Crop.Sow(population: Population, cultivar: CultivarName, depth: SowingDepth, rowSpacing: RowSpacing);    ",
+                    "            }",
+                    "        }",
+                    "    }",
+                    "}"
+                  ],
                   "Parameters": [
                     {
                       "Key": "Crop",
@@ -804,7 +859,54 @@
                 },
                 {
                   "$type": "Models.Manager, Models",
-                  "Code": "using Models.PMF.Phen;\r\nusing APSIM.Shared.Utilities;\r\nusing System.Xml.Serialization;\r\nusing Models;\r\nusing Models.PMF;\r\nusing Models.Soils;\r\nusing System.Text;\r\nusing System.Collections.Generic;\r\nusing Models.Core;\r\nusing System;\r\nusing Models.Soils.Nutrients;\r\n\r\nnamespace Models\r\n{\r\n    [Serializable] \r\n    public class Script : Model\r\n    {\r\n        [Link(ByName = true)] private Plant Maize;\r\n        [Link] private Zone zone;\r\n        [Link(Type = LinkType.Path, Path = \"[Maize].Phenology\")]\r\n        private Phenology phenology;\r\n                    \r\n        \r\n        [EventSubscribe(\"StartOfSimulation\")]\r\n        private void OnSimulationCommencing(object sender, EventArgs e)\r\n        {\r\n        }\r\n        \r\n        [EventSubscribe(\"DoManagement\")]\r\n        private void OnDoManagement(object sender, EventArgs e)\r\n        {\r\n            if (phenology.CurrentPhase.Name == \"ReadyForHarvesting\")\r\n            {\r\n                Maize.Harvest();\r\n                Maize.EndCrop();\r\n            }\r\n        }\r\n        \r\n        [EventSubscribe(\"DoManagementCalculations\")]\r\n        private void OnDoManagementCalculations(object sender, EventArgs e)\r\n        {\r\n            \r\n        }\r\n    }\r\n}\r\n       \r\n",
+                  "CodeArray": [
+                    "using Models.PMF.Phen;",
+                    "using APSIM.Shared.Utilities;",
+                    "using System.Xml.Serialization;",
+                    "using Models;",
+                    "using Models.PMF;",
+                    "using Models.Soils;",
+                    "using System.Text;",
+                    "using System.Collections.Generic;",
+                    "using Models.Core;",
+                    "using System;",
+                    "using Models.Soils.Nutrients;",
+                    "",
+                    "namespace Models",
+                    "{",
+                    "    [Serializable] ",
+                    "    public class Script : Model",
+                    "    {",
+                    "        [Link(ByName = true)] private Plant Maize;",
+                    "        [Link] private Zone zone;",
+                    "        [Link(Type = LinkType.Path, Path = \"[Maize].Phenology\")]",
+                    "        private Phenology phenology;",
+                    "                    ",
+                    "        ",
+                    "        [EventSubscribe(\"StartOfSimulation\")]",
+                    "        private void OnSimulationCommencing(object sender, EventArgs e)",
+                    "        {",
+                    "        }",
+                    "        ",
+                    "        [EventSubscribe(\"DoManagement\")]",
+                    "        private void OnDoManagement(object sender, EventArgs e)",
+                    "        {",
+                    "            if (phenology.CurrentPhase.Name == \"ReadyForHarvesting\")",
+                    "            {",
+                    "                Maize.Harvest();",
+                    "                Maize.EndCrop();",
+                    "            }",
+                    "        }",
+                    "        ",
+                    "        [EventSubscribe(\"DoManagementCalculations\")]",
+                    "        private void OnDoManagementCalculations(object sender, EventArgs e)",
+                    "        {",
+                    "            ",
+                    "        }",
+                    "    }",
+                    "}",
+                    "       "
+                  ],
                   "Parameters": [],
                   "Name": "Harvesting",
                   "ResourceName": null,
@@ -814,7 +916,39 @@
                 },
                 {
                   "$type": "Models.Manager, Models",
-                  "Code": "using Models.Soils;\r\nusing System;\r\nusing System.Linq;\r\nusing Models.Core;\r\nusing Models.PMF;\r\nnamespace Models\r\n{\r\n    [Serializable]\r\n    public class Script : Model\r\n    {\r\n        [Link] Clock Clock;\r\n        [Link] Fertiliser Fertiliser;\r\n        \r\n        [Description(\"Crop to be fertilised\")]\r\n        public IPlant Crop { get; set; }\r\n\r\n        [Description(\"Type of fertiliser to apply? \")] \r\n        public Fertiliser.Types FertiliserType { get; set; }\r\n    \r\n        [Description(\"Amount of fertiliser to be applied (kg/ha)\")]\r\n        public double Amount { get; set; }\r\n        \r\n        [EventSubscribe(\"Sowing\")]\r\n        private void OnSowing(object sender, EventArgs e)\r\n        {\r\n            Model crop = sender as Model;\r\n            if (Crop != null && crop.Name.ToLower() == (Crop as IModel).Name.ToLower())\r\n                Fertiliser.Apply(Amount: Amount, Type: FertiliserType);\r\n        }\r\n    }\r\n}\r\n",
+                  "CodeArray": [
+                    "using Models.Soils;",
+                    "using System;",
+                    "using System.Linq;",
+                    "using Models.Core;",
+                    "using Models.PMF;",
+                    "namespace Models",
+                    "{",
+                    "    [Serializable]",
+                    "    public class Script : Model",
+                    "    {",
+                    "        [Link] Clock Clock;",
+                    "        [Link] Fertiliser Fertiliser;",
+                    "        ",
+                    "        [Description(\"Crop to be fertilised\")]",
+                    "        public IPlant Crop { get; set; }",
+                    "",
+                    "        [Description(\"Type of fertiliser to apply? \")] ",
+                    "        public Fertiliser.Types FertiliserType { get; set; }",
+                    "    ",
+                    "        [Description(\"Amount of fertiliser to be applied (kg/ha)\")]",
+                    "        public double Amount { get; set; }",
+                    "        ",
+                    "        [EventSubscribe(\"Sowing\")]",
+                    "        private void OnSowing(object sender, EventArgs e)",
+                    "        {",
+                    "            Model crop = sender as Model;",
+                    "            if (Crop != null && crop.Name.ToLower() == (Crop as IModel).Name.ToLower())",
+                    "                Fertiliser.Apply(Amount: Amount, Type: FertiliserType);",
+                    "        }",
+                    "    }",
+                    "}"
+                  ],
                   "Parameters": [
                     {
                       "Key": "Crop",
@@ -837,7 +971,39 @@
                 },
                 {
                   "$type": "Models.Manager, Models",
-                  "Code": "using Models.Soils;\r\nusing APSIM.Shared.Utilities;\r\nusing Models.Soils.Nutrients;\r\nusing Models.PMF;\r\nusing Models.Core;\r\nusing System;\r\nusing System.Linq;\r\nusing Models.Soils.Nutrients;\r\nnamespace Models\r\n{\r\n    [Serializable]\r\n    public class Script : Model\r\n    {\r\n        [Link] Clock Clock;\r\n        [Link] Fertiliser Fertiliser;\r\n        [Link(ByName=true)] Solute NO3;\r\n\r\n        [Description(\"Type of fertiliser to apply? \")] \r\n        public Fertiliser.Types FertiliserType { get; set; }\r\n    \r\n        [Description(\"Threshold amount of NO3 to topup to (kg/ha)\")]\r\n        public double Threshold { get; set;}\r\n        \r\n        [EventSubscribe(\"DoManagement\")]\r\n        private void OnDoManagement(object sender, EventArgs e)\r\n        {\r\n            double Amount = Threshold - MathUtilities.Sum(NO3.kgha);\r\n            Fertiliser.Apply(Amount: Amount, Type: FertiliserType);\r\n        }\r\n    }\r\n}\r\n",
+                  "CodeArray": [
+                    "using Models.Soils;",
+                    "using APSIM.Shared.Utilities;",
+                    "using Models.Soils.Nutrients;",
+                    "using Models.PMF;",
+                    "using Models.Core;",
+                    "using System;",
+                    "using System.Linq;",
+                    "using Models.Soils.Nutrients;",
+                    "namespace Models",
+                    "{",
+                    "    [Serializable]",
+                    "    public class Script : Model",
+                    "    {",
+                    "        [Link] Clock Clock;",
+                    "        [Link] Fertiliser Fertiliser;",
+                    "        [Link(ByName=true)] Solute NO3;",
+                    "",
+                    "        [Description(\"Type of fertiliser to apply? \")] ",
+                    "        public Fertiliser.Types FertiliserType { get; set; }",
+                    "    ",
+                    "        [Description(\"Threshold amount of NO3 to topup to (kg/ha)\")]",
+                    "        public double Threshold { get; set;}",
+                    "        ",
+                    "        [EventSubscribe(\"DoManagement\")]",
+                    "        private void OnDoManagement(object sender, EventArgs e)",
+                    "        {",
+                    "            double Amount = Threshold - MathUtilities.Sum(NO3.kgha);",
+                    "            Fertiliser.Apply(Amount: Amount, Type: FertiliserType);",
+                    "        }",
+                    "    }",
+                    "}"
+                  ],
                   "Parameters": [
                     {
                       "Key": "FertiliserType",
@@ -856,8 +1022,77 @@
                 },
                 {
                   "$type": "Models.Manager, Models",
-                  "Code": "using Models.Soils.Nutrients;\r\nusing APSIM.Shared.Utilities;\r\nusing Models.Surface;\r\nusing Models.Utilities;\r\nusing Models.Soils.Nutrients;\r\nusing Models.Soils;\r\nusing Models.PMF;\r\nusing Models.Core;\r\nusing System;\r\nusing Models.Interfaces;\r\n\r\nnamespace Models\r\n{\r\n    [Serializable]\r\n    public class Script : Model\r\n    {\r\n        [Link] private Plant Wheat;\r\n        [Link] private ISoilWater SoilWater;\r\n        [Link] private Nutrient nutrient;\r\n        [Link] private SurfaceOrganicMatter SOM;\r\n        [Link] private Summary Summary;\r\n\r\n        [Description(\"Reset Water? (Yes or No)\")]\r\n        public string ResetWater {get;set;}\r\n\r\n        [Description(\"Reset Soil Nutrients? (Yes or No)\")]\r\n        public string ResetNutrients {get;set;}\r\n\r\n        [Description(\"Reset Surface Organic Matter? (Yes or No)\")]\r\n        public string ResetSOM {get;set;}\r\n\r\n        [EventSubscribe(\"Sowing\")]\r\n        private void OnSowing(object sender, EventArgs e)\r\n        {\r\n            if (ResetWater == \"Yes\")\r\n            {\r\n                Summary.WriteMessage(this, \"Reset Water\", MessageType.Diagnostic);\r\n                SoilWater.Reset();\r\n            }\r\n            if (ResetNutrients == \"Yes\")\r\n            {\r\n                Summary.WriteMessage(this, \"Reset Nutrients\", MessageType.Diagnostic);\r\n                nutrient.Reset();\r\n            }\r\n            if (ResetSOM == \"Yes\")\r\n            {\r\n                Summary.WriteMessage(this, \"Reset Surface OM\", MessageType.Diagnostic);\r\n                SOM.Reset();\r\n            }\r\n        }\r\n    }\r\n}\r\n",
+                  "CodeArray": [
+                    "using Models.Soils.Nutrients;",
+                    "using APSIM.Shared.Utilities;",
+                    "using Models.Surface;",
+                    "using Models.Utilities;",
+                    "using Models.Soils.Nutrients;",
+                    "using Models.Soils;",
+                    "using Models.PMF;",
+                    "using Models.Core;",
+                    "using System;",
+                    "using System.Linq;",
+                    "using Models.Interfaces;",
+                    "",
+                    "namespace Models",
+                    "{",
+                    "    [Serializable]",
+                    "    public class Script : Model",
+                    "    {",
+                    "        [Link] private Clock Clock;",
+                    "        [Link] private Plant Wheat;",
+                    "        [Link] private ISoilWater SoilWater;",
+                    "        [Link] private Nutrient nutrient;",
+                    "        [Link] private SurfaceOrganicMatter SOM;",
+                    "        [Link] private Summary Summary;",
+                    "",
+                    "        [Description(\"Date to reset on:\")]",
+                    "        public string ResetDate {get;set;}",
+                    "        ",
+                    "        [Description(\"Offset by Days (Negative is Days Before, Positive is Days After):\")]",
+                    "        public int OffsetDays {get;set;}",
+                    "",
+                    "        [Description(\"Reset Water? (Yes or No)\")]",
+                    "        public string ResetWater {get;set;}",
+                    "",
+                    "        [Description(\"Reset Soil Nutrients ? (Yes or No)\")]",
+                    "        public string ResetNutrients {get;set;}",
+                    "",
+                    "        [Description(\"Reset Surface Organic Matter? (Yes or No)\")]",
+                    "        public string ResetSOM {get;set;}",
+                    "",
+                    "        [EventSubscribe(\"DoManagement\")]",
+                    "        private void OnDoManagement(object sender, EventArgs e)",
+                    "        {",
+                    "            DateTime offsetDate = DateUtilities.GetDate(ResetDate, Clock.Today).AddDays(OffsetDays);",
+                    "            if (offsetDate.Equals(Clock.Today))",
+                    "            {",
+                    "                if (ResetWater == \"Yes\")",
+                    "                {",
+                    "                    Summary.WriteMessage(this, \"Reset Water\", MessageType.Diagnostic);",
+                    "                    SoilWater.Reset();",
+                    "                }",
+                    "                if (ResetNutrients == \"Yes\")",
+                    "                {",
+                    "                    Summary.WriteMessage(this, \"Reset Nitrogen\", MessageType.Diagnostic);",
+                    "                    nutrient.Reset();",
+                    "                }",
+                    "                if (ResetSOM == \"Yes\")",
+                    "                {",
+                    "                    Summary.WriteMessage(this, \"Reset Surface OM\", MessageType.Diagnostic);",
+                    "                    SOM.Reset();",
+                    "                }",
+                    "            }",
+                    "        }",
+                    "    }",
+                    "}"
+                  ],
                   "Parameters": [
+                    {
+                      "Key": "ResetDate",
+                      "Value": "01-jan"
+                    },
                     {
                       "Key": "ResetWater",
                       "Value": "Yes"
@@ -869,9 +1104,13 @@
                     {
                       "Key": "ResetSOM",
                       "Value": "Yes"
+                    },
+                    {
+                      "Key": "OffsetDays",
+                      "Value": "-30"
                     }
                   ],
-                  "Name": "Reset on sowing",
+                  "Name": "Reset on date",
                   "ResourceName": null,
                   "Children": [],
                   "Enabled": true,
@@ -893,8 +1132,8 @@
           "Children": [
             {
               "$type": "Models.Clock, Models",
-              "Start": "1990-01-01T00:00:00",
-              "End": "2000-12-31T00:00:00",
+              "Start": "1981-01-01T00:00:00",
+              "End": "2020-12-31T00:00:00",
               "Name": "Clock",
               "ResourceName": null,
               "Children": [],
@@ -913,8 +1152,8 @@
             {
               "$type": "Models.Climate.Weather, Models",
               "ConstantsFile": null,
-              "FileName": "%root%\\Examples\\WeatherFiles\\Dalby.met",
-              "ExcelWorkSheetName": null,
+              "FileName": "D:/project/wth_loc_22.met",
+              "ExcelWorkSheetName": "",
               "Name": "Weather",
               "ResourceName": null,
               "Children": [],
@@ -949,7 +1188,20 @@
                     "[Maize].Grain.Size",
                     "[Maize].Grain.NumberFunction",
                     "[Maize].Grain.N",
-                    "[Maize].Total.Wt"
+                    "[Maize].Total.Wt",
+                    "[Maize].Phenology.EmergenceDAS",
+                    "[Maize].Phenology.FloweringDAS",
+                    "[Maize].Phenology.MaturityDAS",
+                    "Sum of [Weather].Rain from [Maize].Sowing to [Maize].Harvesting as InCropRainfall",
+                    "Sum of [Weather].Radn from [Maize].Sowing to [Maize].Harvesting as InCropRadn",
+                    "Mean of [Weather].MaxT from [Maize].Sowing to [Maize].Harvesting as InCropMaxTemperature",
+                    "Mean of [Weather].MinT from [Maize].Sowing to [Maize].Harvesting as InCropMinTemperature",
+                    "Sum of [Soil].SoilWater.Eo from [Maize].Sowing to [Maize].Harvesting as InCropET",
+                    "Sum of [Soil].SoilWater.Es from [Maize].Sowing to [Maize].Harvesting as InCropES",
+                    "([Maize].Grain.Wt * 10) / InCropET as WUE2 ",
+                    "sum([Soil].SoilWater.ESW) as TotalESW",
+                    "[Maize].Grain.Total.Wt*10 as Yield",
+                    "[Maize].SowingDate"
                   ],
                   "EventNames": [
                     "[Maize].Harvesting"
@@ -970,41 +1222,6 @@
                   "ReadOnly": false
                 },
                 {
-                  "$type": "Models.Manager, Models",
-                  "Code": "using Models.Soils.Nutrients;\r\nusing System;\r\nusing Models.Core;\r\nusing Models.PMF;\r\nusing Models.Soils;\r\nusing Models.Soils.Nutrients;\r\nusing Models.Utilities;\r\nusing APSIM.Shared.Utilities;\r\n\r\nnamespace Models\r\n{\r\n    [Serializable]\r\n    public class Script : Model\r\n    {\r\n        [Link] Clock Clock;\r\n        [Link] Fertiliser Fertiliser;\r\n        [Link] Summary Summary;\r\n        [Link] Soil Soil;\r\n        Accumulator accumulatedRain;\r\n        \r\n        [Description(\"Crop\")]\r\n        public IPlant Crop { get; set; }\r\n        [Description(\"Sowing date (d-mmm)\")]\r\n        public string SowDate { get; set; }\r\n    [Display(Type = DisplayType.CultivarName, PlantName = \"Barley\")]\r\n        [Description(\"Cultivar to be sown\")]\r\n        public string CultivarName { get; set; }\r\n        [Description(\"Sowing depth (mm)\")]\r\n        public double SowingDepth { get; set; }\r\n        [Description(\"Row spacing (mm)\")]\r\n        public double RowSpacing { get; set; }\r\n        [Description(\"Plant population (/m2)\")]\r\n        public double Population { get; set; }\r\n        \r\n\r\n\r\n        [EventSubscribe(\"DoManagement\")]\r\n        private void OnDoManagement(object sender, EventArgs e)\r\n        {\r\n            if (DateUtilities.WithinDates(SowDate, Clock.Today, SowDate))\r\n            {\r\n                Crop.Sow(population: Population, cultivar: CultivarName, depth: SowingDepth, rowSpacing: RowSpacing);    \r\n            }\r\n        \r\n        }\r\n        \r\n    }\r\n}\r\n",
-                  "Parameters": [
-                    {
-                      "Key": "Crop",
-                      "Value": "[Maize]"
-                    },
-                    {
-                      "Key": "SowDate",
-                      "Value": "24-Jul"
-                    },
-                    {
-                      "Key": "CultivarName",
-                      "Value": "rwanda"
-                    },
-                    {
-                      "Key": "SowingDepth",
-                      "Value": "50"
-                    },
-                    {
-                      "Key": "RowSpacing",
-                      "Value": "750"
-                    },
-                    {
-                      "Key": "Population",
-                      "Value": "6"
-                    }
-                  ],
-                  "Name": "SowingRule",
-                  "ResourceName": null,
-                  "Children": [],
-                  "Enabled": true,
-                  "ReadOnly": false
-                },
-                {
                   "$type": "Models.Surface.SurfaceOrganicMatter, Models",
                   "SurfOM": [],
                   "Canopies": [],
@@ -1013,7 +1230,7 @@
                   "InitialResidueMass": 500.0,
                   "InitialStandingFraction": 0.0,
                   "InitialCPR": 0.0,
-                  "InitialCNR": 100.0,
+                  "InitialCNR": 10.0,
                   "Name": "SurfaceOrganicMatter",
                   "ResourceName": "SurfaceOrganicMatter",
                   "Children": [],
@@ -1030,15 +1247,15 @@
                   "Site": null,
                   "NearestTown": null,
                   "Region": null,
-                  "State": "Iburengerazuba",
+                  "State": null,
                   "Country": "Rwanda",
                   "NaturalVegetation": null,
                   "ApsoilNumber": "0",
-                  "Latitude": -2.28997273,
-                  "Longitude": 29.21170769,
+                  "Latitude": -2.725,
+                  "Longitude": 29.825,
                   "LocationAccuracy": null,
                   "YearOfSampling": null,
-                  "DataSource": "Original source is www.isric.org. See: https://www.isric.org/explore/soilgrids/faq-soilgrids  2022-11-21 12:41:12",
+                  "DataSource": "Original source is www.isric.org. See: https://www.isric.org/explore/soilgrids/faq-soilgrids  2023-02-06 09:30:54",
                   "Comments": "resolution = 250m - taxonomic classification name = clay - drainage class = NA - elevation = NA - slope = NA - geomdesc = NA",
                   "Name": "SoilType =  clay",
                   "ResourceName": null,
@@ -1054,62 +1271,62 @@
                         1000.0
                       ],
                       "ParticleSizeClay": [
-                        42.8,
-                        40.3,
-                        39.6,
-                        39.6,
-                        40.5,
-                        40.3
+                        39.4,
+                        38.7,
+                        41.5,
+                        43.4,
+                        43.2,
+                        43.4
                       ],
                       "ParticleSizeSand": [
-                        30.3,
-                        30.7,
-                        29.8,
-                        29.7,
-                        29.6,
-                        30.3
+                        38.4,
+                        39.9,
+                        37.3,
+                        36.4,
+                        36.3,
+                        35.7
                       ],
                       "ParticleSizeSilt": [
-                        26.9,
-                        29.0,
-                        30.6,
-                        30.7,
-                        29.9,
-                        29.4
+                        22.2,
+                        21.4,
+                        21.2,
+                        20.2,
+                        20.5,
+                        20.9
                       ],
                       "Rocks": null,
                       "Texture": null,
                       "BD": [
-                        1.0234,
-                        1.0492,
-                        1.0664,
+                        1.1008,
                         1.1266,
                         1.1696,
-                        1.1782
+                        1.1868,
+                        1.2212,
+                        1.2556
                       ],
                       "AirDry": [
-                        0.12809807981,
-                        0.241218337792,
-                        0.236914990552,
-                        0.23657148598,
-                        0.24168174118,
-                        0.240579035824
+                        0.118051518932,
+                        0.231806462224,
+                        0.24800878336,
+                        0.25895904652,
+                        0.25761681508,
+                        0.258678338848
                       ],
                       "LL15": [
-                        0.25619615962,
-                        0.241218337792,
-                        0.236914990552,
-                        0.23657148598,
-                        0.24168174118,
-                        0.240579035824
+                        0.236103037864,
+                        0.231806462224,
+                        0.24800878336,
+                        0.25895904652,
+                        0.25761681508,
+                        0.258678338848
                       ],
                       "DUL": [
-                        0.384650695068965,
-                        0.371348158840282,
-                        0.368716721051732,
-                        0.368751111203282,
-                        0.373392108058707,
-                        0.371642390108066
+                        0.358186797013717,
+                        0.35250319002982,
+                        0.370971353848381,
+                        0.382400641649366,
+                        0.381342837971912,
+                        0.382963464077431
                       ],
                       "SAT": [
                         0.521,
@@ -1120,12 +1337,12 @@
                         0.44
                       ],
                       "KS": [
-                        98.1750646286623,
-                        123.391078418626,
-                        132.449005026978,
-                        131.592097512101,
-                        121.15699926427,
-                        122.402169137494
+                        124.459964192166,
+                        133.436163291349,
+                        96.8878965275183,
+                        77.1972396173473,
+                        79.2580272053474,
+                        78.3612046937917
                       ],
                       "BDMetadata": null,
                       "AirDryMetadata": null,
@@ -1144,12 +1361,12 @@
                         {
                           "$type": "Models.Soils.SoilCrop, Models",
                           "LL": [
-                            0.26619615962,
-                            0.251218337792,
-                            0.246914990552,
-                            0.24657148598,
-                            0.25168174118,
-                            0.250579035824
+                            0.246103037864,
+                            0.241806462224,
+                            0.25800878336,
+                            0.26895904652,
+                            0.26761681508,
+                            0.268678338848
                           ],
                           "KL": [
                             0.06,
@@ -1179,12 +1396,12 @@
                         {
                           "$type": "Models.Soils.SoilCrop, Models",
                           "LL": [
-                            0.26619615962,
-                            0.251218337792,
-                            0.246914990552,
-                            0.24657148598,
-                            0.25168174118,
-                            0.250579035824
+                            0.246103037864,
+                            0.241806462224,
+                            0.25800878336,
+                            0.26895904652,
+                            0.26761681508,
+                            0.268678338848
                           ],
                           "KL": [
                             0.06,
@@ -1214,12 +1431,12 @@
                         {
                           "$type": "Models.Soils.SoilCrop, Models",
                           "LL": [
-                            0.26619615962,
-                            0.251218337792,
-                            0.246914990552,
-                            0.24657148598,
-                            0.25168174118,
-                            0.250579035824
+                            0.246103037864,
+                            0.241806462224,
+                            0.25800878336,
+                            0.26895904652,
+                            0.26761681508,
+                            0.268678338848
                           ],
                           "KL": [
                             0.06,
@@ -1302,12 +1519,12 @@
                         1000.0
                       ],
                       "Carbon": [
-                        4.95,
-                        3.26,
-                        2.53,
-                        1.35,
-                        1.03,
-                        1.12
+                        2.69,
+                        1.88,
+                        1.57,
+                        1.25,
+                        0.7,
+                        0.48
                       ],
                       "CarbonUnits": 0,
                       "SoilCNRatio": [
@@ -1320,27 +1537,27 @@
                       ],
                       "FBiom": [
                         0.04,
-                        0.0327492301231193,
-                        0.0268128018414256,
-                        0.0219524654437611,
-                        0.0179731585646889,
-                        0.0147151776468577
+                        0.033,
+                        0.027,
+                        0.022,
+                        0.018,
+                        0.015
                       ],
                       "FInert": [
                         0.8,
-                        0.808040133667335,
-                        0.816161072021405,
-                        0.824363627162814,
-                        0.832648619353911,
-                        0.841016877100819
+                        0.808,
+                        0.816,
+                        0.824,
+                        0.833,
+                        0.841
                       ],
                       "FOM": [
                         150.0,
-                        122.809612961697,
-                        100.548006905346,
-                        82.321745414104,
-                        67.3993446175832,
-                        55.1819161757163
+                        122.81,
+                        100.548,
+                        82.322,
+                        67.399,
+                        55.182
                       ],
                       "CarbonMetadata": null,
                       "FOMMetadata": null,
@@ -1361,16 +1578,17 @@
                         1000.0
                       ],
                       "PH": [
+                        5.6,
+                        5.6,
+                        5.6,
+                        5.6,
                         5.5,
-                        5.4,
-                        5.4,
-                        5.4,
-                        5.4,
-                        5.4
+                        5.5
                       ],
                       "PHUnits": 0,
                       "EC": null,
                       "ESP": null,
+                      "CEC": null,
                       "ECMetadata": null,
                       "CLMetadata": null,
                       "ESPMetadata": null,
@@ -1401,7 +1619,7 @@
                         0.457,
                         0.452
                       ],
-                      "InitialPAWmm": 424.82373873179995,
+                      "InitialPAWmm": 397.53577331400004,
                       "RelativeTo": "LL15",
                       "FilledFromTop": false,
                       "Name": "Water",
@@ -1543,17 +1761,63 @@
                     {
                       "$type": "Models.PMF.Cultivar, Models",
                       "Command": [
-                        "[Phenology].Juvenile.Target.FixedValue = 250",
+                        "[Phenology].Juvenile.Target.FixedValue = 135",
                         "[Phenology].Photosensitive.Target.XYPairs.X = 0, 12.5, 24",
                         "[Phenology].Photosensitive.Target.XYPairs.Y = 0, 0, 264.5",
+                        "[Structure].Phyllochron.Phyllochron.Phyllochron.XYPairs.X = 1, 2.4, 3.2",
+                        "[Structure].Phyllochron.Phyllochron.Phyllochron.XYPairs.Y = 25, 25, 36",
                         "[Phenology].FlagLeafToFlowering.Target.FixedValue = 10",
-                        "[Phenology].FloweringToGrainFilling.Target.FixedValue = 170",
-                        "[Phenology].GrainFilling.Target.FixedValue = 550",
+                        "[Phenology].FloweringToGrainFilling.Target.FixedValue = 140",
+                        "[Phenology].GrainFilling.Target.FixedValue = 380",
                         "[Rachis].DMDemands.Structural.DMDemandFunction.MaximumOrganWt.FixedValue = 14",
-                        "[Grain].MaximumGrainsPerCob.FixedValue = 468",
+                        "[Grain].MaximumGrainsPerCob.FixedValue = 486",
                         "[Grain].MaximumPotentialGrainSize.FixedValue = 0.361"
                       ],
-                      "Name": "rwanda",
+                      "Name": "Early",
+                      "ResourceName": null,
+                      "Children": [],
+                      "Enabled": true,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.PMF.Cultivar, Models",
+                      "Command": [
+                        "[Phenology].Juvenile.Target.FixedValue = 150",
+                        "[Phenology].Photosensitive.Target.XYPairs.X = 0, 12.5, 24",
+                        "[Phenology].Photosensitive.Target.XYPairs.Y = 0, 0, 0",
+                        "[Structure].Phyllochron.Phyllochron.Phyllochron.XYPairs.X = 1, 2.8, 3.3",
+                        "[Structure].Phyllochron.Phyllochron.Phyllochron.XYPairs.Y = 28, 28, 40",
+                        "[Phenology].FlagLeafToFlowering.Target.FixedValue = 1",
+                        "[Phenology].FloweringToGrainFilling.Target.FixedValue = 170",
+                        "[Phenology].GrainFilling.Target.FixedValue = 410",
+                        "[Phenology].Maturing.Target.FixedValue = 1",
+                        "[Rachis].DMDemands.Structural.DMDemandFunction.MaximumOrganWt.FixedValue = 20",
+                        "[Grain].MaximumGrainsPerCob.FixedValue = 580",
+                        "[Grain].MaximumPotentialGrainSize.FixedValue = 0.381"
+                      ],
+                      "Name": "Mid",
+                      "ResourceName": null,
+                      "Children": [],
+                      "Enabled": true,
+                      "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.PMF.Cultivar, Models",
+                      "Command": [
+                        "[Phenology].Juvenile.Target.FixedValue = 185",
+                        "[Phenology].Photosensitive.Target.XYPairs.X = 0, 12.5, 24",
+                        "[Phenology].Photosensitive.Target.XYPairs.Y = 0, 0, 0",
+                        "[Structure].Phyllochron.Phyllochron.Phyllochron.XYPairs.X = 1, 2.8, 3.3",
+                        "[Structure].Phyllochron.Phyllochron.Phyllochron.XYPairs.Y = 28, 28, 40",
+                        "[Phenology].FlagLeafToFlowering.Target.FixedValue = 1",
+                        "[Phenology].FloweringToGrainFilling.Target.FixedValue = 160",
+                        "[Phenology].GrainFilling.Target.FixedValue = 400",
+                        "[Phenology].Maturing.Target.FixedValue = 1",
+                        "[Phenology].MaturityToHarvestRipe.Target.FixedValue = 100",
+                        "[Rachis].DMDemands.Structural.DMDemandFunction.MaximumOrganWt.FixedValue = 20",
+                        "[Grain].MaximumPotentialGrainSize.FixedValue = 0.361"
+                      ],
+                      "Name": "Late",
                       "ResourceName": null,
                       "Children": [],
                       "Enabled": true,
@@ -1581,11 +1845,58 @@
                 },
                 {
                   "$type": "Models.Manager, Models",
-                  "Code": "using Models.Soils.Nutrients;\r\nusing System;\r\nusing Models.Core;\r\nusing Models.PMF;\r\nusing Models.Soils;\r\nusing Models.Soils.Nutrients;\r\nusing Models.Utilities;\r\nusing APSIM.Shared.Utilities;\r\n\r\nnamespace Models\r\n{\r\n    [Serializable]\r\n    public class Script : Model\r\n    {\r\n        [Link] Clock Clock;\r\n        [Link] Fertiliser Fertiliser;\r\n        [Link] Summary Summary;\r\n        [Link] Soil Soil;\r\n        Accumulator accumulatedRain;\r\n        \r\n        [Description(\"Crop\")]\r\n        public IPlant Crop { get; set; }\r\n        [Description(\"Sowing date (d-mmm)\")]\r\n        public string SowDate { get; set; }\r\n    [Display(Type = DisplayType.CultivarName, PlantName = \"Barley\")]\r\n        [Description(\"Cultivar to be sown\")]\r\n        public string CultivarName { get; set; }\r\n        [Description(\"Sowing depth (mm)\")]\r\n        public double SowingDepth { get; set; }\r\n        [Description(\"Row spacing (mm)\")]\r\n        public double RowSpacing { get; set; }\r\n        [Description(\"Plant population (/m2)\")]\r\n        public double Population { get; set; }\r\n        \r\n\r\n\r\n        [EventSubscribe(\"DoManagement\")]\r\n        private void OnDoManagement(object sender, EventArgs e)\r\n        {\r\n            if (DateUtilities.WithinDates(SowDate, Clock.Today, SowDate))\r\n            {\r\n                Crop.Sow(population: Population, cultivar: CultivarName, depth: SowingDepth, rowSpacing: RowSpacing);    \r\n            }\r\n        \r\n        }\r\n        \r\n    }\r\n}\r\n",
+                  "CodeArray": [
+                    "using APSIM.Shared.Utilities;",
+                    "using Models.Utilities;",
+                    "using Models.Soils;",
+                    "using Models.PMF;",
+                    "using Models.Core;",
+                    "using System;",
+                    "",
+                    "namespace Models",
+                    "{",
+                    "    [Serializable]",
+                    "    public class Script : Model",
+                    "    {",
+                    "        [Link] Clock Clock;",
+                    "        [Link] Fertiliser Fertiliser;",
+                    "        [Link] Summary Summary;",
+                    "        [Link] Soil Soil;",
+                    "        ",
+                    "        [Description(\"Crop\")]",
+                    "        public IPlant Crop { get; set; }",
+                    "",
+                    "        [Description(\"Sowing date (d-mmm)\")]",
+                    "        public string SowDate { get; set; }",
+                    "",
+                    "        [Display(Type = DisplayType.CultivarName)]",
+                    "        [Description(\"Cultivar to be sown\")]",
+                    "        public string CultivarName { get; set; }",
+                    "",
+                    "        [Description(\"Sowing depth (mm)\")]",
+                    "        public double SowingDepth { get; set; }",
+                    "",
+                    "        [Description(\"Row spacing (mm)\")]",
+                    "        public double RowSpacing { get; set; }",
+                    "",
+                    "        [Description(\"Plant population (/m2)\")]",
+                    "        public double Population { get; set; }",
+                    "",
+                    "        [EventSubscribe(\"DoManagement\")]",
+                    "        private void OnDoManagement(object sender, EventArgs e)",
+                    "        {",
+                    "            if (DateUtilities.WithinDates(SowDate, Clock.Today, SowDate))",
+                    "            {",
+                    "                Crop.Sow(population: Population, cultivar: CultivarName, depth: SowingDepth, rowSpacing: RowSpacing);    ",
+                    "            }",
+                    "        }",
+                    "    }",
+                    "}"
+                  ],
                   "Parameters": [
                     {
                       "Key": "Crop",
-                      "Value": ""
+                      "Value": "[Maize]"
                     },
                     {
                       "Key": "SowDate",
@@ -1593,7 +1904,7 @@
                     },
                     {
                       "Key": "CultivarName",
-                      "Value": "mridina"
+                      "Value": "sc501"
                     },
                     {
                       "Key": "SowingDepth",
@@ -1605,10 +1916,10 @@
                     },
                     {
                       "Key": "Population",
-                      "Value": "6"
+                      "Value": "5.3"
                     }
                   ],
-                  "Name": "SowingRule1",
+                  "Name": "SowingRule",
                   "ResourceName": null,
                   "Children": [],
                   "Enabled": true,
@@ -1616,32 +1927,238 @@
                 },
                 {
                   "$type": "Models.Manager, Models",
-                  "Code": "using Models.Soils;\r\nusing System;\r\nusing Models.Core;\r\nusing Models.PMF;\r\n\r\nnamespace Models\r\n{\r\n    [Serializable]\r\n    public class Script : Model\r\n    {\r\n        [Link]\r\n        private Fertiliser fertiliser;\r\n\r\n           [Link]\r\n           private Clock clock;\r\n\r\n        [Description(\"Amount (kg/ha) of fertiliser to apply\")]\r\n        public double ApplicationAmount {get; set;}\r\n\r\n        [Description(\"Type of fertiliser to apply\")]\r\n        public Fertiliser.Types FertType { get; set; }\r\n\r\n        [Description(\"Date of fertiliser application\")]\r\n        public DateTime ApplicationDate {get; set;}\r\n\r\n        [EventSubscribe(\"DoManagement\")]\r\n        private void OnDoManagement(object sender, EventArgs e)\r\n        {\r\n            if (clock.Today.Date.Equals(ApplicationDate))\r\n                fertiliser.Apply(Amount:ApplicationAmount,Type:FertType);\r\n        }\r\n    }\r\n}\r\n",
-                  "Parameters": [
-                    {
-                      "Key": "ApplicationAmount",
-                      "Value": "500"
-                    },
-                    {
-                      "Key": "FertType",
-                      "Value": "NO3N"
-                    },
-                    {
-                      "Key": "ApplicationDate",
-                      "Value": "12/30/2003 00:00:00"
-                    }
+                  "CodeArray": [
+                    "using Models.PMF.Phen;",
+                    "using APSIM.Shared.Utilities;",
+                    "using System.Xml.Serialization;",
+                    "using Models;",
+                    "using Models.PMF;",
+                    "using Models.Soils;",
+                    "using System.Text;",
+                    "using System.Collections.Generic;",
+                    "using Models.Core;",
+                    "using System;",
+                    "using Models.Soils.Nutrients;",
+                    "",
+                    "namespace Models",
+                    "{",
+                    "    [Serializable] ",
+                    "    public class Script : Model",
+                    "    {",
+                    "        [Link(ByName = true)] private Plant Maize;",
+                    "        [Link] private Zone zone;",
+                    "        [Link(Type = LinkType.Path, Path = \"[Maize].Phenology\")]",
+                    "        private Phenology phenology;",
+                    "                    ",
+                    "        ",
+                    "        [EventSubscribe(\"StartOfSimulation\")]",
+                    "        private void OnSimulationCommencing(object sender, EventArgs e)",
+                    "        {",
+                    "        }",
+                    "        ",
+                    "        [EventSubscribe(\"DoManagement\")]",
+                    "        private void OnDoManagement(object sender, EventArgs e)",
+                    "        {",
+                    "            if (phenology.CurrentPhase.Name == \"ReadyForHarvesting\")",
+                    "            {",
+                    "                Maize.Harvest();",
+                    "                Maize.EndCrop();",
+                    "            }",
+                    "        }",
+                    "        ",
+                    "        [EventSubscribe(\"DoManagementCalculations\")]",
+                    "        private void OnDoManagementCalculations(object sender, EventArgs e)",
+                    "        {",
+                    "            ",
+                    "        }",
+                    "    }",
+                    "}",
+                    "       "
                   ],
-                  "Name": "FertiliserRule",
-                  "ResourceName": null,
-                  "Children": [],
-                  "Enabled": true,
-                  "ReadOnly": false
-                },
-                {
-                  "$type": "Models.Manager, Models",
-                  "Code": "using Models.PMF.Phen;\r\nusing APSIM.Shared.Utilities;\r\nusing System.Xml.Serialization;\r\nusing Models;\r\nusing Models.PMF;\r\nusing Models.Soils;\r\nusing System.Text;\r\nusing System.Collections.Generic;\r\nusing Models.Core;\r\nusing System;\r\nusing Models.Soils.Nutrients;\r\n\r\nnamespace Models\r\n{\r\n    [Serializable] \r\n    public class Script : Model\r\n    {\r\n        [Link(ByName = true)] private Plant Maize;\r\n        [Link] private Zone zone;\r\n        [Link(Type = LinkType.Path, Path = \"[Maize].Phenology\")]\r\n        private Phenology phenology;\r\n                    \r\n        \r\n        [EventSubscribe(\"StartOfSimulation\")]\r\n        private void OnSimulationCommencing(object sender, EventArgs e)\r\n        {\r\n        }\r\n        \r\n        [EventSubscribe(\"DoManagement\")]\r\n        private void OnDoManagement(object sender, EventArgs e)\r\n        {\r\n            if (phenology.CurrentPhase.Name == \"ReadyForHarvesting\")\r\n            {\r\n                Maize.Harvest();\r\n                Maize.EndCrop();\r\n            }\r\n        }\r\n        \r\n        [EventSubscribe(\"DoManagementCalculations\")]\r\n        private void OnDoManagementCalculations(object sender, EventArgs e)\r\n        {\r\n            \r\n        }\r\n    }\r\n}\r\n       \r\n",
                   "Parameters": [],
                   "Name": "Harvesting",
+                  "ResourceName": null,
+                  "Children": [],
+                  "Enabled": true,
+                  "ReadOnly": false
+                },
+                {
+                  "$type": "Models.Manager, Models",
+                  "CodeArray": [
+                    "using Models.Soils;",
+                    "using System;",
+                    "using System.Linq;",
+                    "using Models.Core;",
+                    "using Models.PMF;",
+                    "namespace Models",
+                    "{",
+                    "    [Serializable]",
+                    "    public class Script : Model",
+                    "    {",
+                    "        [Link] Clock Clock;",
+                    "        [Link] Fertiliser Fertiliser;",
+                    "        ",
+                    "        [Description(\"Crop to be fertilised\")]",
+                    "        public IPlant Crop { get; set; }",
+                    "",
+                    "        [Description(\"Type of fertiliser to apply? \")] ",
+                    "        public Fertiliser.Types FertiliserType { get; set; }",
+                    "    ",
+                    "        [Description(\"Amount of fertiliser to be applied (kg/ha)\")]",
+                    "        public double Amount { get; set; }",
+                    "        ",
+                    "        [EventSubscribe(\"Sowing\")]",
+                    "        private void OnSowing(object sender, EventArgs e)",
+                    "        {",
+                    "            Model crop = sender as Model;",
+                    "            if (Crop != null && crop.Name.ToLower() == (Crop as IModel).Name.ToLower())",
+                    "                Fertiliser.Apply(Amount: Amount, Type: FertiliserType);",
+                    "        }",
+                    "    }",
+                    "}"
+                  ],
+                  "Parameters": [
+                    {
+                      "Key": "Crop",
+                      "Value": "[Maize]"
+                    },
+                    {
+                      "Key": "FertiliserType",
+                      "Value": "DAP"
+                    },
+                    {
+                      "Key": "Amount",
+                      "Value": "150"
+                    }
+                  ],
+                  "Name": "Fertilise at sowing",
+                  "ResourceName": null,
+                  "Children": [],
+                  "Enabled": true,
+                  "ReadOnly": false
+                },
+                {
+                  "$type": "Models.Manager, Models",
+                  "CodeArray": [
+                    "using Models.Soils;",
+                    "using APSIM.Shared.Utilities;",
+                    "using Models.Soils.Nutrients;",
+                    "using Models.PMF;",
+                    "using Models.Core;",
+                    "using System;",
+                    "using System.Linq;",
+                    "using Models.Soils.Nutrients;",
+                    "namespace Models",
+                    "{",
+                    "    [Serializable]",
+                    "    public class Script : Model",
+                    "    {",
+                    "        [Link] Clock Clock;",
+                    "        [Link] Fertiliser Fertiliser;",
+                    "        [Link(ByName=true)] Solute NO3;",
+                    "",
+                    "        [Description(\"Type of fertiliser to apply? \")] ",
+                    "        public Fertiliser.Types FertiliserType { get; set; }",
+                    "    ",
+                    "        [Description(\"Threshold amount of NO3 to topup to (kg/ha)\")]",
+                    "        public double Threshold { get; set;}",
+                    "        ",
+                    "        [EventSubscribe(\"DoManagement\")]",
+                    "        private void OnDoManagement(object sender, EventArgs e)",
+                    "        {",
+                    "            double Amount = Threshold - MathUtilities.Sum(NO3.kgha);",
+                    "            Fertiliser.Apply(Amount: Amount, Type: FertiliserType);",
+                    "        }",
+                    "    }",
+                    "}"
+                  ],
+                  "Parameters": [
+                    {
+                      "Key": "FertiliserType",
+                      "Value": "Urea"
+                    },
+                    {
+                      "Key": "Threshold",
+                      "Value": "100"
+                    }
+                  ],
+                  "Name": "Fertilise topup",
+                  "ResourceName": null,
+                  "Children": [],
+                  "Enabled": true,
+                  "ReadOnly": false
+                },
+                {
+                  "$type": "Models.Manager, Models",
+                  "CodeArray": [
+                    "using Models.Soils.Nutrients;",
+                    "using APSIM.Shared.Utilities;",
+                    "using Models.Surface;",
+                    "using Models.Utilities;",
+                    "using Models.Soils.Nutrients;",
+                    "using Models.Soils;",
+                    "using Models.PMF;",
+                    "using Models.Core;",
+                    "using System;",
+                    "using Models.Interfaces;",
+                    "",
+                    "namespace Models",
+                    "{",
+                    "    [Serializable]",
+                    "    public class Script : Model",
+                    "    {",
+                    "        [Link] private Plant Wheat;",
+                    "        [Link] private ISoilWater SoilWater;",
+                    "        [Link] private Nutrient nutrient;",
+                    "        [Link] private SurfaceOrganicMatter SOM;",
+                    "        [Link] private Summary Summary;",
+                    "",
+                    "        [Description(\"Reset Water? (Yes or No)\")]",
+                    "        public string ResetWater {get;set;}",
+                    "",
+                    "        [Description(\"Reset Soil Nutrients? (Yes or No)\")]",
+                    "        public string ResetNutrients {get;set;}",
+                    "",
+                    "        [Description(\"Reset Surface Organic Matter? (Yes or No)\")]",
+                    "        public string ResetSOM {get;set;}",
+                    "",
+                    "        [EventSubscribe(\"Sowing\")]",
+                    "        private void OnSowing(object sender, EventArgs e)",
+                    "        {",
+                    "            if (ResetWater == \"Yes\")",
+                    "            {",
+                    "                Summary.WriteMessage(this, \"Reset Water\", MessageType.Diagnostic);",
+                    "                SoilWater.Reset();",
+                    "            }",
+                    "            if (ResetNutrients == \"Yes\")",
+                    "            {",
+                    "                Summary.WriteMessage(this, \"Reset Nutrients\", MessageType.Diagnostic);",
+                    "                nutrient.Reset();",
+                    "            }",
+                    "            if (ResetSOM == \"Yes\")",
+                    "            {",
+                    "                Summary.WriteMessage(this, \"Reset Surface OM\", MessageType.Diagnostic);",
+                    "                SOM.Reset();",
+                    "            }",
+                    "        }",
+                    "    }",
+                    "}"
+                  ],
+                  "Parameters": [
+                    {
+                      "Key": "ResetWater",
+                      "Value": "Yes"
+                    },
+                    {
+                      "Key": "ResetNutrients",
+                      "Value": "Yes"
+                    },
+                    {
+                      "Key": "ResetSOM",
+                      "Value": "Yes"
+                    }
+                  ],
+                  "Name": "Reset on sowing",
                   "ResourceName": null,
                   "Children": [],
                   "Enabled": true,

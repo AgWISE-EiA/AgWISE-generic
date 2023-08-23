@@ -44,6 +44,9 @@ vignettes/*.pdf
 # ignore inputData contents and subfolders intermediate out folders
 inputData/
 intermediateOutput/
+AgWISE-UseCaseRAB/02_plantingWLY/DSSAT/inputData/
+AgWISE-UseCaseRAB/02_plantingWLY/DSSAT/extdata/
+AgWISE-UseCaseRAB/02_plantingWLY/DSSAT/ouputData/
 
 #ignore jupyter checkpoints
 .ipynb_checkpoints/

@@ -70,7 +70,7 @@ apsimSpatialFactorial <- function(scfl, my_list_clm, wkdir, crop, clck, variety,
     #tryCatch({my_list_sol[[i]]$soil$crop.LL <-  my_list_sol[[i]]$soil$LL15 + 0.01}, error=function(e) {NA}) 
     tryCatch({my_list_sol[[i]]$soil$SAT <-c(0.521, 0.521, 0.497, 0.488, 0.478, 0.440)}, error=function(e) {NA}) 
     tryCatch({my_list_sol[[i]]$soil$AirDry <- my_list_sol[[i]]$soil$LL15 - 0.02}, error=function(e) {NA})
-    #tryCatch({my_list_sol[[i]]$soil$SAT <- my_list_sol[[1]]$- 0.02}, error=function(e) {NA})
+    #tryCatch({my_list_sol[[i]]$soil$SAT <- my_list_sol[[1]]$soil- 0.02}, error=function(e) {NA})
     #tryCatch({edit_apsimx_replace_soil_profile(crop, root = c("pd", "Base_one"), soil.profile = my_list_sol[[i]], overwrite = TRUE)}, 
              #error=function(e) {NA})
     tryCatch({edit_apsimx_replace_soil_profile(crop, root = c("pd", "Base_one"), soil.profile = my_list_sol[[i]], overwrite = TRUE)},

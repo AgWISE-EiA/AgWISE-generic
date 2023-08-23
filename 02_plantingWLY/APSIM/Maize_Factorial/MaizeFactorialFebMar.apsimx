@@ -1094,6 +1094,10 @@
                       "Value": "01-jan"
                     },
                     {
+                      "Key": "OffsetDays",
+                      "Value": "-30"
+                    },
+                    {
                       "Key": "ResetWater",
                       "Value": "Yes"
                     },
@@ -1104,10 +1108,6 @@
                     {
                       "Key": "ResetSOM",
                       "Value": "Yes"
-                    },
-                    {
-                      "Key": "OffsetDays",
-                      "Value": "-30"
                     }
                   ],
                   "Name": "Reset on date",
